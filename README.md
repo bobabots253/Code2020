@@ -9,6 +9,7 @@
 # Branches
 - master: competition ready code
 - colorsensor: REV Color Sensor V3 Test Code
+- neotest: Testing NEO's/SPARK MAX's
 ## About
 This robotic code is made for the ***Infinite Recharge*** game. <br>
 If you'd like to learn more about the game, everything can be found 
