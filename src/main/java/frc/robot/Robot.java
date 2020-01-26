@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  RobotContainer robot;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -27,6 +28,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    robot = new RobotContainer();
+  }
+  
+  @Override
+  public void disabledInit(){
+  
   }
 
   /**
@@ -39,6 +46,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   /**
@@ -54,6 +62,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    // aaron please write auto thanks
   }
 
   /**
