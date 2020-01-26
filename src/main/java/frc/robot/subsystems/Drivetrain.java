@@ -79,6 +79,51 @@ public class Drivetrain implements Subsystem {
         setOpenLoop(0.0, 0.0);
     }
     
+    /**
+     * Zeroes encoders
+     */
+    public void resetEncoders() {
+        resetEncoders(0, 0);
+    }
+    
+    /**
+     * Sets encoders to a specific value
+     * @param left  left wheel value
+     * @param right right wheel value
+     */
+    public void resetEncoders(int left, int right) {
+        rightMaster.setSelectedSensorPosition(right);
+        leftMaster.setSelectedSensorPosition(left);
+    }
+    
+    /**
+     * @return the current measurement of the left drivetrain encoder
+     */
+    public static double getLeftEnc() {
+        return leftMaster.getSelectedSensorPosition();
+    }
+    
+    /**
+     * @return the current measurement of the right drivetrain encoder
+     */
+    public static double getRightEnc() {
+        return rightMaster.getSelectedSensorPosition();
+    }
+    
+    /**
+     * @return the current velocity measurement of the left drivetrain encoder
+     */
+    public static double getLeftEncVelocity() {
+        return leftMaster.getSelectedSensorVelocity();
+    }
+    
+    /**
+     * @return the current velocity measurement of the right drivetrain encoder
+     */
+    public static double getRightEncVelocity() {
+        return rightMaster.getSelectedSensorVelocity();
+    }
+    
     /* Static class to contain the speeds of each side of the drivetrain */
     public static class WheelState {
         public double left, right;
