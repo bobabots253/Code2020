@@ -8,9 +8,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  RobotContainer robot;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -27,6 +28,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    robot = new RobotContainer();
+    RobotContainer.drivetrain.resetEncoders();
+  }
+  
+  @Override
+  public void disabledInit(){
+  
   }
 
   /**
@@ -39,6 +47,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
+    SmartDashboard.putNumber("dt left enc", Drivetrain.getLeftEnc());
+    SmartDashboard.putNumber("dt right enc", Drivetrain.getRightEnc());
   }
 
   /**
@@ -54,6 +65,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    // aaron please write auto thanks
   }
 
   /**
