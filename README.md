@@ -7,7 +7,7 @@
 - [ ] ~~Robust, complete, and efficient code~~
 
 # Branches
-- master: competition ready code
+- master: competition code
 - colorsensor: REV Color Sensor V3 Test Code
 - neotest: Testing NEO's/SPARK MAX's
 ## About
