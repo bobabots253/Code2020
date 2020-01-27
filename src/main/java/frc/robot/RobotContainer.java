@@ -10,9 +10,15 @@ import frc.robot.subsystems.Drivetrain;
 public class RobotContainer {
     public static Drivetrain drivetrain;
     
+    private static RobotContainer instance;
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
     
-    public RobotContainer(){
+    public static RobotContainer getInstance(){
+        if (instance == null) instance = new RobotContainer();
+        return instance;
+    }
+    
+    private RobotContainer(){
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.OpenLoop));
     }

@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    robot = new RobotContainer();
+    robot = RobotContainer.getInstance();
     RobotContainer.drivetrain.resetEncoders();
   }
   
