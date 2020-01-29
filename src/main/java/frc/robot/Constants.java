@@ -12,11 +12,9 @@ public class Constants {
         // copied from 2019
         public static final double kJoystickDeadband = 0.07; // How much of joystick is "dead" zone [0,1]
         
-        public static final double kTurnSens = 1; // Maximum normal turning rate (in percent of max) to allow robot to turn to [0,1]
-        public static final double kDriveSens = 1; // Overall speed setting (turn down for demos) [0,1]
-        public static final double kTurnInPlaceSens = 1; // Maximum turn-in-place rate (in percent of max) to allow robot to turn to [0,1]
-        
-        public static final double kMaxTurnRateRadians = Math.PI/3.0; // Maximum radians per second to allow turning
+        public static final double kTurnSens = 0.75; // Maximum normal turning rate (in percent of max) to allow robot to turn to [0,1]
+        public static final double kDriveSens = 0.75; // Overall speed setting (turn down for demos) [0,1]
+        public static final double kTurnInPlaceSens = 0.75; // Maximum turn-in-place rate (in percent of max) to allow robot to turn to [0,1]
     }
     
     
@@ -27,5 +25,12 @@ public class Constants {
             leftSlave = 1,    // TalonFX
             rightMaster = 2,  // TalonFX
             rightSlave = 3;   // TalonFX
+
+        /* Drivetrain Current Limiting */
+        public static final boolean kLimitEnabled = true;  // never turn this to false
+        // TODO: Tune these
+        public static final double kCurrentLimit = 45;
+        public static final double kTriggerThresholdCurrent = 38;
+        public static final double kTriggerThresholdTimeDelta = 0.125;
     }
 }

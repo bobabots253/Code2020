@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-
+import frc.robot.Constants.DriveTrainConstants;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import java.util.Arrays;
@@ -29,12 +29,17 @@ public class Drivetrain implements Subsystem {
         rightSlave.follow(rightMaster);
         
         // inversion on opposite sides of the drivetrain
-        Arrays.asList(leftMaster, leftSlave).forEach(motor -> motor.setInverted(true));
-        Arrays.asList(rightMaster, rightSlave).forEach(motor -> motor.setInverted(false));
+        Arrays.asList(leftMaster, leftSlave).forEach(motor -> motor.setInverted(false));
+        Arrays.asList(rightMaster, rightSlave).forEach(motor -> motor.setInverted(true));
         
         // Motor settings
         TalonFXConfiguration falconConfig = new TalonFXConfiguration();
-        falconConfig.supplyCurrLimit = new SupplyCurrentLimitConfiguration(true, 45, 38, 0.125);
+        falconConfig.supplyCurrLimit = new SupplyCurrentLimitConfiguration(
+            DriveTrainConstants.kLimitEnabled,
+            DriveTrainConstants.kCurrentLimit,
+            DriveTrainConstants.kTriggerThresholdCurrent,
+            DriveTrainConstants.kTriggerThresholdTimeDelta
+        );
         Arrays.asList(leftMaster, leftSlave, rightMaster, rightSlave).forEach(motor -> {
             
             /*  TalonSRX configs

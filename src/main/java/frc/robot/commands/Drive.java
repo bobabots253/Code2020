@@ -34,8 +34,8 @@ public class Drive implements Command {
             case OpenLoop:
                 // Differential drive as long as throttle is greater than zero (deadbanded).
                 if (throttle != 0) {
-                    left = throttle + throttle * turn * DriverConstants.kTurnSens;
-                    right = throttle - throttle * turn * DriverConstants.kTurnSens;
+                    left = (throttle + throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
+                    right = (throttle - throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
                 } else {
                     // Turns in place when there is no throttle input
                     left = turn * DriverConstants.kTurnInPlaceSens;
