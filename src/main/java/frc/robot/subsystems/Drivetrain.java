@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
@@ -14,11 +11,11 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.Arrays;
 
 public class Drivetrain implements Subsystem {
-    private static final TalonSRX
-        leftMaster = new TalonSRX(Constants.DriveTrainConstants.leftMaster),
-        leftSlave = new TalonSRX(Constants.DriveTrainConstants.leftSlave),
-        rightMaster = new TalonSRX(Constants.DriveTrainConstants.rightMaster),
-        rightSlave = new TalonSRX(Constants.DriveTrainConstants.rightSlave);
+    private static final TalonFX
+        leftMaster = new TalonFX(Constants.DriveTrainConstants.leftMaster),
+        leftSlave = new TalonFX(Constants.DriveTrainConstants.leftSlave),
+        rightMaster = new TalonFX(Constants.DriveTrainConstants.rightMaster),
+        rightSlave = new TalonFX(Constants.DriveTrainConstants.rightSlave);
 
     private static Drivetrain instance;
 
@@ -36,11 +33,18 @@ public class Drivetrain implements Subsystem {
         Arrays.asList(rightMaster, rightSlave).forEach(motor -> motor.setInverted(false));
         
         // Motor settings
+        TalonFXConfiguration falconConfig = new TalonFXConfiguration();
+        falconConfig.supplyCurrLimit = new SupplyCurrentLimitConfiguration(true, 45, 38, 0.125);
         Arrays.asList(leftMaster, leftSlave, rightMaster, rightSlave).forEach(motor -> {
+            
+            /*  TalonSRX configs
             motor.configPeakCurrentLimit(45);
             motor.configPeakCurrentDuration(125);
             motor.configContinuousCurrentLimit(38);
             motor.enableCurrentLimit(true);
+             */
+            
+            motor.configAllSettings(falconConfig);
             
             motor.configVoltageCompSaturation(12, 10);
             motor.enableVoltageCompensation(true);
