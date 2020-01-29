@@ -42,7 +42,7 @@ public class Drivetrain implements Subsystem {
             motor.configPeakCurrentDuration(125);
             motor.configContinuousCurrentLimit(38);
             motor.enableCurrentLimit(true);
-             */
+            */
             
             motor.configAllSettings(falconConfig);
             
