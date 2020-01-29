@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Drivetrain.WheelState;
 
 import java.util.Set;
 
@@ -24,12 +23,10 @@ public class Drive implements Command {
     
     @Override
     public void execute(){
-    
         // Retrieving the deadbanded throttle and turn values (the controller joystick values)
         double throttle = RobotContainer.getThrottleValue();
         double turn = RobotContainer.getTurnValue();
-        
-        WheelState wheelSpeeds;
+
         double left, right;
         
         switch (state) {
@@ -39,9 +36,8 @@ public class Drive implements Command {
                 if (throttle != 0) {
                     left = throttle + throttle * turn * DriverConstants.kTurnSens;
                     right = throttle - throttle * turn * DriverConstants.kTurnSens;
-        
-                    // Turns in place when there is no throttle input
                 } else {
+                    // Turns in place when there is no throttle input
                     left = turn * DriverConstants.kTurnInPlaceSens;
                     right = -turn * DriverConstants.kTurnInPlaceSens;
                 }
