@@ -8,6 +8,7 @@
 
 # Branches
 - master: competition code
+- ShooterBranch: Shooter code before implementing
 - colorsensor: REV Color Sensor V3 Test Code
 - neotest: Testing NEO's/SPARK MAX's
 ## About
