@@ -10,7 +10,6 @@ package frc.robot.Subsystem;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.EncoderType;
 
@@ -18,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 
 public class Shooter implements Subsystem {
-    private static final CANSparkMax shooterSparkMax = new CANSparkMax(Constants.ShooterConstants.shooterMotor, MotorType.kBrushless);
+    public static final CANSparkMax shooterSparkMax = new CANSparkMax(Constants.ShooterConstants.shooterMotor, MotorType.kBrushless);
     private CANPIDController shootController = new CANPIDController(shooterSparkMax);
     private CANEncoder shooterEncoder = new CANEncoder(shooterSparkMax, EncoderType.kHallSensor, 42);
     private static Shooter instance;
@@ -29,8 +28,8 @@ public class Shooter implements Subsystem {
     }
     
     public Shooter() {
+        shooterSparkMax.clearFaults();
         shooterSparkMax.enableVoltageCompensation(12);  // no touchy
-        shooterSparkMax.enableSoftLimit(SoftLimitDirection.kForward, true);
    
     }
     

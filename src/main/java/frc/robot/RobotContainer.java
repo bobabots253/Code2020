@@ -26,7 +26,7 @@ public class RobotContainer {
     }
 
     private void bindOI(){
-        button1.whenPressed(new Shoot());
+        button1.whileHeld(new Shoot());  // the trigger
     }
 
     public static double getThrottleValue() {
