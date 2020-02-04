@@ -20,7 +20,7 @@ public class RobotContainer {
     
     private RobotContainer(){
         drivetrain = Drivetrain.getInstance();
-        drivetrain.setDefaultCommand(new Drive(Drive.State.OpenLoop));
+        drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
     }
     
     public static double getThrottleValue() {

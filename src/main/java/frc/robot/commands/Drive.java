@@ -1,9 +1,12 @@
 package frc.robot.commands;
 
 
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
@@ -11,7 +14,7 @@ import java.util.Set;
 
 public class Drive implements Command {
     public enum State {
-        OpenLoop
+        CurvatureDrive2019, CheesyDriveOpenLoop, CheesyDriveClosedLoop
     }
     
     private State state;
@@ -31,7 +34,7 @@ public class Drive implements Command {
         
         switch (state) {
             // maybe more drive states later? idk
-            case OpenLoop:
+            case CurvatureDrive2019:
                 // Differential drive as long as throttle is greater than zero (deadbanded).
                 if (throttle != 0) {
                     left = (throttle + throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
@@ -41,12 +44,52 @@ public class Drive implements Command {
                     left = turn * DriverConstants.kTurnInPlaceSens;
                     right = -turn * DriverConstants.kTurnInPlaceSens;
                 }
-    
-                Drivetrain.setOpenLoop(left, right);
+
                 break;
+
+            case CheesyDriveOpenLoop:
+                if (throttle != 0) {
+                    throttle *= DrivetrainConstants.kMaxSpeedMPS;
+                    turn *= DrivetrainConstants.kMaxTurnRate;
+
+                    DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
+                    wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS*DriverConstants.kDriveSens);
+
+                    left = wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
+                    right = wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
+                } else {
+                    left = turn * DriverConstants.kTurnInPlaceSens;
+                    right = -turn * DriverConstants.kTurnInPlaceSens;
+                }
+
+                break;
+
+            case CheesyDriveClosedLoop:
+                if (throttle != 0) {
+                    throttle *= DrivetrainConstants.kMaxSpeedMPS;
+                    turn *= DrivetrainConstants.kMaxTurnRate;
+
+                    DifferentialDriveWheelSpeeds _wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
+                    _wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS*DriverConstants.kDriveSens);
+
+                    left = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.leftMetersPerSecond);
+                    right = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.rightMetersPerSecond);
+
+                    left += Drivetrain.LEFT_PID_CONTROLLER.calculate(_wSpeeds.leftMetersPerSecond - Drivetrain.getLeftEncVelocityMeters());
+                    right += Drivetrain.RIGHT_PID_CONTROLLER.calculate(_wSpeeds.rightMetersPerSecond - Drivetrain.getRightEncVelocityMeters());
+                } else {
+                    left = turn * DriverConstants.kTurnInPlaceSens;
+                    right = -turn * DriverConstants.kTurnInPlaceSens;
+                }
+                
+                break;
+
             default:
+                left = 0;
+                right = 0;
                 break;
         }
+        Drivetrain.setOpenLoop(left, right);
     }
     
     // When this command ends, it stops the drivetrain to guarantee safety

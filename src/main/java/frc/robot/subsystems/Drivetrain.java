@@ -3,19 +3,28 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.Constants.DrivetrainConstants;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import java.util.Arrays;
 
 public class Drivetrain implements Subsystem {
     private static final TalonFX
-        leftMaster = new TalonFX(Constants.DriveTrainConstants.leftMaster),
-        leftSlave = new TalonFX(Constants.DriveTrainConstants.leftSlave),
-        rightMaster = new TalonFX(Constants.DriveTrainConstants.rightMaster),
-        rightSlave = new TalonFX(Constants.DriveTrainConstants.rightSlave);
+        leftMaster = new TalonFX(Constants.DrivetrainConstants.leftMaster),
+        leftSlave = new TalonFX(Constants.DrivetrainConstants.leftSlave),
+        rightMaster = new TalonFX(Constants.DrivetrainConstants.rightMaster),
+        rightSlave = new TalonFX(Constants.DrivetrainConstants.rightSlave);
+
+    public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(DrivetrainConstants.trackWidth);
+    public static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(DrivetrainConstants.kS, DrivetrainConstants.kV, DrivetrainConstants.kA);
+    public static final PIDController LEFT_PID_CONTROLLER = new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
+    public static final PIDController RIGHT_PID_CONTROLLER = new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
 
     private static Drivetrain instance;
 
@@ -35,10 +44,10 @@ public class Drivetrain implements Subsystem {
         // Motor settings
         TalonFXConfiguration falconConfig = new TalonFXConfiguration();
         falconConfig.supplyCurrLimit = new SupplyCurrentLimitConfiguration(
-            DriveTrainConstants.kLimitEnabled,
-            DriveTrainConstants.kCurrentLimit,
-            DriveTrainConstants.kTriggerThresholdCurrent,
-            DriveTrainConstants.kTriggerThresholdTimeDelta
+            DrivetrainConstants.kLimitEnabled,
+            DrivetrainConstants.kCurrentLimit,
+            DrivetrainConstants.kTriggerThresholdCurrent,
+            DrivetrainConstants.kTriggerThresholdTimeDelta
         );
         Arrays.asList(leftMaster, leftSlave, rightMaster, rightSlave).forEach(motor -> {
             
@@ -131,6 +140,22 @@ public class Drivetrain implements Subsystem {
      */
     public static double getRightEncVelocity() {
         return rightMaster.getSelectedSensorVelocity();
+    }
+
+    public static double getLeftEncVelocityMeters() {
+        return ticksPerDecisecondToMetersPerSecond(getLeftEncVelocity());
+    }
+
+    public static double getRightEncVelocityMeters() {
+        return ticksPerDecisecondToMetersPerSecond(getRightEncVelocity());
+    }
+
+    public static double ticksPerDecisecondToMetersPerSecond(double ticksPerDecisecond){
+        return (ticksPerDecisecond * 10 * Math.PI * DrivetrainConstants.wheelDiameter) / DrivetrainConstants.ticksPerRotation;
+    }
+
+    public static double metersPerSecondToTicksPerDecisecond(double metersPerSecond){
+        return metersPerSecond * DrivetrainConstants.ticksPerRotation / (10 * Math.PI * DrivetrainConstants.wheelDiameter);
     }
     
     /* Static class to contain the speeds of each side of the drivetrain */
