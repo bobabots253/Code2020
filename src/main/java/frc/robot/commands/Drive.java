@@ -50,7 +50,7 @@ public class Drive implements Command {
             case CheesyDriveOpenLoop:
                 if (throttle != 0) {
                     throttle *= DrivetrainConstants.kMaxSpeedMPS;
-                    turn *= DrivetrainConstants.kMaxTurnRate;
+                    turn *= DrivetrainConstants.kMaxCurvature * throttle;
 
                     DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
                     wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS*DriverConstants.kDriveSens);
@@ -67,7 +67,7 @@ public class Drive implements Command {
             case CheesyDriveClosedLoop:
                 if (throttle != 0) {
                     throttle *= DrivetrainConstants.kMaxSpeedMPS;
-                    turn *= DrivetrainConstants.kMaxTurnRate;
+                    turn *= DrivetrainConstants.kMaxCurvature * throttle;
 
                     DifferentialDriveWheelSpeeds _wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
                     _wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS*DriverConstants.kDriveSens);

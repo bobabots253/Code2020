@@ -27,7 +27,7 @@ public class Constants {
             rightSlave = 3;   // TalonFX
 
         public static final double kMaxSpeedMPS = 4.972;  // max speed in meters per second
-        public static final double kMaxTurnRate = Math.toRadians(-180);  // max turn rate in radians per second
+        public static final double kMaxCurvature = Math.toRadians(-180);  // max turn rate in radians per second
         public static final double trackWidth = 0.7051868402911773;  // distance between wheels
 
         /* feedforward constants */
