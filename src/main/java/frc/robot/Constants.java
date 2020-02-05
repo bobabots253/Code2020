@@ -1,7 +1,7 @@
 package frc.robot;
 
 public class Constants {
-    /* */
+    /* Controllers Input */
     public static class InputPorts {
         public static final int
             xboxController = 0;
@@ -32,15 +32,15 @@ public class Constants {
 
         /* feedforward constants */
         public static final double kS = 0.364;  // voltage required to overcome friction (V)
-        public static final double kV = 2.34;  // voltage over velocity                 (V/(meters/second))
-        public static final double kA = 0.0824;  // voltage over racceleration            (V(meters/second/second))
+        public static final double kV = 2.34;  // voltage over velocity                  (V/(meters/second))
+        public static final double kA = 0.0824;  // voltage over acceleration            (V(meters/second/second))
 
         /* PID constants */
         public static final double kP = 2.99;
         public static final double kI = 0;
         public static final double kD = 0;
 
-        /*  */
+        /* Wheels Constants */
         public static final double ticksPerRotation = 2048 * 10.42;
         public static final double wheelDiameter = 6 / 39.3700787;  // first number inches --> converted to meters
 

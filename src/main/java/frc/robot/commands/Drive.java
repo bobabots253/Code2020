@@ -53,7 +53,7 @@ public class Drive implements Command {
                     turn *= DrivetrainConstants.kMaxCurvature * throttle;
 
                     DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
-                    wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS*DriverConstants.kDriveSens);
+                    wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
 
                     left = wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
                     right = wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
@@ -70,7 +70,7 @@ public class Drive implements Command {
                     turn *= DrivetrainConstants.kMaxCurvature * throttle;
 
                     DifferentialDriveWheelSpeeds _wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
-                    _wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS*DriverConstants.kDriveSens);
+                    _wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
 
                     left = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.leftMetersPerSecond);
                     right = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.rightMetersPerSecond);
