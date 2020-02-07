@@ -51,4 +51,25 @@ public class Constants {
         public static final double kTriggerThresholdCurrent = 38;
         public static final double kTriggerThresholdTimeDelta = 0.125;
     }
+    
+    public static class IntakeConstants {
+        /* Motors */ // TODO: Change these numbers
+        public static final int armMotor = 8;
+        public static final int spinMotor = 9;
+        
+        /* PID Constants */ //TODO: Tune
+        public static double kP = 0;
+        public static double kI = 0;
+        public static double kD = 0;
+    }
+    
+    public static class ConveyorConstants {
+        //TODO: Change this number
+        public static final int motorID = 10;
+    }
+    
+    public static class ShooterConstants {
+        //TODO: Change this number
+        public static final int motorID = 11;
+    }
 }

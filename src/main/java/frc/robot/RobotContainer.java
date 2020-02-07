@@ -5,10 +5,17 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.Drive;
+import frc.robot.commands.Shoot;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
     public static Drivetrain drivetrain;
+    public static Intake intake;
+    public static Conveyor conveyor;
+    public static Shooter shooter;
     
     private static RobotContainer instance;
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
@@ -21,6 +28,10 @@ public class RobotContainer {
     private RobotContainer(){
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
+        
+        intake = Intake.getInstance();
+        conveyor = Conveyor.getInstance();
+        shooter = Shooter.getInstance();
     }
     
     public static double getThrottleValue() {
