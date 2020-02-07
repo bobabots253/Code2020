@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -21,6 +23,7 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class Robot extends TimedRobot {
   RobotContainer robot;
+  AnalogInput photoelectric;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -30,6 +33,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robot = RobotContainer.getInstance();
     RobotContainer.drivetrain.resetEncoders();
+
+    photoelectric = new AnalogInput(2);
   }
   
   @Override
@@ -50,6 +55,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putNumber("dt left enc", Drivetrain.getLeftEnc());
     SmartDashboard.putNumber("dt right enc", Drivetrain.getRightEnc());
+
+    System.out.println(photoelectric.getVoltage());
   }
 
   /**
@@ -80,6 +87,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    
   }
 
   /**
