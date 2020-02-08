@@ -41,11 +41,11 @@ public class Constants {
         public static final double kD = 0;
 
         /* Wheels Constants */
-        public static final double ticksPerRotation = 2048 * 10.42;
-        public static final double wheelDiameter = 6 / 39.3700787;  // first number inches --> converted to meters
+        public static final double kTicksPerRotation = 2048 * 10.42;
+        public static final double kWheelDiameter = 6 / 39.3700787;  // first number inches --> converted to meters
         
         public static final double kMaxSpeedMPS = 4.972;  // max speed in meters per second
-        public static final double trackWidth = 0.7051868402911773;  // distance between wheels
+        public static final double kTrackWidth = 0.7051868402911773;  // distance between wheels
     
         /* Drivetrain Current Limiting */
         public static final boolean kLimitEnabled = true;  // never turn this to false
@@ -64,6 +64,17 @@ public class Constants {
         public static double kP = 0;
         public static double kI = 0;
         public static double kD = 0;
+
+        /* Feedforward Constants */ // TODO: tune
+        public static double kS = 0;
+        public static double kCos = 0;
+        public static double kV = 0;
+        public static double kA = 0;
+
+        /* Intake constants */ // TODO: tune
+        public static double kMaxVelocity = 0; // Maximum velocity to turn arm at, radians per second
+        public static double kMaxAcceleration = 0; // Maximum acceleration to turn arm at, radians per second per second
+        public static double kRadPerTick = 0; // Angle change of the arm per tick of the encoder
     }
     
     public static class ConveyorConstants {
@@ -76,3 +87,4 @@ public class Constants {
         public static final int motorID = 11;
     }
 }
+

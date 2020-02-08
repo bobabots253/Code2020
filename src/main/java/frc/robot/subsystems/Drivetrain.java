@@ -62,7 +62,6 @@ public class Drivetrain implements Subsystem {
             
             motor.configVoltageCompSaturation(12, 10);
             motor.enableVoltageCompensation(true);
-            motor.configClosedloopRamp(0.05, 0);
             motor.setNeutralMode(NeutralMode.Brake);
         });
     
