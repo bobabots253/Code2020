@@ -18,7 +18,7 @@ public class Constants {
         public static final double kTurnSens = 1; // Maximum normal turning rate (in percent of max) to allow robot to turn to [0,1]
 
         /* Cheesydrive constants */
-        public static final double kMaxCurvature = Math.toRadians(-180);  // max turn rate in radians per second
+        public static final double kMaxCurvature = Math.toRadians(-180);  // Maximum turn rate in radians per meter [0, infinity]
     }
     
     
