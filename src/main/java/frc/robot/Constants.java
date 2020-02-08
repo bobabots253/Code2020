@@ -9,12 +9,16 @@ public class Constants {
     
     /* Differential Drive Settings */
     public static class DriverConstants {
-        // copied from 2019
+        /* Common drive mode settings */
         public static final double kJoystickDeadband = 0.07; // How much of joystick is "dead" zone [0,1]
-        
-        public static final double kTurnSens = 1; // Maximum normal turning rate (in percent of max) to allow robot to turn to [0,1]
         public static final double kDriveSens = 1; // Overall speed setting (turn down for demos) [0,1]
         public static final double kTurnInPlaceSens = 0.25; // Maximum turn-in-place rate (in percent of max) to allow robot to turn to [0,1]
+        
+        /* 2019 drive mode constants */
+        public static final double kTurnSens = 1; // Maximum normal turning rate (in percent of max) to allow robot to turn to [0,1]
+
+        /* Cheesydrive constants */
+        public static final double kMaxCurvature = Math.toRadians(-180);  // Maximum turn rate in radians per meter [0, infinity]
     }
     
     
@@ -25,10 +29,6 @@ public class Constants {
             leftSlave = 1,    // TalonFX
             rightMaster = 2,  // TalonFX
             rightSlave = 3;   // TalonFX
-
-        public static final double kMaxSpeedMPS = 4.972;  // max speed in meters per second
-        public static final double kMaxCurvature = Math.toRadians(-180);  // max turn rate in radians per second
-        public static final double trackWidth = 0.7051868402911773;  // distance between wheels
 
         /* feedforward constants */
         public static final double kS = 0.364;  // voltage required to overcome friction (V)
@@ -43,7 +43,10 @@ public class Constants {
         /* Wheels Constants */
         public static final double ticksPerRotation = 2048 * 10.42;
         public static final double wheelDiameter = 6 / 39.3700787;  // first number inches --> converted to meters
-
+        
+        public static final double kMaxSpeedMPS = 4.972;  // max speed in meters per second
+        public static final double trackWidth = 0.7051868402911773;  // distance between wheels
+    
         /* Drivetrain Current Limiting */
         public static final boolean kLimitEnabled = true;  // never turn this to false
         // TODO: Tune these
