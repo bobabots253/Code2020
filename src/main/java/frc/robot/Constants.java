@@ -9,12 +9,15 @@ public class Constants {
     
     /* Differential Drive Settings */
     public static class DriverConstants {
+        /* Common drive mode settings */
         public static final double kJoystickDeadband = 0.07; // How much of joystick is "dead" zone [0,1]
-        
-        public static final double kTurnSens = 1; // Maximum normal turning rate (in percent of max) to allow robot to turn to [0,1]
         public static final double kDriveSens = 1; // Overall speed setting (turn down for demos) [0,1]
         public static final double kTurnInPlaceSens = 0.25; // Maximum turn-in-place rate (in percent of max) to allow robot to turn to [0,1]
-    
+        
+        /* 2019 drive mode constants */
+        public static final double kTurnSens = 1; // Maximum normal turning rate (in percent of max) to allow robot to turn to [0,1]
+
+        /* Cheesydrive constants */
         public static final double kMaxCurvature = Math.toRadians(-180);  // max turn rate in radians per second
     }
     
