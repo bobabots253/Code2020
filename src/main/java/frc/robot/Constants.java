@@ -80,6 +80,8 @@ public class Constants {
     public static class ConveyorConstants {
         //TODO: Change this number
         public static final int motorID = 10;
+
+        public static final double kQueueSpeed = 0.1;
     }
     
     public static class ShooterConstants {

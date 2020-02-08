@@ -1,11 +1,10 @@
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.commands.ConveyorQueue;
 import frc.robot.commands.Drive;
-import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -30,12 +29,15 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         
         intake = Intake.getInstance();
+        
         conveyor = Conveyor.getInstance();
+        conveyor.setDefaultCommand(new ConveyorQueue());
+
         shooter = Shooter.getInstance();
     }
     
     public static double getThrottleValue() {
-        // Controllers y-axes are natively up-negative, down-positive. This method corrects that by returning the opposite of the value
+        // Controllers y-axes are natively up-negative, down-positive. This method corrects that by returning the opposite of the y-value
         return -deadbandX(driver.getY(GenericHID.Hand.kLeft), DriverConstants.kJoystickDeadband);
     }
     
