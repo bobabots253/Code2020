@@ -85,6 +85,19 @@ public class Constants {
     public static class ShooterConstants {
         //TODO: Change this number
         public static final int motorID = 11;
+
+        /* PID Constants */ //TODO: Tune
+        public static double kP = 0;
+        public static double kI = 0;
+        public static double kD = 0;
+
+        /* Feedforward Constants */ // TODO: tune
+        public static double kS = 0;
+        public static double kV = 0;
+        public static double kA = 0;
+
+        /* Shooter Constants */
+        public static double kTolerance = 0;
     }
 }
 

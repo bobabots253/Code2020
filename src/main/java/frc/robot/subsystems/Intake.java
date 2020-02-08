@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends ProfiledPIDSubsystem {
@@ -59,8 +58,24 @@ public class Intake extends ProfiledPIDSubsystem {
      * 
      * @param value Percent of maximum voltage to send to motor
      */
-    public void spin(double value) {
+    public void intake(double value) {
         spinMotor.set(ControlMode.PercentOutput, value);
+    }
+
+    /**
+     * Set the intake to rotate manually (overriding the position control)
+     * @param value Percent of maximum voltage to send to motor
+     */
+    public void rotate(double value) {
+        armMotor.set(ControlMode.PercentOutput, value);
+    }
+
+    /**
+     * Stops the motors 
+     */
+    public void stopMotors() {
+        armMotor.set(ControlMode.PercentOutput, 0);
+        spinMotor.set(ControlMode.PercentOutput, 0);
     }
 
     /**

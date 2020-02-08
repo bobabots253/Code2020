@@ -21,7 +21,7 @@ public class Drivetrain implements Subsystem {
         rightMaster = new TalonFX(Constants.DrivetrainConstants.rightMaster),
         rightSlave = new TalonFX(Constants.DrivetrainConstants.rightSlave);
 
-    public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(DrivetrainConstants.trackWidth);
+    public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(DrivetrainConstants.kTrackWidth);
     public static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(DrivetrainConstants.kS, DrivetrainConstants.kV, DrivetrainConstants.kA);
     public static final PIDController LEFT_PID_CONTROLLER = new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
     public static final PIDController RIGHT_PID_CONTROLLER = new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
@@ -150,11 +150,11 @@ public class Drivetrain implements Subsystem {
     }
 
     public static double ticksPerDecisecondToMetersPerSecond(double ticksPerDecisecond){
-        return (ticksPerDecisecond * 10 * Math.PI * DrivetrainConstants.wheelDiameter) / DrivetrainConstants.ticksPerRotation;
+        return (ticksPerDecisecond * 10 * Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kTicksPerRotation;
     }
 
     public static double metersPerSecondToTicksPerDecisecond(double metersPerSecond){
-        return metersPerSecond * DrivetrainConstants.ticksPerRotation / (10 * Math.PI * DrivetrainConstants.wheelDiameter);
+        return metersPerSecond * DrivetrainConstants.kTicksPerRotation / (10 * Math.PI * DrivetrainConstants.kWheelDiameter);
     }
     
     /* Static class to contain the speeds of each side of the drivetrain */
