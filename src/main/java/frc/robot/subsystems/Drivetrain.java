@@ -6,9 +6,15 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.Units;
 import frc.robot.Constants.DrivetrainConstants;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -25,6 +31,7 @@ public class Drivetrain implements Subsystem {
     public static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(DrivetrainConstants.kS, DrivetrainConstants.kV, DrivetrainConstants.kA);
     public static final PIDController LEFT_PID_CONTROLLER = new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
     public static final PIDController RIGHT_PID_CONTROLLER = new PIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD);
+    public static DifferentialDriveOdometry ODOMETRY = new DifferentialDriveOdometry(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()));
 
     private static Drivetrain instance;
 
@@ -88,6 +95,17 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("left volts", left);
         SmartDashboard.putNumber("right volts", right);
     }
+
+    /**
+     * Sets odometry (used to set the position and angle offset at the beginning of
+     * autonomous)
+     * 
+     * @param poseMeters Global pose of robot
+     * @param gyroAngle  Angle robot is facing
+     */
+    public void setOdometry(Pose2d poseMeters, Rotation2d gyroAngle) {
+        ODOMETRY.resetPosition(poseMeters, gyroAngle);
+    }
     
     /**
      * Stops the drivetrain motors by setting their speed to 0
@@ -112,49 +130,55 @@ public class Drivetrain implements Subsystem {
         rightMaster.setSelectedSensorPosition(right);
         leftMaster.setSelectedSensorPosition(left);
     }
+
+    /**
+     * Return the left and right drivetrain velocities (in meters/sec) as a DifferentialDriveWheelSpeeds object
+     * @return
+     */
+    public static DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(Units.TicksPerDecisecondToMPS(getLeftEncVelocity()), Units.TicksPerDecisecondToMPS(getRightEncVelocity()));
+    }
     
     /**
-     * @return the current measurement of the left drivetrain encoder
+     * @return the current position measurement of the left drivetrain encoder in talon native units (ticks)
      */
     public static double getLeftEnc() {
         return leftMaster.getSelectedSensorPosition();
     }
     
     /**
-     * @return the current measurement of the right drivetrain encoder
+     * @return the current position measurement of the right drivetrain encoder in talon native units (ticks/)
      */
     public static double getRightEnc() {
         return rightMaster.getSelectedSensorPosition();
     }
     
     /**
-     * @return the current velocity measurement of the left drivetrain encoder
+     * @return the current velocity measurement of the left drivetrain encoder in talon native units (ticks/ds)
      */
     public static double getLeftEncVelocity() {
         return leftMaster.getSelectedSensorVelocity();
     }
     
     /**
-     * @return the current velocity measurement of the right drivetrain encoder
+     * @return the current velocity measurement of the right drivetrain encoder in talon native units (ticks/ds)
      */
     public static double getRightEncVelocity() {
         return rightMaster.getSelectedSensorVelocity();
     }
 
+    /**
+     * @return the current velocity measurement of the left drivetrain encoder in meters
+     */
     public static double getLeftEncVelocityMeters() {
-        return ticksPerDecisecondToMetersPerSecond(getLeftEncVelocity());
+        return Units.TicksPerDecisecondToMPS(getLeftEncVelocity());
     }
 
+    /**
+     * @return the current velocity measurement of the right drivetrain encoder in meters
+     */
     public static double getRightEncVelocityMeters() {
-        return ticksPerDecisecondToMetersPerSecond(getRightEncVelocity());
-    }
-
-    public static double ticksPerDecisecondToMetersPerSecond(double ticksPerDecisecond){
-        return (ticksPerDecisecond * 10 * Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kTicksPerRotation;
-    }
-
-    public static double metersPerSecondToTicksPerDecisecond(double metersPerSecond){
-        return metersPerSecond * DrivetrainConstants.kTicksPerRotation / (10 * Math.PI * DrivetrainConstants.kWheelDiameter);
+        return Units.TicksPerDecisecondToMPS(getRightEncVelocity());
     }
     
     /* Static class to contain the speeds of each side of the drivetrain */

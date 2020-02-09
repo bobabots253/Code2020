@@ -53,6 +53,9 @@ public class Constants {
         public static final double kCurrentLimit = 45;
         public static final double kTriggerThresholdCurrent = 38;
         public static final double kTriggerThresholdTimeDelta = 0.125;
+
+        public static final double kRamseteBeta = 2.0;
+        public static final double kRamseteZeta = 0.7;
     }
     
     public static class IntakeConstants {
