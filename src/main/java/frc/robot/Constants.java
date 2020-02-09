@@ -54,4 +54,12 @@ public class Constants {
         public static final double kTriggerThresholdCurrent = 38;
         public static final double kTriggerThresholdTimeDelta = 0.125;
     }
+    
+    public static class OrchestraConstants {
+        public static final String[] songs = {
+        
+        };
+        
+        public static final int numSongs = songs.length - 1;
+    }
 }
