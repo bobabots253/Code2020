@@ -13,7 +13,7 @@ public final class Units {
     private static final double kTicksPerRotation = DrivetrainConstants.kTicksPerRotation;
     private static final double kWheelDiameter = DrivetrainConstants.kWheelDiameter;
 
-    private Units(){};
+    private Units(){}
 
     /**
      * Converts given meters/sec to ticks/ds
@@ -123,26 +123,6 @@ public final class Units {
    */
   public static double inchesToMeters(double inches) {
     return inches * kMetersPerInch;
-  }
-
-  /**
-   * Converts given degrees to radians.
-   *
-   * @param degrees The degrees to convert to radians.
-   * @return Radians converted from degrees.
-   */
-  public static double degreesToRadians(double degrees) {
-    return Math.toRadians(degrees);
-  }
-
-  /**
-   * Converts given radians to degrees.
-   *
-   * @param radians The radians to convert to degrees.
-   * @return Degrees converted from radians.
-   */
-  public static double radiansToDegrees(double radians) {
-    return Math.toDegrees(radians);
   }
 
   /**
