@@ -104,5 +104,13 @@ public class Constants {
         /* Shooter Constants */  // TODO: tune
         public static double kTolerance = 0;
     }
+    
+    public static class OrchestraConstants {
+        public static final String[] songs = {
+        
+        };
+        
+        public static final int numSongs = songs.length - 1;
+    }
 }
 

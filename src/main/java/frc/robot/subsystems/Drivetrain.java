@@ -17,6 +17,7 @@ import frc.robot.RobotContainer;
 import frc.robot.Units;
 import frc.robot.Constants.DrivetrainConstants;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.RobotContainer;
 
 import java.util.Arrays;
 
@@ -26,6 +27,8 @@ public class Drivetrain implements Subsystem {
         leftSlave = new TalonFX(Constants.DrivetrainConstants.leftSlave),
         rightMaster = new TalonFX(Constants.DrivetrainConstants.rightMaster),
         rightSlave = new TalonFX(Constants.DrivetrainConstants.rightSlave);
+    
+    public static final TalonFX[] motors = {leftMaster, leftSlave, rightMaster, rightSlave};
 
     public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(DrivetrainConstants.kTrackWidth);
     public static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(DrivetrainConstants.kS, DrivetrainConstants.kV, DrivetrainConstants.kA);
@@ -56,7 +59,7 @@ public class Drivetrain implements Subsystem {
             DrivetrainConstants.kTriggerThresholdCurrent,
             DrivetrainConstants.kTriggerThresholdTimeDelta
         );
-        Arrays.asList(leftMaster, leftSlave, rightMaster, rightSlave).forEach(motor -> {
+        Arrays.asList(motors).forEach(motor -> {
             
             /*  TalonSRX configs
             motor.configPeakCurrentLimit(45);
@@ -89,6 +92,7 @@ public class Drivetrain implements Subsystem {
      * @param right  Percent output of motors on right side of drivetrain
      */
     public static void setOpenLoop(Double left, Double right){
+        RobotContainer.orchestra.pause();
         leftMaster.set(ControlMode.PercentOutput, left);
         rightMaster.set(ControlMode.PercentOutput, right);
     

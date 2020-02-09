@@ -1,14 +1,10 @@
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.List;
-
+import com.ctre.phoenix.music.Orchestra;
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -20,7 +16,10 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.Constants.OrchestraConstants;
 import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
 import frc.robot.commands.ConveyorQueue;
@@ -30,8 +29,17 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
 public class RobotContainer {
     public static Drivetrain drivetrain;
+    public static Orchestra orchestra;
+    
+    private static int songIndex = 0;
+    
     public static Intake intake;
     public static Conveyor conveyor;
     public static Shooter shooter;
@@ -41,7 +49,10 @@ public class RobotContainer {
     public static AHRS navX;
     
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
-
+    private static final JoystickButton driver_X = new JoystickButton(driver, 3);
+    private static final POVButton DPAD_RIGHT = new POVButton(driver, 90);
+    private static final POVButton DPAD_LEFT = new POVButton(driver, 270);
+    
     private static RobotContainer instance;
     public static RobotContainer getInstance(){
         if (instance == null) instance = new RobotContainer();
@@ -54,16 +65,35 @@ public class RobotContainer {
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         
+        orchestra = new Orchestra(Arrays.asList(Drivetrain.motors));
+        // remove to unbind orchestra OI
+        bindOrchestraOI();
+    
         intake = Intake.getInstance();
-        
+    
         conveyor = Conveyor.getInstance();
         conveyor.setDefaultCommand(new ConveyorQueue());
-
+    
         shooter = Shooter.getInstance();
-
+    
         falcondashboard = Dashboard.getInstance();
-
+    
         bindOI();
+    }
+    
+    private void bindOrchestraOI(){
+        orchestra.loadMusic(OrchestraConstants.songs[0]);
+        driver_X.whenPressed(() -> orchestra.play(), drivetrain).whenReleased(() -> orchestra.pause());
+        DPAD_RIGHT.whenPressed(() -> {
+            songIndex++;
+            if (songIndex > OrchestraConstants.numSongs) songIndex = 0;
+            orchestra.loadMusic(OrchestraConstants.songs[songIndex]);
+        });
+        DPAD_LEFT.whenPressed(() -> {
+            songIndex--;
+            if (songIndex < 0) songIndex = OrchestraConstants.numSongs;
+            orchestra.loadMusic(OrchestraConstants.songs[songIndex]);
+        });
     }
 
     /* Binding OI input to Commands */
@@ -106,8 +136,7 @@ public class RobotContainer {
         );
 
         /* Adding all the autonomous commands into a single sequence */
-        SequentialCommandGroup autonomous = new SequentialCommandGroup(initializeAutonomous, new TrajectoryTracker(initialTrajectory));
-        return autonomous;
+        return new SequentialCommandGroup(initializeAutonomous, new TrajectoryTracker(initialTrajectory));
     }
     
     public static double getThrottleValue() {
