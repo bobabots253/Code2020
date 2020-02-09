@@ -14,6 +14,11 @@ public class TrajectoryTracker extends RamseteCommand {
     private Trajectory trajectory;
     private double startTime;
 
+    /**
+     * This class follows a given Trajectory using RamseteCommand, providing odometry functionality
+     * 
+     * @param trajectory The Trajectory to follow
+     */
     public TrajectoryTracker(Trajectory trajectory) {
         super(trajectory, 
               Drivetrain.ODOMETRY::getPoseMeters,
@@ -27,7 +32,7 @@ public class TrajectoryTracker extends RamseteCommand {
               RobotContainer.drivetrain);
         this.trajectory = trajectory;
     }
-
+    
     @Override
     public void initialize(){
         super.initialize();

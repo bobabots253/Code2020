@@ -72,7 +72,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        // TODO: Replace this code with the selector logic to select the proper autonomous sequence (aka, decide how we want to select auto)
+        // TODO: Replace this code with the selector logic to select the proper autonomousit  sequence (aka, decide how we want to select auto)
         Trajectory initialTrajectory;
         try {
             initialTrajectory = TrajectoryUtil.fromPathweaverJson(Paths.get("/home/lvuser/deploy/paths/InitiationToTarget.json"));

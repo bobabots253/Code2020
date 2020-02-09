@@ -5,7 +5,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 
-// Interfaces with FalconDashboard 
+// Interfaces with FalconDashboard to visualize path odometry
 // https://github.com/5190GreenHopeRobotics/FalconDashboard
 
 public class Dashboard {
@@ -41,12 +41,20 @@ public class Dashboard {
         
     }
 
+    /**
+     * Puts drivetrain pose data into the FalconDashboard NetworkTable
+     * @param pose The current pose of the robot
+     */
     public void putOdom(Pose2d pose){
         this.robotX.setDouble(pose.getTranslation().getX());
         this.robotY.setDouble(pose.getTranslation().getY());
         this.robotHeading.setDouble(pose.getRotation().getRadians());
     }
-
+    
+    /**
+     * Puts path pose data into the FalconDashboard NetworkTable
+     * @param pose The current pose of the path
+     */
     public void putPath(Pose2d pose){
         this.pathX.setDouble(pose.getTranslation().getX());
         this.pathY.setDouble(pose.getTranslation().getY());
@@ -54,6 +62,9 @@ public class Dashboard {
         this.followingPath.setBoolean(true);
     }
 
+    /**
+     * Sets the "followingPath" entry of the NetworkTable to false, indicating that path odometry should stop 
+     */
     public void endPath(){
         this.followingPath.setBoolean(false);
     }
