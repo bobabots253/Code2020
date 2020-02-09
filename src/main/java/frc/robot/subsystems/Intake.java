@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Units;
 
 public class Intake extends ProfiledPIDSubsystem {
     
@@ -98,7 +99,7 @@ public class Intake extends ProfiledPIDSubsystem {
      */
     @Override
     public double getMeasurement() {
-        return ticksToRadians(armMotor.getSelectedSensorPosition());
+        return Units.ticksToRadians(armMotor.getSelectedSensorPosition());
     }
 
     /**
@@ -110,15 +111,5 @@ public class Intake extends ProfiledPIDSubsystem {
         double feedforward = FEEDFORWARD.calculate(setpoint.position, setpoint.velocity);
         // Set motor, converting voltage to percent voltage
         armMotor.set(ControlMode.PercentOutput, (output + feedforward)/12.0);
-    }
-
-    /**
-     * Converts encoder ticks to arm position in radians
-     * 
-     * @param value absolute encoder value
-     * @return intake position in radians
-     */
-    private double ticksToRadians(double value) {
-        return value * IntakeConstants.kRadPerTick;
     }
 }

@@ -63,6 +63,16 @@ public final class Units {
     public static double TicksToMeters(double ticks) {
         return ticks * 0.319185814 / kTicksPerRotation;
     }
+    
+    /**
+     * Converts encoder ticks to arm position in radians
+     *
+     * @param value absolute encoder value
+     * @return intake position in radians
+     */
+    public static double ticksToRadians(double value) {
+        return value * Constants.IntakeConstants.kRadPerTick;
+    }
 
     /**
      * Converts a Pose2d in meters to a Pose2d in feet
