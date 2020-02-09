@@ -13,7 +13,7 @@
 - neotest: Testing NEO's/SPARK MAX's
 - opticalsensor: Test code for photoelectric sensor for ball queuing
 
-**BRANCH OFF THE DEVELOPMENT BRANCH AND MERGE BACK INTO DEVELOPMENT. DO NOT MERGE INTO MASTER.
+**BRANCH OFF THE DEVELOPMENT BRANCH AND MERGE BACK INTO DEVELOPMENT. DO NOT MERGE INTO MASTER.**
 ## About
 This robotic code is made for the ***Infinite Recharge*** game. <br>
 If you'd like to learn more about the game, everything can be found 
