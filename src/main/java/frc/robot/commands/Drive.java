@@ -33,7 +33,7 @@ public class Drive implements Command {
         double left, right;
         
         switch (state) {
-            // maybe more drive states later? idk
+            
             case CurvatureDrive2019:
                 // Differential drive as long as throttle is greater than zero (deadbanded).
                 if (throttle != 0) {
@@ -58,6 +58,7 @@ public class Drive implements Command {
                     left = wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
                     right = wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
                 } else {
+                    // Turns in place when there is no throttle input
                     left = turn * DriverConstants.kTurnInPlaceSens;
                     right = -turn * DriverConstants.kTurnInPlaceSens;
                 }
@@ -77,7 +78,12 @@ public class Drive implements Command {
 
                     left += Drivetrain.LEFT_PID_CONTROLLER.calculate(_wSpeeds.leftMetersPerSecond - Drivetrain.getLeftEncVelocityMeters());
                     right += Drivetrain.RIGHT_PID_CONTROLLER.calculate(_wSpeeds.rightMetersPerSecond - Drivetrain.getRightEncVelocityMeters());
+                    
+                    // Convert voltages to percent voltages
+                    left /= 12;
+                    right /= 12;
                 } else {
+                    // Turns in place when there is no throttle input
                     left = turn * DriverConstants.kTurnInPlaceSens;
                     right = -turn * DriverConstants.kTurnInPlaceSens;
                 }

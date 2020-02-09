@@ -41,11 +41,11 @@ public class Constants {
         public static final double kD = 0;
 
         /* Wheels Constants */
-        public static final double ticksPerRotation = 2048 * 10.42;
-        public static final double wheelDiameter = 6 / 39.3700787;  // first number inches --> converted to meters
+        public static final double kTicksPerRotation = 2048 * 10.42;
+        public static final double kWheelDiameter = 6 / 39.3700787;  // first number inches --> converted to meters
         
         public static final double kMaxSpeedMPS = 4.972;  // max speed in meters per second
-        public static final double trackWidth = 0.7051868402911773;  // distance between wheels
+        public static final double kTrackWidth = 0.7051868402911773;  // distance between wheels
     
         /* Drivetrain Current Limiting */
         public static final boolean kLimitEnabled = true;  // never turn this to false
@@ -53,6 +53,56 @@ public class Constants {
         public static final double kCurrentLimit = 45;
         public static final double kTriggerThresholdCurrent = 38;
         public static final double kTriggerThresholdTimeDelta = 0.125;
+
+        public static final double kRamseteBeta = 2.0;
+        public static final double kRamseteZeta = 0.7;
+    }
+    
+    public static class IntakeConstants {
+        /* Motors */ // TODO: Change these numbers
+        public static final int armMotor = 8;
+        public static final int spinMotor = 9;
+        
+        /* PID Constants */ //TODO: Tune
+        public static double kP = 0;
+        public static double kI = 0;
+        public static double kD = 0;
+
+        /* Feedforward Constants */ // TODO: tune
+        public static double kS = 0;
+        public static double kCos = 0;
+        public static double kV = 0;
+        public static double kA = 0;
+
+        /* Intake constants */ // TODO: tune
+        public static double kMaxVelocity = 0; // Maximum velocity to turn arm at, radians per second
+        public static double kMaxAcceleration = 0; // Maximum acceleration to turn arm at, radians per second per second
+        public static double kRadPerTick = 0; // Angle change of the arm per tick of the encoder
+    }
+    
+    public static class ConveyorConstants {
+        //TODO: Change this number
+        public static final int motorID = 10;
+
+        public static final double kQueueSpeed = 0.1;
+    }
+    
+    public static class ShooterConstants {
+        //TODO: Change this number
+        public static final int motorID = 11;
+
+        /* PID Constants */ //TODO: Tune
+        public static double kP = 0;
+        public static double kI = 0;
+        public static double kD = 0;
+
+        /* Feedforward Constants */ // TODO: tune
+        public static double kS = 0;
+        public static double kV = 0;
+        public static double kA = 0;
+
+        /* Shooter Constants */  // TODO: tune
+        public static double kTolerance = 0;
     }
     
     public static class OrchestraConstants {
@@ -63,3 +113,4 @@ public class Constants {
         public static final int numSongs = songs.length - 1;
     }
 }
+
