@@ -31,7 +31,7 @@ public class Shooter extends PIDSubsystem {
 
     /**
      * Sets the speed of the shooter in percent of max voltage (overriding the closed loop velocity control)
-     * @param speed
+     * @param value percent of voltage [-1, 1]
      */
     public static void setOpenLoop(double value){
         motor.set(value);

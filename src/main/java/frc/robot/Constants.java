@@ -101,7 +101,7 @@ public class Constants {
         public static double kV = 0;
         public static double kA = 0;
 
-        /* Shooter Constants */
+        /* Shooter Constants */  // TODO: tune
         public static double kTolerance = 0;
     }
 }

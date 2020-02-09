@@ -95,7 +95,7 @@ public class Intake extends ProfiledPIDSubsystem {
     }
 
     /**
-     * Returns the arm's current position as an encoder value
+     * @return the arm's current position as an encoder value
      */
     @Override
     public double getMeasurement() {

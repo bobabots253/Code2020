@@ -132,8 +132,7 @@ public class Drivetrain implements Subsystem {
     }
 
     /**
-     * Return the left and right drivetrain velocities (in meters/sec) as a DifferentialDriveWheelSpeeds object
-     * @return
+     * @return the left and right drivetrain velocities (in meters/sec) as a DifferentialDriveWheelSpeeds object
      */
     public static DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(Units.TicksPerDecisecondToMPS(getLeftEncVelocity()), Units.TicksPerDecisecondToMPS(getRightEncVelocity()));
