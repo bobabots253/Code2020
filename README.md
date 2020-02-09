@@ -8,10 +8,12 @@
 
 # Branches
 - master: competition code
-- shooter: Shooter code before implementing
+- development: main development for code during the season. Branch off of here and merge here. 
 - colorsensor: REV Color Sensor V3 Test Code
 - neotest: Testing NEO's/SPARK MAX's
 - opticalsensor: Test code for photoelectric sensor for ball queuing
+
+**BRANCH OFF THE DEVELOPMENT BRANCH AND MERGE BACK INTO DEVELOPMENT. DO NOT MERGE INTO MASTER.
 ## About
 This robotic code is made for the ***Infinite Recharge*** game. <br>
 If you'd like to learn more about the game, everything can be found 
