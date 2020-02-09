@@ -1,17 +1,29 @@
 package frc.robot;
 
 
+import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.Constants.OrchestraConstants;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Drivetrain;
 
+import java.util.Arrays;
+
 public class RobotContainer {
     public static Drivetrain drivetrain;
+    public static Orchestra orchestra;
+    
+    private static int songIndex = 0;
     
     private static RobotContainer instance;
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
+    private static final JoystickButton driver_X = new JoystickButton(driver, 3);
+    private static final POVButton DPAD_RIGHT = new POVButton(driver, 90);
+    private static final POVButton DPAD_LEFT = new POVButton(driver, 270);
     
     public static RobotContainer getInstance(){
         if (instance == null) instance = new RobotContainer();
@@ -21,6 +33,25 @@ public class RobotContainer {
     private RobotContainer(){
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
+        
+        orchestra = new Orchestra(Arrays.asList(Drivetrain.motors));
+        // remove to unbind orchestra OI
+        bindOrchestraOI();
+    }
+    
+    private void bindOrchestraOI(){
+        orchestra.loadMusic(OrchestraConstants.songs[0]);
+        driver_X.whenPressed(() -> orchestra.play(), drivetrain).whenReleased(() -> orchestra.pause());
+        DPAD_RIGHT.whenPressed(() -> {
+            songIndex++;
+            if (songIndex > OrchestraConstants.numSongs) songIndex = 0;
+            orchestra.loadMusic(OrchestraConstants.songs[songIndex]);
+        });
+        DPAD_LEFT.whenPressed(() -> {
+            songIndex--;
+            if (songIndex < 0) songIndex = OrchestraConstants.numSongs;
+            orchestra.loadMusic(OrchestraConstants.songs[songIndex]);
+        });
     }
     
     public static double getThrottleValue() {

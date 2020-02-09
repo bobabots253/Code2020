@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.RobotContainer;
 
 import java.util.Arrays;
 
@@ -85,6 +86,7 @@ public class Drivetrain implements Subsystem {
      * @param right  Percent output of motors on right side of drivetrain
      */
     public static void setOpenLoop(Double left, Double right){
+        RobotContainer.orchestra.pause();
         leftMaster.set(ControlMode.PercentOutput, left);
         rightMaster.set(ControlMode.PercentOutput, right);
     
