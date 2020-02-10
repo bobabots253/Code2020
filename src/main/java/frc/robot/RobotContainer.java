@@ -81,18 +81,22 @@ public class RobotContainer {
     }
     
     private void bindOrchestraOI(){
-        orchestra.loadMusic(OrchestraConstants.songs[0]);
+        loadSong();
         driver_X.whenPressed(() -> orchestra.play(), drivetrain).whenReleased(() -> orchestra.pause());
         DPAD_RIGHT.whenPressed(() -> {
             songIndex++;
             if (songIndex > OrchestraConstants.numSongs) songIndex = 0;
-            orchestra.loadMusic(OrchestraConstants.songs[songIndex]);
+            loadSong();
         });
         DPAD_LEFT.whenPressed(() -> {
             songIndex--;
             if (songIndex < 0) songIndex = OrchestraConstants.numSongs;
-            orchestra.loadMusic(OrchestraConstants.songs[songIndex]);
+            loadSong();
         });
+    }
+    
+    private void loadSong(){
+        orchestra.loadMusic(String.format("songs/%s.chrp", OrchestraConstants.songs[songIndex]));
     }
 
     /* Binding OI input to Commands */
