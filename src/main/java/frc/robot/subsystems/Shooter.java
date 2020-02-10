@@ -1,16 +1,16 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.wpilibj.controller.PIDController;
+import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.ShooterConstants;
 
-public class Shooter extends PIDSubsystem {
+public class Shooter implements Subsystem {
     private static final CANSparkMax motor = new CANSparkMax(ShooterConstants.motorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static CANEncoder encoder;
+    private static CANPIDController pidController;
 
     private static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
     
@@ -21,11 +21,13 @@ public class Shooter extends PIDSubsystem {
     }
     
     private Shooter(){
-        super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
-        getController().setTolerance(ShooterConstants.kTolerance);
-
         motor.enableVoltageCompensation(12);
-        encoder = motor.getEncoder();
+    
+        pidController = motor.getPIDController();
+        pidController.setP(ShooterConstants.kP, ShooterConstants.kSlotID);
+        pidController.setI(ShooterConstants.kI, ShooterConstants.kSlotID);
+        pidController.setD(ShooterConstants.kD, ShooterConstants.kSlotID);
+        pidController.setOutputRange(ShooterConstants.kMin, ShooterConstants.kMax, ShooterConstants.kSlotID);
     }
 
     /**
@@ -42,21 +44,12 @@ public class Shooter extends PIDSubsystem {
     public static void stop(){
         motor.stopMotor();
     }
-
+    
     /**
-     * Uses the value calculated by PIDSubsystem
+     * Set the setpoint of the flywheel based on an RPM target
+     * @param RPM the RPM for the flywheel to spin at
      */
-    @Override
-    protected void useOutput(double output, double setpoint) {
-        motor.setVoltage(output + FEEDFORWARD.calculate(setpoint));
-
-    }
-
-    /**
-     * Returns the encoder velocity (RPM)
-     */
-    @Override
-    protected double getMeasurement() {
-        return encoder.getVelocity();
+    public void setGoal(double RPM){
+        pidController.setReference(RPM, ControlType.kVelocity, ShooterConstants.kSlotID, FEEDFORWARD.calculate(RPM), CANPIDController.ArbFFUnits.kVoltage);
     }
 }

@@ -91,10 +91,13 @@ public class Constants {
         //TODO: Change this number
         public static final int motorID = 11;
 
-        /* PID Constants */ //TODO: Tune
+        /* PIDController Constants, Slot 0, RPM Velocity Control */ //TODO: Tune
+        public static int kSlotID = 0;
         public static double kP = 0;
         public static double kI = 0;
         public static double kD = 0;
+        public static double kMin = -0.7;
+        public static double kMax = 0.7;
 
         /* Feedforward Constants */ // TODO: tune
         public static double kS = 0;
