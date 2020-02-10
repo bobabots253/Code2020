@@ -43,7 +43,7 @@ public class RobotContainer {
     public static Conveyor conveyor;
     public static Shooter shooter;
 
-    public static Dashboard falcondashboard;
+    public static Dashboard falconDashboard;
 
     public static AHRS navX;
     
@@ -75,7 +75,7 @@ public class RobotContainer {
     
         shooter = Shooter.getInstance();
     
-        falcondashboard = Dashboard.getInstance();
+        falconDashboard = Dashboard.getInstance();
     
         bindOI();
     }

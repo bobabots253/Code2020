@@ -70,7 +70,7 @@ public final class Units {
      * @param value absolute encoder value
      * @return intake position in radians
      */
-    public static double ticksToRadians(double value) {
+    public static double TicksToRadians(double value) {
         return value * Constants.IntakeConstants.kRadPerTick;
     }
 
@@ -80,7 +80,7 @@ public final class Units {
      * @param meter The Pose2d to convert to feet
      * @return Pose2d in feet converted from meters
      */
-    public static Pose2d meterPoseToFeetPose(Pose2d meter) {
+    public static Pose2d MeterPoseToFeetPose(Pose2d meter) {
         Translation2d feetTranslation = meter.getTranslation().div(kMetersPerInch*kInchesPerFoot);
         return new Pose2d(feetTranslation, meter.getRotation());
     }
@@ -91,8 +91,8 @@ public final class Units {
    * @param meters The meters to convert to feet.
    * @return Feet converted from meters.
    */
-  public static double metersToFeet(double meters) {
-    return metersToInches(meters) / kInchesPerFoot;
+  public static double MetersToFeet(double meters) {
+    return MetersToInches(meters) / kInchesPerFoot;
   }
 
   /**
@@ -101,8 +101,8 @@ public final class Units {
    * @param feet The feet to convert to meters.
    * @return Meters converted from feet.
    */
-  public static double feetToMeters(double feet) {
-    return inchesToMeters(feet * kInchesPerFoot);
+  public static double FeetToMeters(double feet) {
+    return InchesToMeters(feet * kInchesPerFoot);
   }
 
   /**
@@ -111,7 +111,7 @@ public final class Units {
    * @param meters The meters to convert to inches.
    * @return Inches converted from meters.
    */
-  public static double metersToInches(double meters) {
+  public static double MetersToInches(double meters) {
     return meters / kMetersPerInch;
   }
 
@@ -121,7 +121,7 @@ public final class Units {
    * @param inches The inches to convert to meters.
    * @return Meters converted from inches.
    */
-  public static double inchesToMeters(double inches) {
+  public static double InchesToMeters(double inches) {
     return inches * kMetersPerInch;
   }
 
@@ -131,7 +131,7 @@ public final class Units {
    * @param rpm The rotations per minute to convert to radians per second.
    * @return Radians per second converted from rotations per minute.
    */
-  public static double rotationsPerMinuteToRadiansPerSecond(double rpm) {
+  public static double RotationsPerMinuteToRadiansPerSecond(double rpm) {
     return rpm * Math.PI / (kSecondsPerMinute / 2);
   }
 
@@ -141,7 +141,7 @@ public final class Units {
    * @param radiansPerSecond The radians per second to convert to from rotations per minute.
    * @return Rotations per minute converted from radians per second.
    */
-  public static double radiansPerSecondToRotationsPerMinute(double radiansPerSecond) {
+  public static double RadiansPerSecondToRotationsPerMinute(double radiansPerSecond) {
     return radiansPerSecond * (kSecondsPerMinute / 2) / Math.PI;
   }
 
