@@ -112,6 +112,7 @@ public class Constants {
                 All songs should have a file extension .chrp
                 All songs in this array should be just the filename without the extension (case sensitive)
                  */
+                "example"
         
         };
         
