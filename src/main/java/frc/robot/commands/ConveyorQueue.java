@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
-import java.util.Set;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.ConveyorConstants;
 import frc.robot.subsystems.Conveyor;
+
+import java.util.Set;
 
 public class ConveyorQueue implements Command {
 

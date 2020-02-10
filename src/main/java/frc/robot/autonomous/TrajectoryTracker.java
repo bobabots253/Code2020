@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.RobotContainer;
 import frc.robot.Units;
-import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class TrajectoryTracker extends RamseteCommand {
@@ -47,13 +47,13 @@ public class TrajectoryTracker extends RamseteCommand {
         Trajectory.State currentState = trajectory.sample(currentTime-startTime);
         Pose2d currentPose = currentState.poseMeters;
 
-        RobotContainer.falcondashboard.putPath(Units.meterPoseToFeetPose(currentPose));
+        RobotContainer.falconDashboard.putPath(Units.meterPoseToFeetPose(currentPose));
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
         Drivetrain.stopMotors();
-        RobotContainer.falcondashboard.endPath();
+        RobotContainer.falconDashboard.endPath();
     }
 }
