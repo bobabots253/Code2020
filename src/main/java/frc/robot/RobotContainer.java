@@ -31,7 +31,6 @@ import frc.robot.subsystems.Shooter;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
 public class RobotContainer {
@@ -65,7 +64,7 @@ public class RobotContainer {
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         
-        orchestra = new Orchestra(Arrays.asList(Drivetrain.motors));
+        orchestra = new Orchestra(List.of(Drivetrain.motors));
         // remove to unbind orchestra OI
         bindOrchestraOI();
     

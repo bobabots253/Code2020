@@ -19,7 +19,7 @@ import frc.robot.Constants.DrivetrainConstants;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class Drivetrain implements Subsystem {
     private static final TalonFX
@@ -48,8 +48,8 @@ public class Drivetrain implements Subsystem {
         rightSlave.follow(rightMaster);
         
         // inversion on opposite sides of the drivetrain
-        Arrays.asList(leftMaster, leftSlave).forEach(motor -> motor.setInverted(false));
-        Arrays.asList(rightMaster, rightSlave).forEach(motor -> motor.setInverted(true));
+        List.of(leftMaster, leftSlave).forEach(motor -> motor.setInverted(false));
+        List.of(rightMaster, rightSlave).forEach(motor -> motor.setInverted(true));
         
         // Motor settings
         TalonFXConfiguration falconConfig = new TalonFXConfiguration();
@@ -59,7 +59,7 @@ public class Drivetrain implements Subsystem {
             DrivetrainConstants.kTriggerThresholdCurrent,
             DrivetrainConstants.kTriggerThresholdTimeDelta
         );
-        Arrays.asList(motors).forEach(motor -> {
+        List.of(motors).forEach(motor -> {
             
             /*  TalonSRX configs
             motor.configPeakCurrentLimit(45);
@@ -76,7 +76,7 @@ public class Drivetrain implements Subsystem {
         });
     
         /* Encoder settings */
-        Arrays.asList(leftMaster, rightMaster).forEach(motor -> {
+        List.of(leftMaster, rightMaster).forEach(motor -> {
             motor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 1, 10);
             motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
             motor.setSensorPhase(false);

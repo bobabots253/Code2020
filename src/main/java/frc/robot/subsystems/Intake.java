@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.Arrays;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -13,6 +11,8 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Units;
+
+import java.util.List;
 
 public class Intake extends ProfiledPIDSubsystem {
     
@@ -47,7 +47,7 @@ public class Intake extends ProfiledPIDSubsystem {
         spinMotor.setInverted(false);
 
         /* Common intake motor settings */
-        Arrays.asList(armMotor, spinMotor).forEach(motor -> {
+        List.of(armMotor, spinMotor).forEach(motor -> {
             motor.configVoltageCompSaturation(12);
             motor.enableVoltageCompensation(true);
             motor.enableCurrentLimit(true);
