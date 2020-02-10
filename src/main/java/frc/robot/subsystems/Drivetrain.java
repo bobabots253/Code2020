@@ -90,7 +90,6 @@ public class Drivetrain implements Subsystem {
      * @param right  Percent output of motors on right side of drivetrain
      */
     public static void setOpenLoop(Double left, Double right){
-        RobotContainer.orchestra.pause();
         leftMaster.set(ControlMode.PercentOutput, left);
         rightMaster.set(ControlMode.PercentOutput, right);
     
