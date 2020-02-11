@@ -65,8 +65,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         
         orchestra = new Orchestra(List.of(Drivetrain.motors));
-        // remove to unbind orchestra OI
-        bindOrchestraOI();
+        // set to true for competition bindings
+        bindOrchestraOI(false);
     
         intake = Intake.getInstance();
     
@@ -80,19 +80,30 @@ public class RobotContainer {
         bindOI();
     }
     
-    private void bindOrchestraOI(){
-        loadSong();
-        driver_X.whenPressed(() -> orchestra.play(), drivetrain).whenReleased(() -> orchestra.pause());
-        DPAD_RIGHT.whenPressed(() -> {
-            songIndex++;
-            if (songIndex > OrchestraConstants.numSongs) songIndex = 0;
+    private void bindOrchestraOI(boolean competitionMode){
+        if (competitionMode) {
+            // bindings for competition
+        } else {
+            // bindings for off-competition
             loadSong();
-        });
-        DPAD_LEFT.whenPressed(() -> {
-            songIndex--;
-            if (songIndex < 0) songIndex = OrchestraConstants.numSongs;
-            loadSong();
-        });
+            driver_X.whenPressed(orchestra.isPlaying() ? () -> orchestra.pause() : () -> orchestra.play(), drivetrain);
+            DPAD_RIGHT.whenPressed(() -> {
+                songIndex++;
+                if (songIndex > OrchestraConstants.numSongs) songIndex = 0;
+                loadSong();
+            });
+            DPAD_LEFT.whenPressed(() -> {
+                if (orchestra.isPlaying()) {
+                    // restart song
+                    orchestra.stop();
+                    orchestra.play();
+                } else {
+                    songIndex--;
+                    if (songIndex < 0) songIndex = OrchestraConstants.numSongs;
+                    loadSong();
+                }
+            });
+        }
     }
     
     private void loadSong(){
