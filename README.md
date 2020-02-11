@@ -10,7 +10,6 @@
 # Branches
 - master: competition code
 - development: main development for code during the season. Branch off of here and merge here. 
-- music: additions that allow the bot to play music with the Falcons
 - colorsensor: REV Color Sensor V3 Test Code
 - neotest: Testing NEO's/SPARK MAX's
 - opticalsensor: Test code for photoelectric sensor for ball queuing
