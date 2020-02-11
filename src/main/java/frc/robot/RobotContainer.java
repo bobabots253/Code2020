@@ -82,16 +82,22 @@ public class RobotContainer {
     
     private void bindOrchestraOI(){
         loadSong();
-        driver_X.whenPressed(() -> orchestra.play(), drivetrain).whenReleased(() -> orchestra.pause());
+        driver_X.whenPressed(orchestra.isPlaying() ? () -> orchestra.pause() : () -> orchestra.play(), drivetrain);
         DPAD_RIGHT.whenPressed(() -> {
             songIndex++;
             if (songIndex > OrchestraConstants.numSongs) songIndex = 0;
             loadSong();
         });
         DPAD_LEFT.whenPressed(() -> {
-            songIndex--;
-            if (songIndex < 0) songIndex = OrchestraConstants.numSongs;
-            loadSong();
+            if (orchestra.isPlaying()) {
+                // restart song
+                orchestra.stop();
+                orchestra.play();
+            } else {
+                songIndex--;
+                if (songIndex < 0) songIndex = OrchestraConstants.numSongs;
+                loadSong();
+            }
         });
     }
     
