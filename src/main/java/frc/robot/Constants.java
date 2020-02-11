@@ -121,7 +121,7 @@ public class Constants {
                 "Kimi_no_Na_wa-Sparkle",
                 "Kimi_no_Na_wa-Zen_Zen_Zense",
                 "Love-Live_Snow_Halation",
-                "Miku-Levan_Polka",
+                "Miku-Ievan_Polkka",
                 "Miku-Senbon_Zakura",
                 "Miku-Triple_Baka",
                 "Tenki_no_Ko-Grand_Escape",
