@@ -69,7 +69,7 @@ public class RobotContainer {
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         
-        orchestra = new Orchestra(List.of(Drivetrain.motors));
+        orchestra = new Orchestra(Drivetrain.motors);
         // set to true for competition bindings
         bindOrchestraOI(false);
     

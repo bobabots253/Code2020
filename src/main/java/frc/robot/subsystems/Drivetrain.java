@@ -26,7 +26,7 @@ public class Drivetrain implements Subsystem {
         rightMaster = new TalonFX(Constants.DrivetrainConstants.rightMaster),
         rightSlave = new TalonFX(Constants.DrivetrainConstants.rightSlave);
     
-    public static final TalonFX[] motors = {leftMaster, leftSlave, rightMaster, rightSlave};
+    public static final List<TalonFX> motors = List.of(leftMaster, leftSlave, rightMaster, rightSlave);
 
     public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(DrivetrainConstants.kTrackWidth);
     public static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(DrivetrainConstants.kS, DrivetrainConstants.kV, DrivetrainConstants.kA);
@@ -57,7 +57,7 @@ public class Drivetrain implements Subsystem {
             DrivetrainConstants.kTriggerThresholdCurrent,
             DrivetrainConstants.kTriggerThresholdTimeDelta
         );
-        List.of(motors).forEach(motor -> {
+        motors.forEach(motor -> {
             
             /*  TalonSRX configs
             motor.configPeakCurrentLimit(45);
