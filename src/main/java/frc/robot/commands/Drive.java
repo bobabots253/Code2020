@@ -9,6 +9,7 @@ import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Drivetrain.WheelState;
 
 import java.util.Set;
 
@@ -30,74 +31,92 @@ public class Drive implements Command {
         double throttle = RobotContainer.getThrottleValue();
         double turn = RobotContainer.getTurnValue();
 
-        double left, right;
+        WheelState wheelState;
         
         switch (state) {
             
             case CurvatureDrive2019:
                 // Differential drive as long as throttle is greater than zero (deadbanded).
-                if (throttle != 0) {
-                    left = (throttle + throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
-                    right = (throttle - throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
-                } else {
-                    // Turns in place when there is no throttle input
-                    left = turn * DriverConstants.kTurnInPlaceSens;
-                    right = -turn * DriverConstants.kTurnInPlaceSens;
-                }
-
+                wheelState = CurvatureDrive2019(throttle, turn);
                 break;
 
             case CheesyDriveOpenLoop:
-                if (throttle != 0) {
-                    throttle *= DrivetrainConstants.kMaxSpeedMPS;
-                    turn *= DriverConstants.kMaxCurvature * throttle;
-
-                    DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
-                    wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
-
-                    left = wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.leftMetersPerSecond) / Constants.kMaxVoltage;
-                    right = wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.rightMetersPerSecond) / Constants.kMaxVoltage;
-
-                } else {
-                    // Turns in place when there is no throttle input
-                    left = turn * DriverConstants.kTurnInPlaceSens;
-                    right = -turn * DriverConstants.kTurnInPlaceSens;
-                }
-
+                wheelState = CheesyDriveOpenLoop(throttle, turn);
                 break;
 
             case CheesyDriveClosedLoop:
-                if (throttle != 0) {
-                    throttle *= DrivetrainConstants.kMaxSpeedMPS;
-                    turn *= DriverConstants.kMaxCurvature * throttle;
-
-                    DifferentialDriveWheelSpeeds _wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
-                    _wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
-
-                    left = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.leftMetersPerSecond);
-                    right = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.rightMetersPerSecond);
-
-                    left += Drivetrain.LEFT_PID_CONTROLLER.calculate(Drivetrain.getLeftEncVelocityMeters(), _wSpeeds.leftMetersPerSecond);
-                    right += Drivetrain.RIGHT_PID_CONTROLLER.calculate(Drivetrain.getRightEncVelocityMeters(), _wSpeeds.rightMetersPerSecond);
-                    
-                    // Convert voltages to percent voltages
-                    left /= Constants.kMaxVoltage;
-                    right /= Constants.kMaxVoltage;
-                } else {
-                    // Turns in place when there is no throttle input
-                    left = turn * DriverConstants.kTurnInPlaceSens;
-                    right = -turn * DriverConstants.kTurnInPlaceSens;
-                }
-                
+                wheelState = CheesyDriveClosedLoop(throttle, turn);
                 break;
 
             default:
-                left = 0;
-                right = 0;
+                wheelState = new WheelState(0, 0);
                 break;
         }
-
-        Drivetrain.setOpenLoop(left, right);
+        Drivetrain.setOpenLoop(wheelState.left, wheelState.right);
+    }
+    
+    public static WheelState CurvatureDrive2019(double throttle, double turn) {
+        double left, right;
+        
+        if (throttle != 0) {
+            left = (throttle + throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
+            right = (throttle - throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
+        } else {
+            return TurnInPlace(turn);
+        }
+        
+        return new WheelState(left, right);
+    }
+    
+    public static WheelState CheesyDriveOpenLoop(double throttle, double turn) {
+        double left, right;
+        
+        if (throttle != 0) {
+            throttle *= DrivetrainConstants.kMaxSpeedMPS;
+            turn *= DriverConstants.kMaxCurvature * throttle;
+        
+            DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
+            wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
+        
+            left = wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.leftMetersPerSecond) / Constants.kMaxVoltage;
+            right = wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.rightMetersPerSecond) / Constants.kMaxVoltage;
+        
+        } else {
+            return TurnInPlace(turn);
+        }
+        
+        return new WheelState(left, right);
+    }
+    
+    public static WheelState CheesyDriveClosedLoop(double throttle, double turn) {
+        double left, right;
+        
+        if (throttle != 0) {
+            throttle *= DrivetrainConstants.kMaxSpeedMPS;
+            turn *= DriverConstants.kMaxCurvature * throttle;
+        
+            DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
+            wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
+        
+            left = Drivetrain.FEEDFORWARD.calculate(wSpeeds.leftMetersPerSecond);
+            right = Drivetrain.FEEDFORWARD.calculate(wSpeeds.rightMetersPerSecond);
+        
+            left += Drivetrain.LEFT_PID_CONTROLLER.calculate(Drivetrain.getLeftEncVelocityMeters(), wSpeeds.leftMetersPerSecond);
+            right += Drivetrain.RIGHT_PID_CONTROLLER.calculate(Drivetrain.getRightEncVelocityMeters(), wSpeeds.rightMetersPerSecond);
+        
+            // Convert voltages to percent voltages
+            left /= Constants.kMaxVoltage;
+            right /= Constants.kMaxVoltage;
+        } else {
+            return TurnInPlace(turn);
+        }
+        
+        return new WheelState(left, right);
+    }
+    
+    public static WheelState TurnInPlace(double turn) {
+        double x = turn * DriverConstants.kTurnInPlaceSens;
+        return new WheelState(x, -x);
     }
     
     // When this command ends, it stops the drivetrain to guarantee safety

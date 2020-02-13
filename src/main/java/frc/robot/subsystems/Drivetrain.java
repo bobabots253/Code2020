@@ -183,7 +183,7 @@ public class Drivetrain implements Subsystem {
     
     /* Static class to contain the speeds of each side of the drivetrain */
     public static class WheelState {
-        public double left, right;
+        public final double left, right;
         
         public WheelState(double left, double right) {
             this.left = left;
