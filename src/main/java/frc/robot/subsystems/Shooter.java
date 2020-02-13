@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter implements Subsystem {
@@ -21,7 +22,7 @@ public class Shooter implements Subsystem {
     }
     
     private Shooter(){
-        motor.enableVoltageCompensation(12);
+        motor.enableVoltageCompensation(Constants.kMaxVoltage);
     
         pidController = motor.getPIDController();
         pidController.setP(ShooterConstants.kP, ShooterConstants.kSlotID);

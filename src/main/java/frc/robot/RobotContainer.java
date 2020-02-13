@@ -2,6 +2,9 @@ package frc.robot;
 
 import com.ctre.phoenix.music.Orchestra;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.XboxController;
@@ -44,6 +47,7 @@ public class RobotContainer {
     public static Shooter shooter;
 
     public static Dashboard falconDashboard;
+    private static NetworkTable limelight;
 
     public static AHRS navX;
     
@@ -60,6 +64,7 @@ public class RobotContainer {
     
     private RobotContainer(){
         navX = new AHRS(Port.kMXP);
+        limelight = NetworkTableInstance.getDefault().getTable("limelight");
         
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
@@ -110,11 +115,18 @@ public class RobotContainer {
         orchestra.loadMusic(String.format("songs/%s.chrp", OrchestraConstants.songs[songIndex]));
     }
 
-    /* Binding OI input to Commands */
+    /**
+     * Binds operator input to Commands 
+     */
     private void bindOI() {
 
     }
 
+    /**
+     * Constructs and returns the Command to run during the autonomous period
+     * 
+     * @return the Command to run during autonomous
+     */
     public Command getAutonomousCommand() {
         // TODO: Replace this code with the selector logic to select the proper autonomousit  sequence (aka, decide how we want to select auto)
         Trajectory initialTrajectory;
@@ -153,15 +165,32 @@ public class RobotContainer {
         return new SequentialCommandGroup(initializeAutonomous, new TrajectoryTracker(initialTrajectory));
     }
     
+    /**
+     * Returns the deadbanded throttle input from the main driver controller
+     * 
+     * @return the deadbanded throttle input from the main driver controller
+     */
     public static double getThrottleValue() {
         // Controllers y-axes are natively up-negative, down-positive. This method corrects that by returning the opposite of the y-value
         return -deadbandX(driver.getY(GenericHID.Hand.kLeft), DriverConstants.kJoystickDeadband);
     }
     
+    /**
+     * Returns the deadbanded turn input from the main driver controller
+     * 
+     * @return the deadbanded turn input from the main driver controller 
+     */
     public static double getTurnValue() {
         return deadbandX(driver.getX(GenericHID.Hand.kRight), DriverConstants.kJoystickDeadband);
     }
     
+    /**
+     * Deadbands an input to [-1, -deadband], [deadband, 1], rescaling inputs to be linear from (deadband, 0) to (1,1)
+     * 
+     * @param input The input value to rescale
+     * @param deadband The deadband 
+     * @return the input rescaled and to fit [-1, -deadband], [deadband, 1]
+     */
     public static double deadbandX(double input, double deadband) {
         if (Math.abs(input) <= deadband) {
             return 0;
@@ -169,6 +198,90 @@ public class RobotContainer {
             return input;
         } else {
             return (1 / (1 - deadband) * (input + Math.signum(-input) * deadband));
+        }
+    }
+
+    /**
+     * Set the LED mode on the Limelight
+     * 
+     * @param ledMode The mode to set the Limelight LEDs to
+     */
+    public void setLEDMode(LEDMode ledMode) {
+        limelight.getEntry("ledMode").setNumber(ledMode.val);
+    }
+
+    /**
+     * Sets the appearance of the Limelight camera stream
+     * 
+     * @param stream Stream mode to set the Limelight to
+     */
+    public void setStreamMode(StreamMode stream) {
+        limelight.getEntry("stream").setNumber(stream.val);
+    }
+
+    /**
+     * Sets Limelight vision pipeline
+     * 
+     * @param pipeline The pipeline to use
+     */
+    public void setPipeline(VisionPipeline pipeline) {
+        limelight.getEntry("pipeline").setNumber(pipeline.val);
+    }
+
+    /**
+     * Returns the horizontal offset between the target and the crosshair in degrees
+     * 
+     * @return the horizontal offset between the target and the crosshair in degrees
+     */
+    public static double getXOffset() {
+        return -limelight.getEntry("tx").getDouble(0);
+    }
+
+    /**
+     * Returns the vertical offset between the target and the crosshair in degrees
+     * 
+     * @return the vertical offset between the target and the crosshair in degrees
+     */
+    public static double getYOffset() {
+        return -limelight.getEntry("ty").getDouble(0.0);
+    }
+
+    /**
+     * Enum representing the different possible Limelight LED modes
+     */
+    public static enum LEDMode {
+        PIPELINE(0), OFF(1), BLINK(2), ON(3);
+
+        public int val;
+
+        private LEDMode(int val) {
+            this.val = val;
+        }
+    }
+
+    /**
+     * Enum representing the different possible Limelight stream modes
+     */
+    public static enum StreamMode {
+        SIDE_BY_SIDE(0), PIP_MAIN(1), PIP_SECONDARY(2);
+
+        public int val;
+        
+        private StreamMode(int val){
+            this.val = val;
+        }
+    }
+
+    /**
+     * Enum representing the different possible Limelight vision pipelines
+     */
+    public static enum VisionPipeline {
+        VISION(0), DRIVER(1);
+
+        public int val;
+
+        private VisionPipeline(int val){
+            this.val = val;
         }
     }
 }

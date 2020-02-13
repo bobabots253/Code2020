@@ -1,6 +1,10 @@
 package frc.robot;
 
 public class Constants {
+
+    public static final double dt = 0.02;
+    public static final double kMaxVoltage = 12.0;
+
     /* Controllers Input */
     public static class InputPorts {
         public static final int
@@ -107,6 +111,22 @@ public class Constants {
         /* Shooter Constants */  // TODO: tune
         public static double kTolerance = 0;
     }
+
+    public static class VisionConstants {
+        //TODO: Tune
+
+        /* Turn PID Constants */
+        public static double kPTurn = 0;
+        public static double kITurn = 0;
+        public static double kDTurn = 0;
+        public static double kTurnTolerance = 0;
+
+        /* Distance PID Constants */
+        public static double kPDist = 0;
+        public static double kIDist = 0;
+        public static double kDDist = 0;
+        public static double kDistTolerance = 0;
+    }
     
     public static class OrchestraConstants {
         public static final String[] songs = {
@@ -121,7 +141,7 @@ public class Constants {
                 "Kimi_no_Na_wa-Sparkle",
                 "Kimi_no_Na_wa-Zen_Zen_Zense",
                 "Love-Live_Snow_Halation",
-                "Miku-Levan_Polka",
+                "Miku-Ievan_Polkka",
                 "Miku-Senbon_Zakura",
                 "Miku-Triple_Baka",
                 "Tenki_no_Ko-Grand_Escape",

@@ -1,12 +1,12 @@
 package frc.robot.commands;
 
-
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
@@ -55,8 +55,9 @@ public class Drive implements Command {
                     DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
                     wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
 
-                    left = wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
-                    right = wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
+                    left = wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.leftMetersPerSecond) / Constants.kMaxVoltage;
+                    right = wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.rightMetersPerSecond) / Constants.kMaxVoltage;
+
                 } else {
                     // Turns in place when there is no throttle input
                     left = turn * DriverConstants.kTurnInPlaceSens;
@@ -76,12 +77,12 @@ public class Drive implements Command {
                     left = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.leftMetersPerSecond);
                     right = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.rightMetersPerSecond);
 
-                    left += Drivetrain.LEFT_PID_CONTROLLER.calculate(_wSpeeds.leftMetersPerSecond - Drivetrain.getLeftEncVelocityMeters());
-                    right += Drivetrain.RIGHT_PID_CONTROLLER.calculate(_wSpeeds.rightMetersPerSecond - Drivetrain.getRightEncVelocityMeters());
+                    left += Drivetrain.LEFT_PID_CONTROLLER.calculate(Drivetrain.getLeftEncVelocityMeters(), _wSpeeds.leftMetersPerSecond);
+                    right += Drivetrain.RIGHT_PID_CONTROLLER.calculate(Drivetrain.getRightEncVelocityMeters(), _wSpeeds.rightMetersPerSecond);
                     
                     // Convert voltages to percent voltages
-                    left /= 12;
-                    right /= 12;
+                    left /= Constants.kMaxVoltage;
+                    right /= Constants.kMaxVoltage;
                 } else {
                     // Turns in place when there is no throttle input
                     left = turn * DriverConstants.kTurnInPlaceSens;
@@ -95,6 +96,7 @@ public class Drive implements Command {
                 right = 0;
                 break;
         }
+
         Drivetrain.setOpenLoop(left, right);
     }
     

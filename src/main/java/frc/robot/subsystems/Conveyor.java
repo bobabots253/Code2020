@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.Constants.ConveyorConstants;
 
 public class Conveyor implements Subsystem {
@@ -16,7 +17,7 @@ public class Conveyor implements Subsystem {
     }
     
     private Conveyor() {
-        motor.enableVoltageCompensation(12);
+        motor.enableVoltageCompensation(Constants.kMaxVoltage);
         motor.setInverted(false);
     }
 

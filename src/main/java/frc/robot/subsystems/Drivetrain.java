@@ -68,7 +68,7 @@ public class Drivetrain implements Subsystem {
             
             motor.configAllSettings(falconConfig);
             
-            motor.configVoltageCompSaturation(12, 10);
+            motor.configVoltageCompSaturation(Constants.kMaxVoltage, 10);
             motor.enableVoltageCompensation(true);
             motor.setNeutralMode(NeutralMode.Brake);
         });

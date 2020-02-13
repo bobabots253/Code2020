@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants;
 import frc.robot.Units;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class Intake extends ProfiledPIDSubsystem {
 
         /* Common intake motor settings */
         List.of(armMotor, spinMotor).forEach(motor -> {
-            motor.configVoltageCompSaturation(12);
+            motor.configVoltageCompSaturation(Constants.kMaxVoltage);
             motor.enableVoltageCompensation(true);
             motor.enableCurrentLimit(true);
         });
