@@ -248,12 +248,12 @@ public class RobotContainer {
     /**
      * Enum representing the different possible Limelight LED modes
      */
-    public static enum LEDMode {
+    public enum LEDMode {
         PIPELINE(0), OFF(1), BLINK(2), ON(3);
 
         public int val;
 
-        private LEDMode(int val) {
+        LEDMode(int val) {
             this.val = val;
         }
     }
@@ -261,12 +261,12 @@ public class RobotContainer {
     /**
      * Enum representing the different possible Limelight stream modes
      */
-    public static enum StreamMode {
+    public enum StreamMode {
         SIDE_BY_SIDE(0), PIP_MAIN(1), PIP_SECONDARY(2);
 
         public int val;
         
-        private StreamMode(int val){
+        StreamMode(int val){
             this.val = val;
         }
     }
@@ -274,12 +274,12 @@ public class RobotContainer {
     /**
      * Enum representing the different possible Limelight vision pipelines
      */
-    public static enum VisionPipeline {
+    public enum VisionPipeline {
         VISION(0), DRIVER(1);
 
         public int val;
 
-        private VisionPipeline(int val){
+        VisionPipeline(int val){
             this.val = val;
         }
     }
