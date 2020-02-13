@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -90,7 +91,7 @@ public class RobotContainer {
         } else {
             // bindings for off-competition
             loadSong();
-            driver_X.whenPressed(orchestra.isPlaying() ? () -> orchestra.pause() : () -> orchestra.play(), drivetrain);
+            driver_X.whileHeld(new RunCommand(orchestra::play, drivetrain)).whenReleased(orchestra::pause, drivetrain);
             DPAD_RIGHT.whenPressed(() -> {
                 songIndex++;
                 if (songIndex > OrchestraConstants.numSongs) songIndex = 0;
