@@ -38,13 +38,12 @@ import java.util.List;
 
 public class RobotContainer {
     public static Drivetrain drivetrain;
-    public static Orchestra orchestra;
-    
-    private static int songIndex = 0;
-    
     public static Intake intake;
     public static Conveyor conveyor;
     public static Shooter shooter;
+
+    public static Orchestra orchestra;
+    private static int songIndex = 0;
 
     public static Dashboard falconDashboard;
     private static NetworkTable limelight;

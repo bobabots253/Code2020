@@ -72,7 +72,6 @@ public class VisionTrack implements Command {
 
     @Override
     public void end(boolean interrupted) {
-
         RobotContainer.getInstance().setLEDMode(LEDMode.OFF);
         Drivetrain.setOpenLoop(0.0, 0.0);
     }
@@ -81,8 +80,4 @@ public class VisionTrack implements Command {
     public Set<Subsystem> getRequirements() {
         return Set.of(requirements);
     }
-
-    
-
-
 }
