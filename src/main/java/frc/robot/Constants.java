@@ -15,14 +15,10 @@ public class Constants {
     public static class DriverConstants {
         /* Common drive mode settings */
         public static final double kJoystickDeadband = 0.07; // How much of joystick is "dead" zone [0,1]
-        public static final double kDriveSens = 1; // Overall speed setting (turn down for demos) [0,1]
+        public static final double kDriveSens = 0.5; // Overall speed setting (turn down for demos) [0,1]
         public static final double kTurnInPlaceSens = 0.25; // Maximum turn-in-place rate (in percent of max) to allow robot to turn to [0,1]
-        
-        /* 2019 drive mode constants */
         public static final double kTurnSens = 1; // Maximum normal turning rate (in percent of max) to allow robot to turn to [0,1]
 
-        /* Cheesydrive constants */
-        public static final double kMaxCurvature = Math.toRadians(-180);  // Maximum turn rate in radians per meter [0, infinity]
     }
     
     
@@ -50,12 +46,13 @@ public class Constants {
         
         public static final double kMaxSpeedMPS = 4.972;  // max speed in meters per second
         public static final double kTrackWidth = 0.7051868402911773;  // distance between wheels
+        public static final double kMaxCurvature = Math.toRadians(-162);  // Maximum turn rate in radians per meter
     
         /* Drivetrain Current Limiting */
         public static final boolean kLimitEnabled = true;  // never turn this to false
         // TODO: Tune these
-        public static final double kCurrentLimit = 45;
-        public static final double kTriggerThresholdCurrent = 38;
+        public static final double kCurrentLimit = 38;
+        public static final double kTriggerThresholdCurrent = 45;
         public static final double kTriggerThresholdTimeDelta = 0.125;
 
         public static final double kRamseteBeta = 2.0;
@@ -88,7 +85,7 @@ public class Constants {
         //TODO: Change this number
         public static final int motorID = 10;
 
-        public static final double kQueueSpeed = 0.1;
+        public static final double kQueueSpeed = 0.0;
     }
     
     public static class ShooterConstants {
