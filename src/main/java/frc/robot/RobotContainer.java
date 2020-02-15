@@ -51,7 +51,10 @@ public class RobotContainer {
     public static AHRS navX;
     
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
+  //  private static final XboxController
     private static final JoystickButton driver_X = new JoystickButton(driver, 3);
+    private static final JoystickButton driver_B = new JoystickButton(driver, 2);
+    private static final JoystickButton driver_A = new JoystickButton(driver, 1);
     private static final POVButton DPAD_RIGHT = new POVButton(driver, 90);
     private static final POVButton DPAD_LEFT = new POVButton(driver, 270);
     
@@ -71,7 +74,7 @@ public class RobotContainer {
         orchestra = new Orchestra(Drivetrain.motors);
         // set to true for competition bindings
         bindOrchestraOI(false);
-    
+        
         intake = Intake.getInstance();
     
         conveyor = Conveyor.getInstance();
@@ -90,7 +93,7 @@ public class RobotContainer {
         } else {
             // bindings for off-competition
             loadSong();
-            driver_X.whileHeld(new RunCommand(orchestra::play, drivetrain)).whenReleased(orchestra::pause, drivetrain);
+            //driver_X.whileHeld(new RunCommand(orchestra::play, drivetrain)).whenReleased(orchestra::pause, drivetrain);
             DPAD_RIGHT.whenPressed(() -> {
                 songIndex++;
                 if (songIndex > OrchestraConstants.numSongs) songIndex = 0;
@@ -118,6 +121,10 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
+       driver_A.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
+       driver_B.whileHeld(() -> intake.intake(-0.5)).whenReleased(intake::stopMotors);
+
+
 
     }
 

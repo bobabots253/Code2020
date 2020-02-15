@@ -42,36 +42,37 @@ public class Drivetrain implements Subsystem {
     }
     
     private Drivetrain(){
+
+        // Motor settings
+        TalonFXConfiguration falconConfig = new TalonFXConfiguration();
+        falconConfig.statorCurrLimit = new StatorCurrentLimitConfiguration(
+            DrivetrainConstants.kLimitEnabled,
+            DrivetrainConstants.kCurrentLimit,
+            DrivetrainConstants.kTriggerThresholdCurrent,
+            DrivetrainConstants.kTriggerThresholdTimeDelta
+        );
+        falconConfig.supplyCurrLimit = new SupplyCurrentLimitConfiguration(
+            true,
+            38,
+            45,
+            0.125
+        );
+
+        motors.forEach(motor -> {
+            motor.configFactoryDefault();
+            //motor.configAllSettings(falconConfig);
+            
+            motor.configVoltageCompSaturation(Constants.kMaxVoltage, 10);
+            motor.enableVoltageCompensation(true);
+            motor.setNeutralMode(NeutralMode.Brake);
+        });
+
         leftSlave.follow(leftMaster);
         rightSlave.follow(rightMaster);
         
         // inversion on opposite sides of the drivetrain
         List.of(leftMaster, leftSlave).forEach(motor -> motor.setInverted(false));
         List.of(rightMaster, rightSlave).forEach(motor -> motor.setInverted(true));
-        
-        // Motor settings
-        TalonFXConfiguration falconConfig = new TalonFXConfiguration();
-        falconConfig.supplyCurrLimit = new SupplyCurrentLimitConfiguration(
-            DrivetrainConstants.kLimitEnabled,
-            DrivetrainConstants.kCurrentLimit,
-            DrivetrainConstants.kTriggerThresholdCurrent,
-            DrivetrainConstants.kTriggerThresholdTimeDelta
-        );
-        motors.forEach(motor -> {
-            
-            /*  TalonSRX configs
-            motor.configPeakCurrentLimit(45);
-            motor.configPeakCurrentDuration(125);
-            motor.configContinuousCurrentLimit(38);
-            motor.enableCurrentLimit(true);
-            */
-            
-            motor.configAllSettings(falconConfig);
-            
-            motor.configVoltageCompSaturation(Constants.kMaxVoltage, 10);
-            motor.enableVoltageCompensation(true);
-            motor.setNeutralMode(NeutralMode.Brake);
-        });
     
         /* Encoder settings */
         List.of(leftMaster, rightMaster).forEach(motor -> {
@@ -90,11 +91,12 @@ public class Drivetrain implements Subsystem {
      * @param right  Percent output of motors on right side of drivetrain
      */
     public static void setOpenLoop(Double left, Double right){
-        leftMaster.set(ControlMode.PercentOutput, left);
-        rightMaster.set(ControlMode.PercentOutput, right);
     
-        SmartDashboard.putNumber("left volts", left);
-        SmartDashboard.putNumber("right volts", right);
+        SmartDashboard.putNumber("left set", left);
+        SmartDashboard.putNumber("right set", right);
+        /*
+        SmartDashboard.putNumber("l current", leftMaster.getStatorCurrent());
+        SmartDashboard.putNumber("r current", rightMaster.getStatorCurrent());*/
     }
 
     /**
