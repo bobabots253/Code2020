@@ -51,19 +51,22 @@ public class VisionTrack implements Command {
         double turn = TURN_PID_CONTROLLER.calculate(turnError, 0);
 
         if (throttle != 0) {
-            throttle *= DrivetrainConstants.kMaxSpeedMPS;
-            turn *= DriverConstants.kMaxCurvature * throttle;
+            throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
+            turn *= DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens * throttle;
 
             DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
-            wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
+            wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS);
 
-            left = wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.leftMetersPerSecond) / Constants.kMaxVoltage;
-            right = wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.rightMetersPerSecond) / Constants.kMaxVoltage;
+            left = Drivetrain.FEEDFORWARD.calculate(wSpeeds.leftMetersPerSecond) / Constants.kMaxVoltage;
+            right = Drivetrain.FEEDFORWARD.calculate(wSpeeds.rightMetersPerSecond) / Constants.kMaxVoltage;
 
         } else {
             // Turns in place when there is no throttle input
-            left = turn * DriverConstants.kTurnInPlaceSens;
-            right = -turn * DriverConstants.kTurnInPlaceSens;
+            left = turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
+            right = -turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
+
+            left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
+            right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
         }
 
         Drivetrain.setOpenLoop(left, right);
