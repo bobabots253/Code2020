@@ -27,6 +27,7 @@ import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
 import frc.robot.commands.ConveyorQueue;
 import frc.robot.commands.Drive;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -41,6 +42,7 @@ public class RobotContainer {
     public static Intake intake;
     public static Conveyor conveyor;
     public static Shooter shooter;
+    public static Climber climber;
 
     public static Orchestra orchestra;
     private static int songIndex = 0;
@@ -52,6 +54,7 @@ public class RobotContainer {
     
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
     private static final JoystickButton driver_X = new JoystickButton(driver, 3);
+    private static final JoystickButton driver_A = new JoystickButton(driver, 1);
     private static final POVButton DPAD_RIGHT = new POVButton(driver, 90);
     private static final POVButton DPAD_LEFT = new POVButton(driver, 270);
     
@@ -118,7 +121,8 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
-
+        driver_A.whenHeld( new RunCommand(() -> climber.setSpeed(0.5)));
+        driver_A.whenReleased( new RunCommand(() -> climber.stopMotors()));
     }
 
     /**
