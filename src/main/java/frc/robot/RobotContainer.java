@@ -17,14 +17,18 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.OrchestraConstants;
 import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
+import frc.robot.commands.ArmDown;
+import frc.robot.commands.ArmUp;
 import frc.robot.commands.ConveyorQueue;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Conveyor;
@@ -51,7 +55,8 @@ public class RobotContainer {
     public static AHRS navX;
     
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
-  //  private static final XboxController
+    //private static final XboxController
+    private static final JoystickButton driver_Y = new JoystickButton(driver, 4);
     private static final JoystickButton driver_X = new JoystickButton(driver, 3);
     private static final JoystickButton driver_B = new JoystickButton(driver, 2);
     private static final JoystickButton driver_A = new JoystickButton(driver, 1);
@@ -76,6 +81,7 @@ public class RobotContainer {
         bindOrchestraOI(false);
         
         intake = Intake.getInstance();
+        //intake.setDefaultCommand(new ArmUp());
     
         conveyor = Conveyor.getInstance();
         conveyor.setDefaultCommand(new ConveyorQueue());
@@ -121,11 +127,21 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
-       driver_A.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
-       driver_B.whileHeld(() -> intake.intake(-0.5)).whenReleased(intake::stopMotors);
+      // driver_A.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
+      // driver_B.whileHeld(() -> intake.intake(-0.5)).whenReleased(intake::stopMotors);
 
+        /*driver_A.whileHeld(new ParallelCommandGroup(
+            new ArmDown(),
+            new SequentialCommandGroup(
+                new WaitCommand(1),
+                new InstantCommand(() -> Intake.rotate(0.2))
+            )
+        )).whenReleased(new ArmUp());*/
 
-
+        driver_X.whileHeld(()->Conveyor.setOpenLoop(1), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
+        driver_Y.whileHeld(()->Conveyor.setOpenLoop(-1), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
+        driver_A.whileHeld(()->Shooter.setOpenLoop(-0.8), Shooter.getInstance()).whenReleased(()->Shooter.setOpenLoop(0), Shooter.getInstance());
+        
     }
 
     /**
