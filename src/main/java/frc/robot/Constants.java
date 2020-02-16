@@ -79,14 +79,6 @@ public class Constants {
         public static double kMaxVelocity = 0; // Maximum velocity to turn arm at, radians per second
         public static double kMaxAcceleration = 0; // Maximum acceleration to turn arm at, radians per second per second
         public static double kRadPerTick = 0; // Angle change of the arm per tick of the encoder
-
-        public static final int kSlotIdx = 0;
-        public static final int kPIDLoopIdx = 0;
-        public static final int kTimeoutMs = 30;
-
-        public static final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.0, 0, 1.0);
-
-        
     }
     
     public static class ConveyorConstants {
