@@ -21,7 +21,6 @@ public class Constants {
 
     }
     
-    
     public static class DrivetrainConstants {
         public static final int
             /* Drivetrain motor IDs */
@@ -41,8 +40,8 @@ public class Constants {
         public static final double kD = 0;
 
         /* Wheels Constants */
-        public static final double kTicksPerRotation = 2048 * 10.42;
-        public static final double kWheelDiameter = 6 / 39.3700787;  // first number inches --> converted to meters
+        public static final double kTicksPerRotation = 2048 * 10.42; // Falcon 500 integrated encoder (2048 CPR) multiplied by gear ratio (10.42:1)
+        public static final double kWheelDiameter = Units.InchesToMeters(6); 
         
         public static final double kMaxSpeedMPS = 4.972;  // max speed in meters per second
         public static final double kTrackWidth = 0.7051868402911773;  // distance between wheels

@@ -92,11 +92,8 @@ public class Drivetrain implements Subsystem {
      */
     public static void setOpenLoop(Double left, Double right){
     
-        SmartDashboard.putNumber("left set", left);
-        SmartDashboard.putNumber("right set", right);
-        /*
-        SmartDashboard.putNumber("l current", leftMaster.getStatorCurrent());
-        SmartDashboard.putNumber("r current", rightMaster.getStatorCurrent());*/
+        leftMaster.set(ControlMode.PercentOutput, left);
+        rightMaster.set(ControlMode.PercentOutput, right);
     }
 
     /**

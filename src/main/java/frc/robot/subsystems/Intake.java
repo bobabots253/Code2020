@@ -99,7 +99,7 @@ public class Intake extends ProfiledPIDSubsystem {
      */
     @Override
     public double getMeasurement() {
-        return Units.TicksToRadians(armMotor.getSelectedSensorPosition());
+        return Units.IntakeUnits.TicksToRadians(armMotor.getSelectedSensorPosition());
     }
 
     /**
