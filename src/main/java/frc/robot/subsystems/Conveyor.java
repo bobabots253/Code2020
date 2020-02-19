@@ -21,10 +21,25 @@ public class Conveyor implements Subsystem {
         motor.setInverted(false);
     }
 
-    public boolean getSensor() {
+    /**
+     * Determine whether a power cell is seen by the queuing sensor at the beginning of the conveyor
+     * 
+     * @return true if the sensor sees a ball, else: false
+     */
+    public boolean getQueueSensor() {
         // TODO: implement
         return true;
     }   
+
+    /**
+     * Determine whether a power cell is seen by the shooter sensor at the end of the conveyor
+     * 
+     * @return true if the sensor sees a ball, else: false
+     */
+    public boolean getShooterSensor() {
+        // TODO: implement
+        return true;
+    }
 
     /**
      * Sets the conveyor in percent of max speed
@@ -34,4 +49,7 @@ public class Conveyor implements Subsystem {
         motor.set(value);
     }
 
+    public static void stop(){
+        setOpenLoop(0);
+    }
 }

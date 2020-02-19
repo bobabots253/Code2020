@@ -11,11 +11,39 @@ public class ConveyorQueue implements Command {
 
     private Subsystem[] requirements = {Conveyor.getInstance()};
 
+    public enum State {
+        OneSensor, TwoSensors
+    }
+
+    private State state;
+
+    public ConveyorQueue(State state) {
+        this.state = state;
+    }
+
     public void execute() { 
-        if(Conveyor.getInstance().getSensor()) {
-            Conveyor.setOpenLoop(ConveyorConstants.kQueueSpeed);
-        } else {
-            Conveyor.setOpenLoop(0);
+
+        switch(state){
+            case OneSensor:
+                if(Conveyor.getInstance().getQueueSensor()) {
+                    Conveyor.setOpenLoop(ConveyorConstants.kQueueSpeed);
+                } else {
+                    Conveyor.stop();
+                }
+                break;
+            case TwoSensors:
+                if(!Conveyor.getInstance().getShooterSensor()) {
+                    if(Conveyor.getInstance().getQueueSensor()) {
+                        Conveyor.setOpenLoop(ConveyorConstants.kQueueSpeed);
+                    } else {
+                        Conveyor.stop();
+                    }
+                } else {
+                    Conveyor.stop();
+                }
+                break;
+            default:
+                break;
         }
     }
 
