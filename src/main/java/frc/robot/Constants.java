@@ -89,14 +89,16 @@ public class Constants {
 
     public static class ConveyorConstants {
         // TODO: Change this number
-        public static final int motorID = 10;
+        public static final int master_MotorID = 10;
+        public static final int slave_MotorID = 12;
 
         public static final double kQueueSpeed = 0.0;
     }
 
     public static class ShooterConstants {
         // TODO: Change this number
-        public static final int motorID = 11;
+        public static final int master_MotorID = 11;
+        public static final int slave_MotorID = 13;
 
         /* PIDController Constants, Slot 0, RPM Velocity Control */ // TODO: Tune
         public static int kSlotID = 0;

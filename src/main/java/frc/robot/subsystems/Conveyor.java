@@ -7,7 +7,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.ConveyorConstants;
 
 public class Conveyor implements Subsystem {
-    private static final CANSparkMax motor = new CANSparkMax(ConveyorConstants.motorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax master = new CANSparkMax(ConveyorConstants.master_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax slave = new CANSparkMax(ConveyorConstants.slave_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     
     private static Conveyor instance;
     
@@ -17,9 +18,15 @@ public class Conveyor implements Subsystem {
     }
     
     private Conveyor() {
-        motor.enableVoltageCompensation(Constants.kMaxVoltage);
-        motor.setInverted(false);
+        master.enableVoltageCompensation(Constants.kMaxVoltage);
+        master.setInverted(false);
+        slave.enableVoltageCompensation(Constants.kMaxVoltage);
+        slave.setInverted(true);
+
+        slave.follow(master);
     }
+
+    
 
     /**
      * Determine whether a power cell is seen by the queuing sensor at the beginning of the conveyor
@@ -46,7 +53,7 @@ public class Conveyor implements Subsystem {
      * @param value Percent speed
      */
     public static void setOpenLoop(double value) {
-        motor.set(value);
+        master.set(value);
     }
 
     public static void stop(){
