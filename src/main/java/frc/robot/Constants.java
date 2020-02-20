@@ -23,7 +23,7 @@ public class Constants {
                                                   // turn to [0,1]
 
     }
-
+    
     public static class DrivetrainConstants {
         public static final int
         /* Drivetrain motor IDs */
@@ -146,5 +146,9 @@ public class Constants {
                 "Xi-Freedom_Dive" };
 
         public static final int numSongs = songs.length - 1;
+    }
+    public static class ClimberConstants{
+        public static final int mainMotorID = 14;
+        public static final int slaveMotorID = 15;
     }
 }

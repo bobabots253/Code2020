@@ -4,11 +4,14 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 
 public class Climber implements Subsystem{
     private static Climber instance;
-    public static TalonSRX mainMotor;
-    public static TalonSRX slaveMotor;
+    public static TalonSRX
+         mainMotor = new TalonSRX(Constants.ClimberConstants.mainMotorID),
+         slaveMotor = new TalonSRX(Constants.ClimberConstants.slaveMotorID); 
+    
 
     private Climber(){
         slaveMotor.follow(mainMotor);
