@@ -24,11 +24,15 @@ public class Shooter implements Subsystem {
     }
     
     private Shooter(){
+        master.restoreFactoryDefaults();
+        slave.restoreFactoryDefaults();
+
+
+
         master.enableVoltageCompensation(Constants.kMaxVoltage);
         master.setInverted(false);
         slave.enableVoltageCompensation(Constants.kMaxVoltage);
         slave.setInverted(true);
-
 
         slave.follow(master);
     
@@ -37,6 +41,9 @@ public class Shooter implements Subsystem {
         pidController.setI(ShooterConstants.kI, ShooterConstants.kSlotID);
         pidController.setD(ShooterConstants.kD, ShooterConstants.kSlotID);
         pidController.setOutputRange(ShooterConstants.kMin, ShooterConstants.kMax, ShooterConstants.kSlotID);
+
+        master.burnFlash();
+        slave.burnFlash();
     }
 
     /**

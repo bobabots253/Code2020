@@ -18,12 +18,20 @@ public class Conveyor implements Subsystem {
     }
     
     private Conveyor() {
+        master.restoreFactoryDefaults();
+        slave.restoreFactoryDefaults();
+
+        
+
         master.enableVoltageCompensation(Constants.kMaxVoltage);
         master.setInverted(false);
         slave.enableVoltageCompensation(Constants.kMaxVoltage);
         slave.setInverted(true);
 
         slave.follow(master);
+
+        master.burnFlash();
+        slave.burnFlash();
     }
 
     
