@@ -7,20 +7,21 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Climber implements Subsystem{
     private static Climber instance;
-    public static TalonSRX motor;
+    public static TalonSRX mainMotor;
+    public static TalonSRX slaveMotor;
 
     private Climber(){
-
+        slaveMotor.follow(mainMotor);
     }
-    public static void setSpeed(double speed){
-        motor.set(ControlMode.PercentOutput, speed);
+    public static void climbUp(double speed){
+        mainMotor.set(ControlMode.PercentOutput, speed);
     }
     public static Climber getInstance(){
         if(instance == null) {instance = new Climber();}
         return instance;
     }
     public static void stopMotors(){
-        motor.set(ControlMode.PercentOutput, 0.0f);
+        mainMotor.set(ControlMode.PercentOutput, 0.0f);
     }
     
 }

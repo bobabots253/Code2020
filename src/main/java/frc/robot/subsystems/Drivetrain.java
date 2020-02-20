@@ -42,45 +42,48 @@ public class Drivetrain implements Subsystem {
     }
     
     private Drivetrain(){
+
+        TalonFXConfiguration configuration = new TalonFXConfiguration();
+        configuration.statorCurrLimit = new StatorCurrentLimitConfiguration(
+                Constants.DrivetrainConstants.kStatorLimitEnable, 
+                Constants.DrivetrainConstants.kStatorCurrentLimit,
+                Constants.DrivetrainConstants.kStatorTriggerThreshold,
+                Constants.DrivetrainConstants.kStatorTriggerDuration);
+        configuration.supplyCurrLimit = new SupplyCurrentLimitConfiguration(
+                Constants.DrivetrainConstants.kSupplyLimitEnable, 
+                Constants.DrivetrainConstants.kSupplyCurrentLimit,
+                Constants.DrivetrainConstants.kSupplyTriggerThreshold,
+                Constants.DrivetrainConstants.kSupplyTriggerDuration);
+
+        /* Resetting to factory before setting common settings */
+        motors.forEach(motor -> {
+            motor.configFactoryDefault();
+            motor.configAllSettings(configuration);
+            
+            motor.configVoltageCompSaturation(Constants.kMaxVoltage);
+            motor.enableVoltageCompensation(true);
+            motor.setNeutralMode(NeutralMode.Brake);
+        });
+
         leftSlave.follow(leftMaster);
         rightSlave.follow(rightMaster);
         
         // inversion on opposite sides of the drivetrain
         List.of(leftMaster, leftSlave).forEach(motor -> motor.setInverted(false));
         List.of(rightMaster, rightSlave).forEach(motor -> motor.setInverted(true));
-        
-        // Motor settings
-        TalonFXConfiguration falconConfig = new TalonFXConfiguration();
-        falconConfig.supplyCurrLimit = new SupplyCurrentLimitConfiguration(
-            DrivetrainConstants.kLimitEnabled,
-            DrivetrainConstants.kCurrentLimit,
-            DrivetrainConstants.kTriggerThresholdCurrent,
-            DrivetrainConstants.kTriggerThresholdTimeDelta
-        );
-        motors.forEach(motor -> {
-            
-            /*  TalonSRX configs
-            motor.configPeakCurrentLimit(45);
-            motor.configPeakCurrentDuration(125);
-            motor.configContinuousCurrentLimit(38);
-            motor.enableCurrentLimit(true);
-            */
-            
-            motor.configAllSettings(falconConfig);
-            
-            motor.configVoltageCompSaturation(Constants.kMaxVoltage, 10);
-            motor.enableVoltageCompensation(true);
-            motor.setNeutralMode(NeutralMode.Brake);
-        });
     
-        /* Encoder settings */
-        List.of(leftMaster, rightMaster).forEach(motor -> {
-            motor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 1, 10);
-            motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
-            motor.setSensorPhase(false);
-        });
+        leftMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+        rightMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         
         register();
+    }
+
+    @Override
+    public void periodic() {
+        ODOMETRY.update(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()),
+                        getLeftEncMeters(),
+                        getRightEncMeters());
+        RobotContainer.falconDashboard.putOdom(Units.DrivetrainUnits.MeterPoseToFeetPose(ODOMETRY.getPoseMeters()));
     }
 
     /**
@@ -92,9 +95,6 @@ public class Drivetrain implements Subsystem {
     public static void setOpenLoop(Double left, Double right){
         leftMaster.set(ControlMode.PercentOutput, left);
         rightMaster.set(ControlMode.PercentOutput, right);
-    
-        SmartDashboard.putNumber("left volts", left);
-        SmartDashboard.putNumber("right volts", right);
     }
 
     /**
@@ -136,7 +136,7 @@ public class Drivetrain implements Subsystem {
      * @return the left and right drivetrain velocities (in meters/sec) as a DifferentialDriveWheelSpeeds object
      */
     public static DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(Units.TicksPerDecisecondToMPS(getLeftEncVelocity()), Units.TicksPerDecisecondToMPS(getRightEncVelocity()));
+        return new DifferentialDriveWheelSpeeds(getLeftEncVelocityMeters(), getRightEncVelocityMeters());
     }
     
     /**
@@ -152,6 +152,22 @@ public class Drivetrain implements Subsystem {
     public static double getRightEnc() {
         return rightMaster.getSelectedSensorPosition();
     }
+
+    /**
+     * @return the current position measurement of the left drivetrain encoder in meters
+     */
+    public static double getLeftEncMeters() {
+        return Units.DrivetrainUnits.TicksToMeters(getLeftEnc());
+    }
+    
+    /**
+     * @return the current position measurement of the right drivetrain encoder in meters
+     */
+    public static double getRightEncMeters() {
+        return Units.DrivetrainUnits.TicksToMeters(getRightEnc());
+    }
+
+
     
     /**
      * @return the current velocity measurement of the left drivetrain encoder in talon native units (ticks/ds)
@@ -171,14 +187,14 @@ public class Drivetrain implements Subsystem {
      * @return the current velocity measurement of the left drivetrain encoder in meters
      */
     public static double getLeftEncVelocityMeters() {
-        return Units.TicksPerDecisecondToMPS(getLeftEncVelocity());
+        return Units.DrivetrainUnits.TicksPerDecisecondToMPS(getLeftEncVelocity());
     }
 
     /**
      * @return the current velocity measurement of the right drivetrain encoder in meters
      */
     public static double getRightEncVelocityMeters() {
-        return Units.TicksPerDecisecondToMPS(getRightEncVelocity());
+        return Units.DrivetrainUnits.TicksPerDecisecondToMPS(getRightEncVelocity());
     }
     
     /* Static class to contain the speeds of each side of the drivetrain */

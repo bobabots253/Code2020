@@ -10,7 +10,9 @@ import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter implements Subsystem {
-    private static final CANSparkMax motor = new CANSparkMax(ShooterConstants.motorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax master = new CANSparkMax(ShooterConstants.master_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax slave = new CANSparkMax(ShooterConstants.slave_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+
     private static CANPIDController pidController;
 
     private static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
@@ -22,9 +24,15 @@ public class Shooter implements Subsystem {
     }
     
     private Shooter(){
-        motor.enableVoltageCompensation(Constants.kMaxVoltage);
+        master.enableVoltageCompensation(Constants.kMaxVoltage);
+        master.setInverted(false);
+        slave.enableVoltageCompensation(Constants.kMaxVoltage);
+        slave.setInverted(true);
+
+
+        slave.follow(master);
     
-        pidController = motor.getPIDController();
+        pidController = master.getPIDController();
         pidController.setP(ShooterConstants.kP, ShooterConstants.kSlotID);
         pidController.setI(ShooterConstants.kI, ShooterConstants.kSlotID);
         pidController.setD(ShooterConstants.kD, ShooterConstants.kSlotID);
@@ -36,14 +44,14 @@ public class Shooter implements Subsystem {
      * @param value percent of voltage [-1, 1]
      */
     public static void setOpenLoop(double value){
-        motor.set(value);
+        master.set(value);
     }
     
     /**
      * Stops the motor
      */
     public static void stop(){
-        motor.stopMotor();
+        master.stopMotor();
     }
     
     /**

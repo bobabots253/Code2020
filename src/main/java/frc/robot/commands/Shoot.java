@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Shoot implements Command {
     
-    private Subsystem[] requirements = { RobotContainer.conveyor, RobotContainer.shooter };
+    private Subsystem[] requirements = {};
     
     @Override
     public void execute(){

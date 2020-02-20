@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
@@ -30,6 +31,9 @@ public class Drive implements Command {
         double throttle = RobotContainer.getThrottleValue();
         double turn = RobotContainer.getTurnValue();
 
+        SmartDashboard.putNumber("turn input", turn);
+        SmartDashboard.putNumber("throttle input", throttle);
+
         double left, right;
         
         switch (state) {
@@ -39,6 +43,15 @@ public class Drive implements Command {
                 if (throttle != 0) {
                     left = (throttle + throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
                     right = (throttle - throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
+
+                    // Normalize
+                    double maxMagnitude = Math.max(Math.abs(left), Math.abs(right));
+                    
+                    if(maxMagnitude > DriverConstants.kDriveSens) {
+                        left = left / maxMagnitude * DriverConstants.kDriveSens;
+                        right = right / maxMagnitude * DriverConstants.kDriveSens;
+                    } 
+
                 } else {
                     // Turns in place when there is no throttle input
                     left = turn * DriverConstants.kTurnInPlaceSens;
@@ -49,30 +62,33 @@ public class Drive implements Command {
 
             case CheesyDriveOpenLoop:
                 if (throttle != 0) {
-                    throttle *= DrivetrainConstants.kMaxSpeedMPS;
-                    turn *= DriverConstants.kMaxCurvature * throttle;
+                    throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
+                    turn *= DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens * throttle;
 
                     DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
-                    wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
+                    wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS);
 
-                    left = wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.leftMetersPerSecond) / Constants.kMaxVoltage;
-                    right = wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS + Drivetrain.FEEDFORWARD.calculate(wSpeeds.rightMetersPerSecond) / Constants.kMaxVoltage;
+                    left = Drivetrain.FEEDFORWARD.calculate(wSpeeds.leftMetersPerSecond) / Constants.kMaxVoltage;
+                    right = Drivetrain.FEEDFORWARD.calculate(wSpeeds.rightMetersPerSecond) / Constants.kMaxVoltage;
 
                 } else {
                     // Turns in place when there is no throttle input
-                    left = turn * DriverConstants.kTurnInPlaceSens;
-                    right = -turn * DriverConstants.kTurnInPlaceSens;
+                    left = turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
+                    right = -turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
+
+                    left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
+                    right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
                 }
 
                 break;
 
             case CheesyDriveClosedLoop:
                 if (throttle != 0) {
-                    throttle *= DrivetrainConstants.kMaxSpeedMPS;
-                    turn *= DriverConstants.kMaxCurvature * throttle;
+                    throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
+                    turn *= DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens * throttle;
 
                     DifferentialDriveWheelSpeeds _wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
-                    _wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens);
+                    _wSpeeds.normalize(DrivetrainConstants.kMaxSpeedMPS);
 
                     left = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.leftMetersPerSecond);
                     right = Drivetrain.FEEDFORWARD.calculate(_wSpeeds.rightMetersPerSecond);
@@ -85,8 +101,14 @@ public class Drive implements Command {
                     right /= Constants.kMaxVoltage;
                 } else {
                     // Turns in place when there is no throttle input
-                    left = turn * DriverConstants.kTurnInPlaceSens;
-                    right = -turn * DriverConstants.kTurnInPlaceSens;
+                    left = turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
+                    right = -turn * DrivetrainConstants.kMaxSpeedMPS* DriverConstants.kTurnInPlaceSens;
+
+                    left = Drivetrain.FEEDFORWARD.calculate(left);
+                    right = Drivetrain.FEEDFORWARD.calculate(right);
+
+                    left += Drivetrain.LEFT_PID_CONTROLLER.calculate(Drivetrain.getLeftEncVelocityMeters(), left);
+                    right += Drivetrain.RIGHT_PID_CONTROLLER.calculate(Drivetrain.getRightEncVelocityMeters(), right);
                 }
                 
                 break;

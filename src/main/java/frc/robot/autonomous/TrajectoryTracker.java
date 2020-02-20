@@ -47,7 +47,7 @@ public class TrajectoryTracker extends RamseteCommand {
         Trajectory.State currentState = trajectory.sample(currentTime-startTime);
         Pose2d currentPose = currentState.poseMeters;
 
-        RobotContainer.falconDashboard.putPath(Units.MeterPoseToFeetPose(currentPose));
+        RobotContainer.falconDashboard.putPath(Units.DrivetrainUnits.MeterPoseToFeetPose(currentPose));
     }
 
     @Override
