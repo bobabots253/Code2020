@@ -67,8 +67,8 @@ public class Constants {
 
     public static class IntakeConstants {
         /* Motors */ // TODO: Change these numbers
-        public static final int armMotor = 8;
-        public static final int spinMotor = 9;
+        public static final int armMotor = 5;
+        public static final int spinMotor = 6;
 
         /* PID Constants */ // TODO: Tune
         public static double kP = 0;
@@ -90,15 +90,15 @@ public class Constants {
     public static class ConveyorConstants {
         // TODO: Change this number
         public static final int master_MotorID = 10;
-        public static final int slave_MotorID = 12;
+        public static final int slave_MotorID = 11;
 
         public static final double kQueueSpeed = 0.0;
     }
 
     public static class ShooterConstants {
         // TODO: Change this number
-        public static final int master_MotorID = 11;
-        public static final int slave_MotorID = 13;
+        public static final int master_MotorID = 8;
+        public static final int slave_MotorID = 9;
 
         /* PIDController Constants, Slot 0, RPM Velocity Control */ // TODO: Tune
         public static int kSlotID = 0;

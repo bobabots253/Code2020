@@ -28,7 +28,7 @@ public class Conveyor implements Subsystem {
         slave.enableVoltageCompensation(Constants.kMaxVoltage);
         slave.setInverted(true);
 
-        slave.follow(master);
+    
 
         master.burnFlash();
         slave.burnFlash();
@@ -62,6 +62,7 @@ public class Conveyor implements Subsystem {
      */
     public static void setOpenLoop(double value) {
         master.set(value);
+        slave.set(value);
     }
 
     public static void stop(){
