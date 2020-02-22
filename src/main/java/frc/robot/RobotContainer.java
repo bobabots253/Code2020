@@ -128,8 +128,8 @@ public class RobotContainer {
 
        driver_B.whileHeld(()->Shooter.setOpenLoop(-0.65), Shooter.getInstance()).whenReleased(()->Shooter.setOpenLoop(0), Shooter.getInstance());
 
-       driver_X.whileHeld(()->Conveyor.setOpenLoop(0.8), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
-       driver_A.whileHeld(()->Conveyor.setOpenLoop(-0.8), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
+       driver_X.whileHeld(()->Conveyor.setOpenLoop(0.65), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
+       driver_A.whileHeld(()->Conveyor.setOpenLoop(-0.65), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
 
 
 
