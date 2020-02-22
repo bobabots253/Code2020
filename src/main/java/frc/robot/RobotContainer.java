@@ -126,22 +126,18 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
-       driver_LB.whileHeld(() -> intake.intake(0.3)).whenReleased(intake::stopMotors);
-       driver_RB.whileHeld(() -> intake.rotate(0.3)).whenReleased(intake::stopMotors);
+       driver_LB.whileHeld(() -> intake.rotate(0.3)).whenReleased(intake::stopMotors);
+       driver_RB.whileHeld(() -> intake.rotate(-0.3)).whenReleased(intake::stopMotors);
+
+       driver_Y.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
 
        driver_B.whileHeld(()->Shooter.setOpenLoop(-0.65), Shooter.getInstance()).whenReleased(()->Shooter.setOpenLoop(0), Shooter.getInstance());
 
        driver_X.whileHeld(()->Conveyor.setOpenLoop(0.65), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
        driver_A.whileHeld(()->Conveyor.setOpenLoop(0.65), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
 
-
-
-
-
-
-
     }
-
+    
     /**
      * Constructs and returns the Command to run during the autonomous period
      * 
