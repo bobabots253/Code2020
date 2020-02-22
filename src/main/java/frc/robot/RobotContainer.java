@@ -51,11 +51,14 @@ public class RobotContainer {
     public static AHRS navX;
     
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
-    private static final JoystickButton driver_X = new JoystickButton(driver, 3);
-    private static final JoystickButton driver_B = new JoystickButton(driver, 2);
-    private static final JoystickButton driver_A = new JoystickButton(driver, 1);
-    private static final JoystickButton driver_LB = new JoystickButton(driver, 5);
-    private static final JoystickButton driver_RB = new JoystickButton(driver, 6);
+
+    private static final JoystickButton
+        driver_A = new JoystickButton(driver, 1),
+        driver_B = new JoystickButton(driver, 2),
+        driver_X = new JoystickButton(driver, 3),
+        driver_Y = new JoystickButton(driver, 4),
+        driver_LB = new JoystickButton(driver, 5),
+        driver_RB = new JoystickButton(driver, 6);
 
     private static final POVButton DPAD_RIGHT = new POVButton(driver, 90);
     private static final POVButton DPAD_LEFT = new POVButton(driver, 270);

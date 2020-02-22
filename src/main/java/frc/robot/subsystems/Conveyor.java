@@ -21,21 +21,14 @@ public class Conveyor implements Subsystem {
         master.restoreFactoryDefaults();
         slave.restoreFactoryDefaults();
 
-        
+        slave.follow(master, true);
 
         master.enableVoltageCompensation(Constants.kMaxVoltage);
-        master.setInverted(false);
         slave.enableVoltageCompensation(Constants.kMaxVoltage);
-        slave.setInverted(true);
-
-    
 
         master.burnFlash();
         slave.burnFlash();
     }
-
-    
-
     /**
      * Determine whether a power cell is seen by the queuing sensor at the beginning of the conveyor
      * 
@@ -62,7 +55,7 @@ public class Conveyor implements Subsystem {
      */
     public static void setOpenLoop(double value) {
         master.set(value);
-        slave.set(value);
+       
     }
 
     public static void stop(){

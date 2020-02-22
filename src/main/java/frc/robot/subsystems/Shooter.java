@@ -27,13 +27,11 @@ public class Shooter implements Subsystem {
         master.restoreFactoryDefaults();
         slave.restoreFactoryDefaults();
 
-
-
         master.enableVoltageCompensation(Constants.kMaxVoltage);
-        master.setInverted(false);
         slave.enableVoltageCompensation(Constants.kMaxVoltage);
-        slave.setInverted(true);
-    
+
+        slave.follow(master, true);
+
         pidController = master.getPIDController();
         pidController.setP(ShooterConstants.kP, ShooterConstants.kSlotID);
         pidController.setI(ShooterConstants.kI, ShooterConstants.kSlotID);
@@ -50,7 +48,7 @@ public class Shooter implements Subsystem {
      */
     public static void setOpenLoop(double value){
         master.set(value);
-        slave.set(value);
+       
     }
     
     /**
@@ -58,7 +56,7 @@ public class Shooter implements Subsystem {
      */
     public static void stop(){
         master.stopMotor();
-        slave.stopMotor();
+        
     }
     
     /**
