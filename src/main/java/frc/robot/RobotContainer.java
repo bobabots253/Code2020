@@ -53,6 +53,9 @@ public class RobotContainer {
     public static AHRS navX;
     
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
+    private static final JoystickButton driver_LeftStart = new JoystickButton(driver, 5); //the button left of the xbox logo
+    private static final JoystickButton driver_RightStart = new JoystickButton(driver, 6); //the button right of the xbox logo
+    //private static final JoystickButton driver_Y = new JoystickButton(driver, 4);
     private static final JoystickButton driver_X = new JoystickButton(driver, 3);
     private static final JoystickButton driver_B = new JoystickButton(driver, 2);
     private static final JoystickButton driver_A = new JoystickButton(driver, 1);
@@ -122,10 +125,11 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
-        driver_X.whenHeld( new RunCommand(() -> Climber.climbUp(0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors()));
-    
-       driver_A.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
-       driver_B.whileHeld(() -> intake.intake(-0.5)).whenReleased(intake::stopMotors);
+        driver_X.whenHeld( new RunCommand(() -> Climber.climbUnity(0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors()));
+        driver_LeftStart.whenHeld( new RunCommand(() -> Climber.climbLeft(0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
+        driver_RightStart.whenHeld( new RunCommand(() -> Climber.climbRight(0.5))).whenReleased(new RunCommand(() -> Climber.stopRightMotor()));
+        driver_A.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
+        driver_B.whileHeld(() -> intake.intake(-0.5)).whenReleased(intake::stopMotors);
     }
 
     /**

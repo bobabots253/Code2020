@@ -148,7 +148,7 @@ public class Constants {
         public static final int numSongs = songs.length - 1;
     }
     public static class ClimberConstants{
-        public static final int mainMotorID = 14;
-        public static final int slaveMotorID = 15;
+        public static final int leftMotorID = 14;
+        public static final int rightMotorID = 15;
     }
 }
