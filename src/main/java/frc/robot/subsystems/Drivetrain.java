@@ -42,7 +42,7 @@ public class Drivetrain implements Subsystem {
     }
     
     private Drivetrain(){
-
+        
         TalonFXConfiguration configuration = new TalonFXConfiguration();
         configuration.statorCurrLimit = new StatorCurrentLimitConfiguration(
                 Constants.DrivetrainConstants.kStatorLimitEnable, 

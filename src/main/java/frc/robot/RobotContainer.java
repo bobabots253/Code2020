@@ -1,6 +1,5 @@
 package frc.robot;
 
-import com.ctre.phoenix.music.Orchestra;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -17,12 +16,10 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
-import frc.robot.Constants.OrchestraConstants;
 import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
 import frc.robot.commands.ConveyorQueue;
@@ -42,12 +39,8 @@ public class RobotContainer {
     public static Conveyor conveyor;
     public static Shooter shooter;
 
-    public static Orchestra orchestra;
-    private static int songIndex = 0;
-
     public static Dashboard falconDashboard;
     private static NetworkTable limelight;
-
     public static AHRS navX;
     
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
@@ -76,10 +69,6 @@ public class RobotContainer {
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         
-        orchestra = new Orchestra(Drivetrain.motors);
-        // set to true for competition bindings
-        bindOrchestraOI(false);
-        
         intake = Intake.getInstance();
     
         conveyor = Conveyor.getInstance();
@@ -91,50 +80,21 @@ public class RobotContainer {
     
         bindOI();
     }
-    
-    private void bindOrchestraOI(boolean competitionMode){
-        if (competitionMode) {
-            // bindings for competition
-        } else {
-            // bindings for off-competition
-            loadSong();
-            //driver_X.whileHeld(new RunCommand(orchestra::play, drivetrain)).whenReleased(orchestra::pause, drivetrain);
-            DPAD_RIGHT.whenPressed(() -> {
-                songIndex++;
-                if (songIndex > OrchestraConstants.numSongs) songIndex = 0;
-                loadSong();
-            });
-            DPAD_LEFT.whenPressed(() -> {
-                if (orchestra.isPlaying()) {
-                    // restart song
-                    orchestra.stop();
-                    orchestra.play();
-                } else {
-                    songIndex--;
-                    if (songIndex < 0) songIndex = OrchestraConstants.numSongs;
-                    loadSong();
-                }
-            });
-        }
-    }
-    
-    private void loadSong(){
-        orchestra.loadMusic(String.format("songs/%s.chrp", OrchestraConstants.songs[songIndex]));
-    }
 
     /**
      * Binds operator input to Commands 
      */
     private void bindOI() {
-       driver_LB.whileHeld(() -> intake.rotate(0.3)).whenReleased(intake::stopMotors);
-       driver_RB.whileHeld(() -> intake.rotate(-0.3)).whenReleased(intake::stopMotors);
+       driver_LB.whileHeld(() -> intake.rotate(0.3)).whenReleased(()->intake.rotate(0.1));
+       driver_RB.whileHeld(() -> intake.rotate(-0.3)).whenReleased(()->intake.rotate(-0.1));
 
-       driver_Y.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
+       driver_Y.whileHeld(() -> intake.intake(0.75)).whenReleased(intake::stopMotors);
 
-       driver_B.whileHeld(()->Shooter.setOpenLoop(-0.65), Shooter.getInstance()).whenReleased(()->Shooter.setOpenLoop(0), Shooter.getInstance());
+       driver_B.whileHeld(()->Shooter.setOpenLoop(0.65), Shooter.getInstance()).whenReleased(()->Shooter.setOpenLoop(0), Shooter.getInstance());
 
-       driver_X.whileHeld(()->Conveyor.setOpenLoop(0.65), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
-       driver_A.whileHeld(()->Conveyor.setOpenLoop(0.65), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
+       driver_X.whileHeld(()->Conveyor.setOpenLoop(-0.4), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
+       driver_A.whileHeld(()->Conveyor.setOpenLoop(0.4
+       ), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
 
     }
     
