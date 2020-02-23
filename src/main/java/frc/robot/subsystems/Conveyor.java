@@ -2,16 +2,19 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.ConveyorConstants;
 
 public class Conveyor implements Subsystem {
-    private static final CANSparkMax master = new CANSparkMax(ConveyorConstants.master_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax slave = new CANSparkMax(ConveyorConstants.slave_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    
+    public static final CANSparkMax master = new CANSparkMax(ConveyorConstants.master_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final CANSparkMax slave = new CANSparkMax(ConveyorConstants.slave_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final DigitalInput photoelectric = new DigitalInput(0);
+
     private static Conveyor instance;
-    
     public static Conveyor getInstance() {
         if (instance == null) instance = new Conveyor();
         return instance;
@@ -21,6 +24,7 @@ public class Conveyor implements Subsystem {
         master.restoreFactoryDefaults();
         slave.restoreFactoryDefaults();
 
+        master.setInverted(true);
         slave.follow(master, true);
 
         master.enableVoltageCompensation(Constants.kMaxVoltage);
@@ -28,6 +32,13 @@ public class Conveyor implements Subsystem {
 
         master.burnFlash();
         slave.burnFlash();
+
+        register();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putBoolean("Queue Sensor", getQueueSensor());
     }
     /**
      * Determine whether a power cell is seen by the queuing sensor at the beginning of the conveyor
@@ -35,8 +46,7 @@ public class Conveyor implements Subsystem {
      * @return true if the sensor sees a ball, else: false
      */
     public boolean getQueueSensor() {
-        // TODO: implement
-        return true;
+        return (photoelectric.get());
     }   
 
     /**

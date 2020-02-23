@@ -85,16 +85,15 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
-       driver_LB.whileHeld(() -> intake.rotate(0.3)).whenReleased(()->intake.rotate(0.1));
-       driver_RB.whileHeld(() -> intake.rotate(-0.3)).whenReleased(()->intake.rotate(-0.1));
+       driver_X.whileHeld(() -> intake.rotate(0.5)).whenReleased(()->intake.rotate(0.1));
+       driver_Y.whileHeld(() -> intake.rotate(-0.5)).whenReleased(()->intake.rotate(-0.1));
 
-       driver_Y.whileHeld(() -> intake.intake(0.75)).whenReleased(intake::stopMotors);
+       driver_RB.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
 
        driver_B.whileHeld(()->Shooter.setOpenLoop(0.65), Shooter.getInstance()).whenReleased(()->Shooter.setOpenLoop(0), Shooter.getInstance());
 
-       driver_X.whileHeld(()->Conveyor.setOpenLoop(-0.4), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
-       driver_A.whileHeld(()->Conveyor.setOpenLoop(0.4
-       ), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
+       driver_LB.whileHeld(()->Conveyor.setOpenLoop(0.55), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
+       driver_A.whileHeld(()->Conveyor.setOpenLoop(-0.55), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
 
     }
     

@@ -14,8 +14,8 @@ public class Constants {
     public static class DriverConstants {
         /* Common drive mode settings */
         public static final double kJoystickDeadband = 0.07; // How much of joystick is "dead" zone [0,1]
-        public static final double kDriveSens = 0.5; // Overall speed setting (turn down for demos) [0,1]
-        public static final double kTurnInPlaceSens = 0.25; // Maximum turn-in-place rate (in percent of max) to allow
+        public static final double kDriveSens = 1.0; // Overall speed setting (turn down for demos) [0,1]
+        public static final double kTurnInPlaceSens = 0.5; // Maximum turn-in-place rate (in percent of max) to allow
                                                             // robot to turn to [0,1]
         public static final double kTurnSens = 1; // Maximum normal turning rate (in percent of max) to allow robot to
                                                   // turn to [0,1]
@@ -90,7 +90,7 @@ public class Constants {
         public static final int master_MotorID = 10;
         public static final int slave_MotorID = 11;
 
-        public static final double kQueueSpeed = 0.0;
+        public static final double kQueueSpeed = 0.2;
     }
 
     public static class ShooterConstants {

@@ -84,6 +84,11 @@ public class Drivetrain implements Subsystem {
                         getLeftEncMeters(),
                         getRightEncMeters());
         RobotContainer.falconDashboard.putOdom(Units.DrivetrainUnits.MeterPoseToFeetPose(ODOMETRY.getPoseMeters()));
+
+        SmartDashboard.putNumber("Left Master Output", leftMaster.getMotorOutputPercent());
+        SmartDashboard.putNumber("Right Master Output", rightMaster.getMotorOutputPercent());
+        SmartDashboard.putNumber("Left Slave Output", leftSlave.getMotorOutputPercent());
+        SmartDashboard.putNumber("Right Master Output", rightSlave.getMotorOutputPercent());
     }
 
     /**
@@ -95,6 +100,7 @@ public class Drivetrain implements Subsystem {
     public static void setOpenLoop(Double left, Double right){
         leftMaster.set(ControlMode.PercentOutput, left);
         rightMaster.set(ControlMode.PercentOutput, right);
+
     }
 
     /**
