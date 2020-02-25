@@ -71,6 +71,5 @@ public class ConveyorQueue implements Command {
     @Override
     public Set<Subsystem> getRequirements() {
         return Set.of(requirements);
-    }
-    
+    }    
 }

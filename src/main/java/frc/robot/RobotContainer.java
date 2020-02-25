@@ -94,7 +94,6 @@ public class RobotContainer {
 
        driver_LB.whileHeld(()->Conveyor.setOpenLoop(0.55), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
        driver_A.whileHeld(()->Conveyor.setOpenLoop(-0.55), Conveyor.getInstance()).whenReleased(()->Conveyor.setOpenLoop(0), Conveyor.getInstance());
-
     }
     
     /**
