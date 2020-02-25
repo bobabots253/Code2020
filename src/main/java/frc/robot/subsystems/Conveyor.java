@@ -2,12 +2,15 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.ConveyorConstants;
+
+import java.util.List;
 
 public class Conveyor implements Subsystem {
     public static final CANSparkMax master = new CANSparkMax(ConveyorConstants.master_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -21,17 +24,16 @@ public class Conveyor implements Subsystem {
     }
     
     private Conveyor() {
-        master.restoreFactoryDefaults();
-        slave.restoreFactoryDefaults();
+        List.of(master, slave).forEach(motor -> {
+            motor.clearFaults();
+            motor.restoreFactoryDefaults();
+            motor.enableVoltageCompensation(Constants.kMaxVoltage);
+            motor.setIdleMode(IdleMode.kBrake);
+            motor.burnFlash();
+        });
 
         master.setInverted(true);
         slave.follow(master, true);
-
-        master.enableVoltageCompensation(Constants.kMaxVoltage);
-        slave.enableVoltageCompensation(Constants.kMaxVoltage);
-
-        master.burnFlash();
-        slave.burnFlash();
 
         register();
     }

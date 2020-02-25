@@ -25,10 +25,10 @@ public class Constants {
     public static class DrivetrainConstants {
         public static final int
         /* Drivetrain motor IDs */
-        leftMaster = 0, // TalonFX
-                leftSlave = 1, // TalonFX
-                rightMaster = 2, // TalonFX
-                rightSlave = 3; // TalonFX
+            leftMaster = 0, // TalonFX
+            leftSlave = 1, // TalonFX
+            rightMaster = 2, // TalonFX
+            rightSlave = 3; // TalonFX
 
         /* feedforward constants */
         public static final double kS = 0.364; // voltage required to overcome friction (V)
