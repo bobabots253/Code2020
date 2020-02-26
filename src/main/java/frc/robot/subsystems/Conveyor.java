@@ -10,11 +10,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.ConveyorConstants;
 
-import java.util.List;
-
 public class Conveyor implements Subsystem {
-    public static final CANSparkMax master = new CANSparkMax(ConveyorConstants.master_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public static final CANSparkMax slave = new CANSparkMax(ConveyorConstants.slave_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax master = new CANSparkMax(ConveyorConstants.master_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax slave = new CANSparkMax(ConveyorConstants.slave_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final DigitalInput photoelectric = new DigitalInput(0);
 
     private static Conveyor instance;
@@ -24,17 +22,24 @@ public class Conveyor implements Subsystem {
     }
     
     private Conveyor() {
-        List.of(master, slave).forEach(motor -> {
-            motor.clearFaults();
-            motor.restoreFactoryDefaults();
-            motor.enableVoltageCompensation(Constants.kMaxVoltage);
-            motor.setIdleMode(IdleMode.kBrake);
-            motor.burnFlash();
-        });
+        master.clearFaults();
+        slave.clearFaults();
+
+        master.restoreFactoryDefaults();
+        slave.restoreFactoryDefaults();
+
+        master.enableVoltageCompensation(Constants.kMaxVoltage);
+        slave.enableVoltageCompensation(Constants.kMaxVoltage);
+
+        master.setIdleMode(IdleMode.kBrake);
+        slave.setIdleMode(IdleMode.kBrake);
 
         master.setInverted(true);
         slave.follow(master, true);
 
+        // burn flash LAST
+        master.burnFlash();
+        slave.burnFlash();
         register();
     }
 
@@ -67,7 +72,6 @@ public class Conveyor implements Subsystem {
      */
     public static void setOpenLoop(double value) {
         master.set(value);
-       
     }
 
     public static void stop(){

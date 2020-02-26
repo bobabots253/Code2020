@@ -4,6 +4,8 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
@@ -24,12 +26,19 @@ public class Shooter implements Subsystem {
     }
     
     private Shooter(){
+        master.clearFaults();
+        slave.clearFaults();
+
         master.restoreFactoryDefaults();
         slave.restoreFactoryDefaults();
 
         master.enableVoltageCompensation(Constants.kMaxVoltage);
         slave.enableVoltageCompensation(Constants.kMaxVoltage);
 
+        master.setIdleMode(IdleMode.kCoast);
+        slave.setIdleMode(IdleMode.kCoast);
+
+        master.setInverted(false);
         slave.follow(master, true);
 
         pidController = master.getPIDController();
@@ -38,6 +47,7 @@ public class Shooter implements Subsystem {
         pidController.setD(ShooterConstants.kD, ShooterConstants.kSlotID);
         pidController.setOutputRange(ShooterConstants.kMin, ShooterConstants.kMax, ShooterConstants.kSlotID);
 
+        // burn flash LAST
         master.burnFlash();
         slave.burnFlash();
     }
