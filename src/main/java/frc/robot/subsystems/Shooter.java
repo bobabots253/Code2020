@@ -12,8 +12,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter implements Subsystem {
-    private static final CANSparkMax master = new CANSparkMax(ShooterConstants.master_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax slave = new CANSparkMax(ShooterConstants.slave_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax master = new CANSparkMax(ShooterConstants.master, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax slave = new CANSparkMax(ShooterConstants.slave, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     private static CANPIDController pidController;
 

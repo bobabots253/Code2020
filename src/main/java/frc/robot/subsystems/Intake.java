@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import frc.robot.Constants.ConveyorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Units;
 import frc.robot.Util;
@@ -19,7 +18,7 @@ public class Intake extends ProfiledPIDSubsystem {
     
     private static final TalonSRX armMotor = Util.createTalonSRX(IntakeConstants.armMotor, false);
     private static final TalonSRX spinMotor = Util.createTalonSRX(IntakeConstants.spinMotor, false);
-    private static final CANSparkMax conveyorMotor = Util.createSparkMAX(ConveyorConstants.slave_MotorID, MotorType.kBrushless);
+    private static final CANSparkMax conveyorMotor = Util.createSparkMAX(IntakeConstants.conveyorMotor, MotorType.kBrushless);
 
     private static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(IntakeConstants.kS, IntakeConstants.kCos, IntakeConstants.kV, IntakeConstants.kA);
     
