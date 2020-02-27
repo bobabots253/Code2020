@@ -27,7 +27,7 @@ public class Intake extends ProfiledPIDSubsystem {
         if (instance == null) instance = new Intake();
         return instance;
     }
-    
+
     private Intake(){
         super(new ProfiledPIDController(IntakeConstants.kP , IntakeConstants.kI, IntakeConstants.kD,
             new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration)), 0);    
@@ -41,8 +41,8 @@ public class Intake extends ProfiledPIDSubsystem {
      * Sets the conveyor to spin at a percent of max speed
      * @param speed Percent speed
      */
-    public void setConveyor(double speed) {
-        conveyorMotor.set(speed);
+    public void setConveyor(double value) {
+        conveyorMotor.set(value);
     }
 
     /**

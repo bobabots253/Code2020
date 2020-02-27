@@ -51,13 +51,15 @@ public class RobotContainer {
         driver_X = new JoystickButton(driver, 3),
         driver_Y = new JoystickButton(driver, 4),
         driver_LB = new JoystickButton(driver, 5),
-        driver_RB = new JoystickButton(driver, 6);
+        driver_RB = new JoystickButton(driver, 6),
+        driver_VIEW = new JoystickButton(driver, 7),
+        driver_MENU = new JoystickButton(driver, 8);
 
     private static final POVButton 
-        DPAD_UP = new POVButton(driver, 0),
-        DPAD_RIGHT = new POVButton(driver, 90),
-        DPAD_DOWN = new POVButton(driver, 180),
-        DPAD_LEFT = new POVButton(driver, 270);
+        driver_DPAD_UP = new POVButton(driver, 0),
+        driver_DPAD_RIGHT = new POVButton(driver, 90),
+        driver_DPAD_DOWN = new POVButton(driver, 180),
+        driver_DPAD_LEFT = new POVButton(driver, 270);
     
     private static RobotContainer instance;
     public static RobotContainer getInstance(){
