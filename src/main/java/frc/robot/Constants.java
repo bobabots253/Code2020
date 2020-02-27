@@ -21,7 +21,7 @@ public class Constants {
                                                   // turn to [0,1]
 
     }
-
+    // TODO: Tune
     public static class DrivetrainConstants {
         public static final int
         /* Drivetrain motor IDs */
@@ -62,42 +62,41 @@ public class Constants {
         public static final double kSupplyTriggerThreshold = 70;
         public static final double kSupplyTriggerDuration = 0.7;
     }
-
+    // TODO: Tune
     public static class IntakeConstants {
-        /* Motors */ // TODO: Change these numbers
+        /* Motors */
         public static final int armMotor = 5;
         public static final int spinMotor = 6;
         public static final int conveyorMotor = 11;
 
-        /* PID Constants */ // TODO: Tune
+        /* PID Constants */
         public static double kP = 0;
         public static double kI = 0;
         public static double kD = 0;
 
-        /* Feedforward Constants */ // TODO: tune
+        /* Feedforward Constants */
         public static double kS = 0;
         public static double kCos = 0;
         public static double kV = 0;
         public static double kA = 0;
 
-        /* Intake constants */ // TODO: tune
+        /* Intake constants */
         public static double kMaxVelocity = 0; // Maximum velocity to turn arm at, radians per second
         public static double kMaxAcceleration = 0; // Maximum acceleration to turn arm at, radians per second per second
         public static double kRadPerTick = 0; // Angle change of the arm per tick of the encoder
+        public static double kOffsetRadians = 0; // Initial position of the intakr arm
     }
-
+    // TODO: Tune
     public static class ConveyorConstants {
-        // TODO: Change this number
         public static final int motor = 10;
         public static final double kQueueSpeed = 0.2;
     }
-
+    // TODO: Tune
     public static class ShooterConstants {
-        // TODO: Change this number
         public static final int master = 8;
         public static final int slave = 9;
 
-        /* PIDController Constants, Slot 0, RPM Velocity Control */ // TODO: Tune
+        /* PIDController Constants, Slot 0, RPM Velocity Control */ 
         public static int kSlotID = 0;
         public static double kP = 0;
         public static double kI = 0;
@@ -105,18 +104,16 @@ public class Constants {
         public static double kMin = -0.7;
         public static double kMax = 0.7;
 
-        /* Feedforward Constants */ // TODO: tune
+        /* Feedforward Constants */ 
         public static double kS = 0;
         public static double kV = 0;
         public static double kA = 0;
 
-        /* Shooter Constants */ // TODO: tune
+        /* Shooter Constants */ 
         public static double kTolerance = 0;
     }
-
+    // TODO: Tune
     public static class VisionConstants {
-        // TODO: Tune
-
         /* Turn PID Constants */
         public static double kPTurn = 0;
         public static double kITurn = 0;

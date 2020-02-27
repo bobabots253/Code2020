@@ -38,24 +38,24 @@ public class ConveyorQueue implements Command {
                 
                 if(current_spike.hasElapsed(0.25)) {
                     if(!photoelectric_delay.hasElapsed(0.1)){
-                        Conveyor.setOpenLoop(ConveyorConstants.kQueueSpeed);
+                        Conveyor.getInstance().setOpenLoop(ConveyorConstants.kQueueSpeed);
                     } else {
-                        Conveyor.stop();
+                        Conveyor.getInstance().stop();
                     }
                 } else {
-                    Conveyor.setOpenLoop(-ConveyorConstants.kQueueSpeed);
+                    Conveyor.getInstance().setOpenLoop(-ConveyorConstants.kQueueSpeed);
                 }
 
                 break;
             case TwoSensors:
                 if(!Conveyor.getInstance().getShooterSensor()) {
                     if(Conveyor.getInstance().getQueueSensor()) {
-                        Conveyor.setOpenLoop(ConveyorConstants.kQueueSpeed);
+                        Conveyor.getInstance().setOpenLoop(ConveyorConstants.kQueueSpeed);
                     } else {
-                        Conveyor.stop();
+                        Conveyor.getInstance().stop();
                     }
                 } else {
-                    Conveyor.stop();
+                    Conveyor.getInstance().stop();
                 }
                 break;
             default:
@@ -64,7 +64,7 @@ public class ConveyorQueue implements Command {
     }
 
     public void end() {
-        Conveyor.setOpenLoop(0);
+        Conveyor.getInstance().stop();
     }
 
     @Override

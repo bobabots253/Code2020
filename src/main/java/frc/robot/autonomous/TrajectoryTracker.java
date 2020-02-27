@@ -53,7 +53,7 @@ public class TrajectoryTracker extends RamseteCommand {
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
-        Drivetrain.stopMotors();
+        Drivetrain.stop();
         RobotContainer.falconDashboard.endPath();
     }
 }

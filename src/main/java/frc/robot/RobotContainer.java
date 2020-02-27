@@ -93,12 +93,12 @@ public class RobotContainer {
        driver_X.whileHeld(() -> intake.rotate(0.5)).whenReleased(()->intake.rotate(0.1));
        driver_Y.whileHeld(() -> intake.rotate(-0.5)).whenReleased(()->intake.rotate(-0.1));
 
-       driver_RB.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
+       driver_RB.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stop);
 
-       driver_B.whileHeld(()->Shooter.setOpenLoop(0.65), Shooter.getInstance()).whenReleased(()->Shooter.setOpenLoop(0), Shooter.getInstance());
+       driver_B.whileHeld(()->shooter.setOpenLoop(0.65), shooter).whenReleased(shooter::stop, shooter);
 
-       driver_LB.whileHeld(() -> Conveyor.setOpenLoop(0.55), conveyor).whenReleased(() -> Conveyor.setOpenLoop(0), conveyor);
-       driver_A.whileHeld(() -> Conveyor.setOpenLoop(-0.55), conveyor).whenReleased(() -> Conveyor.setOpenLoop(0), conveyor);
+       driver_LB.whileHeld(() -> conveyor.setOpenLoop(0.55), conveyor).whenReleased(conveyor::stop, conveyor);
+       driver_A.whileHeld(() -> conveyor.setOpenLoop(-0.55), conveyor).whenReleased(conveyor::stop, conveyor);
     }
     
     /**

@@ -17,7 +17,7 @@ public class Shoot implements Command {
     
     @Override
     public void end(boolean interrupted) {
-        Shooter.stop();
+        Shooter.getInstance().stop();
     }
     
     @Override

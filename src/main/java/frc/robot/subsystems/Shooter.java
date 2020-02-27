@@ -8,12 +8,12 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants;
+import frc.robot.Util;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter implements Subsystem {
-    private static final CANSparkMax master = new CANSparkMax(ShooterConstants.master, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax slave = new CANSparkMax(ShooterConstants.slave, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax master = Util.createSparkMAX(ShooterConstants.master, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax slave = Util.createSparkMAX(ShooterConstants.slave, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     private static CANPIDController pidController;
 
@@ -26,14 +26,6 @@ public class Shooter implements Subsystem {
     }
     
     private Shooter(){
-        master.clearFaults();
-        slave.clearFaults();
-
-        master.restoreFactoryDefaults();
-        slave.restoreFactoryDefaults();
-
-        master.enableVoltageCompensation(Constants.kMaxVoltage);
-        slave.enableVoltageCompensation(Constants.kMaxVoltage);
 
         master.setIdleMode(IdleMode.kCoast);
         slave.setIdleMode(IdleMode.kCoast);
@@ -47,7 +39,6 @@ public class Shooter implements Subsystem {
         pidController.setD(ShooterConstants.kD, ShooterConstants.kSlotID);
         pidController.setOutputRange(ShooterConstants.kMin, ShooterConstants.kMax, ShooterConstants.kSlotID);
 
-        // burn flash LAST
         master.burnFlash();
         slave.burnFlash();
     }
@@ -56,7 +47,7 @@ public class Shooter implements Subsystem {
      * Sets the speed of the shooter in percent of max voltage (overriding the closed loop velocity control)
      * @param value percent of voltage [-1, 1]
      */
-    public static void setOpenLoop(double value){
+    public void setOpenLoop(double value){
         master.set(value);
        
     }
@@ -64,7 +55,7 @@ public class Shooter implements Subsystem {
     /**
      * Stops the motor
      */
-    public static void stop(){
+    public void stop(){
         master.stopMotor();
         
     }

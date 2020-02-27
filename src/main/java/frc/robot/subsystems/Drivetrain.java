@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.RobotContainer;
 import frc.robot.Units;
@@ -21,10 +20,10 @@ import java.util.List;
 
 public class Drivetrain implements Subsystem {
     private static final TalonFX
-        leftMaster = Util.createTalonFX(Constants.DrivetrainConstants.leftMaster),
-        leftSlave = Util.createTalonFX(Constants.DrivetrainConstants.leftSlave),
-        rightMaster = Util.createTalonFX(Constants.DrivetrainConstants.rightMaster),
-        rightSlave = Util.createTalonFX(Constants.DrivetrainConstants.rightSlave);
+        leftMaster = Util.createTalonFX(DrivetrainConstants.leftMaster),
+        leftSlave = Util.createTalonFX(DrivetrainConstants.leftSlave),
+        rightMaster = Util.createTalonFX(DrivetrainConstants.rightMaster),
+        rightSlave = Util.createTalonFX(DrivetrainConstants.rightSlave);
     
     public static final List<TalonFX> motors = List.of(leftMaster, leftSlave, rightMaster, rightSlave);
 
@@ -92,7 +91,7 @@ public class Drivetrain implements Subsystem {
     /**
      * Stops the drivetrain motors by setting their speed to 0
      */
-    public static void stopMotors(){
+    public static void stop(){
         setOpenLoop(0.0, 0.0);
     }
     

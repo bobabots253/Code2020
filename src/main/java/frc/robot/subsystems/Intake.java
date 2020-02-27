@@ -9,10 +9,9 @@ import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Units;
 import frc.robot.Util;
-
+import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends ProfiledPIDSubsystem {
     
@@ -32,9 +31,10 @@ public class Intake extends ProfiledPIDSubsystem {
         super(new ProfiledPIDController(IntakeConstants.kP , IntakeConstants.kI, IntakeConstants.kD,
             new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration)), 0);    
 
-        
         conveyorMotor.setInverted(true);
         conveyorMotor.burnFlash();
+
+        setGoal(IntakeConstants.kOffsetRadians);
     }
 
     /**
@@ -65,28 +65,29 @@ public class Intake extends ProfiledPIDSubsystem {
     /**
      * Stops the motors 
      */
-    public void stopMotors() {
+    public void stop() {
         armMotor.set(ControlMode.PercentOutput, 0);
         spinMotor.set(ControlMode.PercentOutput, 0);
+        conveyorMotor.set(0);
     }
 
     /**
-     * Resets encoder to zero
+     * Resets encoders to zero
      */
-    public void resetEncoder() {
-        resetEncoder(0);
+    public void resetEncoders() {
+        resetEncoders(0);
     }
 
     /**
      * Resets encoder to a specified value
      * @param value Value to set encoder position to
      */
-    public void resetEncoder(int value) {
+    public void resetEncoders(int value) {
         armMotor.setSelectedSensorPosition(0);
     }
 
     /**
-     * @return the arm's current position as an encoder value
+     * @return the arm's current position as a radian measure
      */
     @Override
     public double getMeasurement() {
