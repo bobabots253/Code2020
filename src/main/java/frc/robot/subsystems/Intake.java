@@ -1,30 +1,25 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import frc.robot.Constants;
 import frc.robot.Constants.ConveyorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Units;
+import frc.robot.Util;
 
-import java.util.List;
 
 public class Intake extends ProfiledPIDSubsystem {
     
-    private static final TalonSRX armMotor = new TalonSRX(IntakeConstants.armMotor);
-    private static final TalonSRX spinMotor = new TalonSRX(IntakeConstants.spinMotor);
-
-    private static final CANSparkMax conveyorMotor = new CANSparkMax(ConveyorConstants.slave_MotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final TalonSRX armMotor = Util.createTalonSRX(IntakeConstants.armMotor, false);
+    private static final TalonSRX spinMotor = Util.createTalonSRX(IntakeConstants.spinMotor, false);
+    private static final CANSparkMax conveyorMotor = Util.createSparkMAX(ConveyorConstants.slave_MotorID, MotorType.kBrushless);
 
     private static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(IntakeConstants.kS, IntakeConstants.kCos, IntakeConstants.kV, IntakeConstants.kA);
     
@@ -36,43 +31,10 @@ public class Intake extends ProfiledPIDSubsystem {
     
     private Intake(){
         super(new ProfiledPIDController(IntakeConstants.kP , IntakeConstants.kI, IntakeConstants.kD,
-            new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration)), 0);
+            new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration)), 0);    
 
-        /* Settings for the intake arm motor */
-        armMotor.configPeakCurrentLimit(45);
-        armMotor.configPeakCurrentDuration(125);
-        armMotor.configContinuousCurrentLimit(38);
-        armMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
-        armMotor.setSensorPhase(true);
-        armMotor.setInverted(false);
-
-        /* Settings for the intake spin motor */
-        spinMotor.configPeakCurrentLimit(45);
-        spinMotor.configPeakCurrentDuration(125);
-        spinMotor.configContinuousCurrentLimit(38);
-        spinMotor.setNeutralMode(NeutralMode.Coast);
-        spinMotor.setInverted(false);
-
-        /* Common intake motor settings */
-        List.of(armMotor, spinMotor).forEach(motor -> {
-            motor.configVoltageCompSaturation(Constants.kMaxVoltage);
-            motor.enableVoltageCompensation(true);
-            motor.enableCurrentLimit(true);
-        });
-
-        // conveyor motor
-
-        conveyorMotor.clearFaults();
-
-        conveyorMotor.restoreFactoryDefaults();
-
-        conveyorMotor.enableVoltageCompensation(Constants.kMaxVoltage);
-
-        conveyorMotor.setIdleMode(IdleMode.kBrake);
-
+        
         conveyorMotor.setInverted(true);
-
-        // burn flash LAST
         conveyorMotor.burnFlash();
     }
 

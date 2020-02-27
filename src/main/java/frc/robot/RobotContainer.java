@@ -53,8 +53,11 @@ public class RobotContainer {
         driver_LB = new JoystickButton(driver, 5),
         driver_RB = new JoystickButton(driver, 6);
 
-    private static final POVButton DPAD_RIGHT = new POVButton(driver, 90);
-    private static final POVButton DPAD_LEFT = new POVButton(driver, 270);
+    private static final POVButton 
+        DPAD_UP = new POVButton(driver, 0),
+        DPAD_RIGHT = new POVButton(driver, 90),
+        DPAD_DOWN = new POVButton(driver, 180),
+        DPAD_LEFT = new POVButton(driver, 270);
     
     private static RobotContainer instance;
     public static RobotContainer getInstance(){
@@ -258,4 +261,5 @@ public class RobotContainer {
             this.val = val;
         }
     }
+
 }

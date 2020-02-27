@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -16,15 +15,16 @@ import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.RobotContainer;
 import frc.robot.Units;
+import frc.robot.Util;
 
 import java.util.List;
 
 public class Drivetrain implements Subsystem {
     private static final TalonFX
-        leftMaster = new TalonFX(Constants.DrivetrainConstants.leftMaster),
-        leftSlave = new TalonFX(Constants.DrivetrainConstants.leftSlave),
-        rightMaster = new TalonFX(Constants.DrivetrainConstants.rightMaster),
-        rightSlave = new TalonFX(Constants.DrivetrainConstants.rightSlave);
+        leftMaster = Util.createTalonFX(Constants.DrivetrainConstants.leftMaster),
+        leftSlave = Util.createTalonFX(Constants.DrivetrainConstants.leftSlave),
+        rightMaster = Util.createTalonFX(Constants.DrivetrainConstants.rightMaster),
+        rightSlave = Util.createTalonFX(Constants.DrivetrainConstants.rightSlave);
     
     public static final List<TalonFX> motors = List.of(leftMaster, leftSlave, rightMaster, rightSlave);
 
@@ -42,38 +42,13 @@ public class Drivetrain implements Subsystem {
     }
     
     private Drivetrain(){
-        
-        TalonFXConfiguration configuration = new TalonFXConfiguration();
-        configuration.statorCurrLimit = new StatorCurrentLimitConfiguration(
-                Constants.DrivetrainConstants.kStatorLimitEnable, 
-                Constants.DrivetrainConstants.kStatorCurrentLimit,
-                Constants.DrivetrainConstants.kStatorTriggerThreshold,
-                Constants.DrivetrainConstants.kStatorTriggerDuration);
-        configuration.supplyCurrLimit = new SupplyCurrentLimitConfiguration(
-                Constants.DrivetrainConstants.kSupplyLimitEnable, 
-                Constants.DrivetrainConstants.kSupplyCurrentLimit,
-                Constants.DrivetrainConstants.kSupplyTriggerThreshold,
-                Constants.DrivetrainConstants.kSupplyTriggerDuration);
-
-        /* Resetting to factory before setting common settings */
-        motors.forEach(motor -> {
-            motor.configFactoryDefault();
-            motor.configAllSettings(configuration);
-            
-            motor.configVoltageCompSaturation(Constants.kMaxVoltage);
-            motor.enableVoltageCompensation(true);
-            motor.setNeutralMode(NeutralMode.Brake);
-        });
 
         leftSlave.follow(leftMaster);
         rightSlave.follow(rightMaster);
         
-        // inversion on opposite sides of the drivetrain
+        // Inverting opposite sides of the drivetrain
         List.of(leftMaster, leftSlave).forEach(motor -> motor.setInverted(false));
         List.of(rightMaster, rightSlave).forEach(motor -> motor.setInverted(true));
-    
-        leftMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-        rightMaster.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         
         register();
     }
