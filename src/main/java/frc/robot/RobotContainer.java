@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -28,6 +29,7 @@ import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Intake.State;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -99,6 +101,12 @@ public class RobotContainer {
 
        driver_LB.whileHeld(() -> conveyor.setOpenLoop(0.55), conveyor).whenReleased(conveyor::stop, conveyor);
        driver_A.whileHeld(() -> conveyor.setOpenLoop(-0.55), conveyor).whenReleased(conveyor::stop, conveyor);
+        /*
+       driver_RB.whenPressed(new InstantCommand(()->intake.setGoal(State.DOWN), intake))
+                .whileHeld(() -> intake.intake(0.5), intake)
+                .whenReleased(new InstantCommand(()->intake.setGoal(State.UP), intake)
+                    .andThen(new InstantCommand(()->intake.intake(0), intake)));
+        */
     }
     
     /**

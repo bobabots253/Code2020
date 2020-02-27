@@ -27,6 +27,22 @@ public class Intake extends ProfiledPIDSubsystem {
         return instance;
     }
 
+    /**
+     * Enum class representing the two possible positions of the intake arm, UP and DOWN
+     */
+    public enum State {
+        UP(0), DOWN(0);
+
+        public double position;
+
+        /**
+         * @param position the value of the arm position in radians
+         */
+        private State(double position) {
+            this.position = position;
+        }
+    }
+
     private Intake(){
         super(new ProfiledPIDController(IntakeConstants.kP , IntakeConstants.kI, IntakeConstants.kD,
             new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration)), 0);    
@@ -80,10 +96,20 @@ public class Intake extends ProfiledPIDSubsystem {
 
     /**
      * Resets encoder to a specified value
+     * 
      * @param value Value to set encoder position to
      */
     public void resetEncoders(int value) {
         armMotor.setSelectedSensorPosition(0);
+    }
+
+    /**
+     * Sets the motion profile's goal to a position represented by a State
+     * 
+     * @param state Goal to set
+     */
+    public void setGoal(State state) {
+        setGoal(state.position);
     }
 
     /**
