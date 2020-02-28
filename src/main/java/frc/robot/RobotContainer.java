@@ -48,7 +48,6 @@ public class RobotContainer {
     public static AHRS navX;
     
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
-<<<<<<< HEAD
 
     private static final JoystickButton
         driver_A = new JoystickButton(driver, 1),
@@ -65,16 +64,6 @@ public class RobotContainer {
         driver_DPAD_RIGHT = new POVButton(driver, 90),
         driver_DPAD_DOWN = new POVButton(driver, 180),
         driver_DPAD_LEFT = new POVButton(driver, 270);
-=======
-    private static final JoystickButton driver_LeftStart = new JoystickButton(driver, 5); //the button left of the xbox logo
-    private static final JoystickButton driver_RightStart = new JoystickButton(driver, 6); //the button right of the xbox logo
-    //private static final JoystickButton driver_Y = new JoystickButton(driver, 4);
-    private static final JoystickButton driver_X = new JoystickButton(driver, 3);
-    private static final JoystickButton driver_B = new JoystickButton(driver, 2);
-    private static final JoystickButton driver_A = new JoystickButton(driver, 1);
-    private static final POVButton DPAD_RIGHT = new POVButton(driver, 90);
-    private static final POVButton DPAD_LEFT = new POVButton(driver, 270);
->>>>>>> origin/climber
     
     private static RobotContainer instance;
     public static RobotContainer getInstance(){
@@ -105,7 +94,6 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
-<<<<<<< HEAD
        driver_X.whileHeld(() -> intake.rotate(0.5)).whenReleased(()->intake.rotate(0.1));
        driver_Y.whileHeld(() -> intake.rotate(-0.5)).whenReleased(()->intake.rotate(-0.1));
 
@@ -115,19 +103,20 @@ public class RobotContainer {
 
        driver_LB.whileHeld(() -> conveyor.setOpenLoop(0.55), conveyor).whenReleased(conveyor::stop, conveyor);
        driver_A.whileHeld(() -> conveyor.setOpenLoop(-0.55), conveyor).whenReleased(conveyor::stop, conveyor);
-        /*
+        //climb with left/right arm
+       driver_VIEW.whenHeld( new RunCommand(() -> Climber.climbLeft(0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
+       driver_DPAD_LEFT.whenHeld( new RunCommand(() -> Climber.climbLeft(-0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
+       driver_MENU.whenHeld( new RunCommand(() -> Climber.climbRight(0.5))).whenReleased(new RunCommand(() -> Climber.stopRightMotor()));
+       driver_DPAD_RIGHT.whenHeld( new RunCommand(() -> Climber.climbLeft(-0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
+        //climb both arms
+       driver_DPAD_UP.whenHeld( new RunCommand(() -> Climber.climbUnity(0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors())); 
+       driver_DPAD_DOWN.whenHeld( new RunCommand(() -> Climber.climbUnity(-0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors()));   
+           /*
        driver_RB.whenPressed(new InstantCommand(()->intake.setGoal(State.DOWN), intake))
                 .whileHeld(() -> intake.intake(0.5), intake)
                 .whenReleased(new InstantCommand(()->intake.setGoal(State.UP), intake)
                     .andThen(new InstantCommand(()->intake.intake(0), intake)));
         */
-=======
-        driver_X.whenHeld( new RunCommand(() -> Climber.climbUnity(0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors()));
-        driver_LeftStart.whenHeld( new RunCommand(() -> Climber.climbLeft(0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
-        driver_RightStart.whenHeld( new RunCommand(() -> Climber.climbRight(0.5))).whenReleased(new RunCommand(() -> Climber.stopRightMotor()));
-        driver_A.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
-        driver_B.whileHeld(() -> intake.intake(-0.5)).whenReleased(intake::stopMotors);
->>>>>>> origin/climber
     }
     
     /**

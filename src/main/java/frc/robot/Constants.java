@@ -21,11 +21,7 @@ public class Constants {
                                                   // turn to [0,1]
 
     }
-<<<<<<< HEAD
     // TODO: Tune
-=======
-    
->>>>>>> origin/climber
     public static class DrivetrainConstants {
         public static final int
         /* Drivetrain motor IDs */
@@ -130,26 +126,9 @@ public class Constants {
         public static double kDDist = 0;
         public static double kDistTolerance = 0;
     }
-<<<<<<< HEAD
-=======
 
-    public static class OrchestraConstants {
-        public static final String[] songs = {
-                /*
-                 * All songs should be in src/main/deploy/songs/ All songs should have a file
-                 * extension .chrp All songs in this array should be just the filename without
-                 * the extension (case sensitive)
-                 */
-                "Darude-Sandstorm", "Flight_of_the_Bumblebee", "Jojo_Bizarre_Adventure_Golden_Wind-Giornos_Theme_Ver_2",
-                "Kimi_no_Na_wa-Sparkle", "Kimi_no_Na_wa-Zen_Zen_Zense", "Love-Live_Snow_Halation", "Miku-Ievan_Polkka",
-                "Miku-Senbon_Zakura", "Miku-Triple_Baka", "Tenki_no_Ko-Grand_Escape", "Undertale_Megalovania",
-                "Xi-Freedom_Dive" };
-
-        public static final int numSongs = songs.length - 1;
-    }
     public static class ClimberConstants{
         public static final int leftMotorID = 14;
         public static final int rightMotorID = 15;
     }
->>>>>>> origin/climber
 }
