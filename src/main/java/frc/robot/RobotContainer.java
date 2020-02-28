@@ -25,6 +25,7 @@ import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
 import frc.robot.commands.ConveyorQueue;
 import frc.robot.commands.Drive;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -40,12 +41,14 @@ public class RobotContainer {
     public static Intake intake;
     public static Conveyor conveyor;
     public static Shooter shooter;
+    public static Climber climber;
 
     public static Dashboard falconDashboard;
     private static NetworkTable limelight;
     public static AHRS navX;
     
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
+<<<<<<< HEAD
 
     private static final JoystickButton
         driver_A = new JoystickButton(driver, 1),
@@ -62,6 +65,16 @@ public class RobotContainer {
         driver_DPAD_RIGHT = new POVButton(driver, 90),
         driver_DPAD_DOWN = new POVButton(driver, 180),
         driver_DPAD_LEFT = new POVButton(driver, 270);
+=======
+    private static final JoystickButton driver_LeftStart = new JoystickButton(driver, 5); //the button left of the xbox logo
+    private static final JoystickButton driver_RightStart = new JoystickButton(driver, 6); //the button right of the xbox logo
+    //private static final JoystickButton driver_Y = new JoystickButton(driver, 4);
+    private static final JoystickButton driver_X = new JoystickButton(driver, 3);
+    private static final JoystickButton driver_B = new JoystickButton(driver, 2);
+    private static final JoystickButton driver_A = new JoystickButton(driver, 1);
+    private static final POVButton DPAD_RIGHT = new POVButton(driver, 90);
+    private static final POVButton DPAD_LEFT = new POVButton(driver, 270);
+>>>>>>> origin/climber
     
     private static RobotContainer instance;
     public static RobotContainer getInstance(){
@@ -92,6 +105,7 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
+<<<<<<< HEAD
        driver_X.whileHeld(() -> intake.rotate(0.5)).whenReleased(()->intake.rotate(0.1));
        driver_Y.whileHeld(() -> intake.rotate(-0.5)).whenReleased(()->intake.rotate(-0.1));
 
@@ -107,6 +121,13 @@ public class RobotContainer {
                 .whenReleased(new InstantCommand(()->intake.setGoal(State.UP), intake)
                     .andThen(new InstantCommand(()->intake.intake(0), intake)));
         */
+=======
+        driver_X.whenHeld( new RunCommand(() -> Climber.climbUnity(0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors()));
+        driver_LeftStart.whenHeld( new RunCommand(() -> Climber.climbLeft(0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
+        driver_RightStart.whenHeld( new RunCommand(() -> Climber.climbRight(0.5))).whenReleased(new RunCommand(() -> Climber.stopRightMotor()));
+        driver_A.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stopMotors);
+        driver_B.whileHeld(() -> intake.intake(-0.5)).whenReleased(intake::stopMotors);
+>>>>>>> origin/climber
     }
     
     /**
