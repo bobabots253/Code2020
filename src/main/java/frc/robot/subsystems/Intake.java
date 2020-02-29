@@ -5,9 +5,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Units;
@@ -19,6 +22,8 @@ public class Intake extends ProfiledPIDSubsystem {
     private static final TalonSRX armMotor = Util.createTalonSRX(IntakeConstants.armMotor, false);
     private static final TalonSRX spinMotor = Util.createTalonSRX(IntakeConstants.spinMotor, false);
     private static final CANSparkMax conveyorMotor = Util.createSparkMAX(IntakeConstants.conveyorMotor, MotorType.kBrushless);
+
+    private static final DutyCycleEncoder armEncoder = new DutyCycleEncoder(1);
 
     private static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(IntakeConstants.kS, IntakeConstants.kCos, IntakeConstants.kV, IntakeConstants.kA);
     
@@ -49,12 +54,19 @@ public class Intake extends ProfiledPIDSubsystem {
         super(new ProfiledPIDController(IntakeConstants.kP , IntakeConstants.kI, IntakeConstants.kD,
             new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration)), 0);    
 
-        
+        armEncoder.setDistancePerRotation(8128);
 
         conveyorMotor.setInverted(true);
         conveyorMotor.burnFlash();
 
         setGoal(IntakeConstants.kOffsetRadians);
+
+        register();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("encoder dist", armEncoder.getDistance());
     }
 
     /**
@@ -104,7 +116,7 @@ public class Intake extends ProfiledPIDSubsystem {
      * @param value Value to set encoder position to
      */
     public void resetEncoders(int value) {
-        armMotor.setSelectedSensorPosition(0);
+        armEncoder.reset();
     }
 
     /**
@@ -121,7 +133,7 @@ public class Intake extends ProfiledPIDSubsystem {
      */
     @Override
     public double getMeasurement() {
-        return Units.IntakeUnits.TicksToRadians(armMotor.getSelectedSensorPosition());
+        return armEncoder.getDistance() * 2 * Math.PI;
     }
 
     /**

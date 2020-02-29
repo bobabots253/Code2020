@@ -24,7 +24,7 @@ public class Climber implements Subsystem{
     private Climber(){
 
         armEncoder = new DutyCycleEncoder(0); //TODO: Set correct DIO Port
-        armEncoder.setDistancePerRotation(0); //TODO: Scale the encoder to a angular value, accounting for gear ratio
+        armEncoder.setDistancePerRotation(8192);
 
         connected = armEncoder.isConnected();
         frequency = armEncoder.getFrequency();
