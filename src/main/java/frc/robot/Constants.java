@@ -70,21 +70,20 @@ public class Constants {
         public static final int conveyorMotor = 11;
 
         /* PID Constants */
-        public static double kP = 0;
+        public static double kP = 2.9;
         public static double kI = 0;
         public static double kD = 0;
 
         /* Feedforward Constants */
-        public static double kS = 0;
-        public static double kCos = 0;
-        public static double kV = 0;
-        public static double kA = 0;
+        public static double kS = 0.402;
+        public static double kCos = 0.771;
+        public static double kV = 0.758;
+        public static double kA = 0.00717;
 
         /* Intake constants */
-        public static double kMaxVelocity = 0; // Maximum velocity to turn arm at, radians per second
-        public static double kMaxAcceleration = 0; // Maximum acceleration to turn arm at, radians per second per second
-        public static double kRadPerTick = 0; // Angle change of the arm per tick of the encoder
-        public static double kOffsetRadians = 0; // Initial position of the intakr arm
+        public static double kMaxVelocity = 0.25; // Maximum velocity to turn arm at, radians per second
+        public static double kMaxAcceleration = 2; // Maximum acceleration to turn arm at, radians per second per second
+        public static double kInitialPosition = 0; // Initial position of the intakr arm
     }
     // TODO: Tune
     public static class ConveyorConstants {

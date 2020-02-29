@@ -54,19 +54,22 @@ public class Intake extends ProfiledPIDSubsystem {
         super(new ProfiledPIDController(IntakeConstants.kP , IntakeConstants.kI, IntakeConstants.kD,
             new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration)), 0);    
 
-        armEncoder.setDistancePerRotation(8128);
+        armEncoder.setDistancePerRotation(2*Math.PI);
 
         conveyorMotor.setInverted(true);
         conveyorMotor.burnFlash();
 
-        setGoal(IntakeConstants.kOffsetRadians);
-
+        setGoal(0);
+        enable();
         register();
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("encoder dist", armEncoder.getDistance());
+        super.periodic();
+
+        SmartDashboard.putNumber("encoder value", armEncoder.getDistance());
+        SmartDashboard.putNumber("measurement", getMeasurement());
     }
 
     /**
@@ -95,27 +98,22 @@ public class Intake extends ProfiledPIDSubsystem {
     }
 
     /**
-     * Stops the motors 
+     * Stops the intake
      */
-    public void stop() {
-        armMotor.set(ControlMode.PercentOutput, 0);
+    public void stopIntake() {
         spinMotor.set(ControlMode.PercentOutput, 0);
         conveyorMotor.set(0);
+    }
+
+    public void stopArm() {
+        disable();
+        armMotor.set(ControlMode.PercentOutput, 0);
     }
 
     /**
      * Resets encoders to zero
      */
     public void resetEncoders() {
-        resetEncoders(0);
-    }
-
-    /**
-     * Resets encoder to a specified value
-     * 
-     * @param value Value to set encoder position to
-     */
-    public void resetEncoders(int value) {
         armEncoder.reset();
     }
 
@@ -125,7 +123,8 @@ public class Intake extends ProfiledPIDSubsystem {
      * @param state Goal to set
      */
     public void setGoal(State state) {
-        setGoal(state.position);
+        setGoal(state.position - IntakeConstants.kInitialPosition);
+        enable();
     }
 
     /**
@@ -133,7 +132,7 @@ public class Intake extends ProfiledPIDSubsystem {
      */
     @Override
     public double getMeasurement() {
-        return armEncoder.getDistance() * 2 * Math.PI;
+        return armEncoder.getDistance() - IntakeConstants.kInitialPosition;
     }
 
     /**
