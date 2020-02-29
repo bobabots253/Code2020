@@ -107,14 +107,14 @@ public class RobotContainer {
        driver_A.whileHeld(() -> conveyor.setOpenLoop(-0.55), conveyor).whenReleased(conveyor::stop, conveyor);
         //climb with left/right arm
 
-       driver_VIEW.whenHeld( new RunCommand(() -> Climber.climbLeft(0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
-       driver_DPAD_LEFT.whenHeld( new RunCommand(() -> Climber.climbLeft(-0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
-       driver_MENU.whenHeld( new RunCommand(() -> Climber.climbRight(0.5))).whenReleased(new RunCommand(() -> Climber.stopRightMotor()));
-       driver_DPAD_RIGHT.whenHeld( new RunCommand(() -> Climber.climbLeft(-0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
+       driver_VIEW.whileHeld( new RunCommand(() -> Climber.climbLeft(0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
+       driver_DPAD_LEFT.whileHeld( new RunCommand(() -> Climber.climbLeft(-0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
+       driver_MENU.whileHeld( new RunCommand(() -> Climber.climbRight(0.5))).whenReleased(new RunCommand(() -> Climber.stopRightMotor()));
+       driver_DPAD_RIGHT.whileHeld( new RunCommand(() -> Climber.climbLeft(-0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
 
         //climb both arms
-       driver_DPAD_UP.whenHeld( new RunCommand(() -> Climber.climbUnity(0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors())); 
-       driver_DPAD_DOWN.whenHeld( new RunCommand(() -> Climber.climbUnity(-0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors()));   
+       driver_DPAD_UP.whileHeld( new RunCommand(() -> Climber.climbUnity(0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors())); 
+       driver_DPAD_DOWN.whileHeld( new RunCommand(() -> Climber.climbUnity(-0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors()));   
            /*
        driver_RB.whenPressed(new InstantCommand(()->intake.setGoal(State.DOWN), intake))
                 .whileHeld(() -> intake.intake(0.5), intake)
