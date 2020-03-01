@@ -1,5 +1,4 @@
 
-
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -48,47 +47,43 @@ public class RobotContainer {
     public static Dashboard falconDashboard;
     private static NetworkTable limelight;
     public static AHRS navX;
-    
+
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
 
-    private static final JoystickButton
-        driver_A = new JoystickButton(driver, 1),
-        driver_B = new JoystickButton(driver, 2),
-        driver_X = new JoystickButton(driver, 3),
-        driver_Y = new JoystickButton(driver, 4),
-        driver_LB = new JoystickButton(driver, 5),
-        driver_RB = new JoystickButton(driver, 6),
-        driver_VIEW = new JoystickButton(driver, 7),
-        driver_MENU = new JoystickButton(driver, 8);
+    private static final JoystickButton driver_A = new JoystickButton(driver, 1),
+            driver_B = new JoystickButton(driver, 2), driver_X = new JoystickButton(driver, 3),
+            driver_Y = new JoystickButton(driver, 4), driver_LB = new JoystickButton(driver, 5),
+            driver_RB = new JoystickButton(driver, 6), driver_VIEW = new JoystickButton(driver, 7),
+            driver_MENU = new JoystickButton(driver, 8);
 
-    private static final POVButton 
-        driver_DPAD_UP = new POVButton(driver, 0),
-        driver_DPAD_RIGHT = new POVButton(driver, 90),
-        driver_DPAD_DOWN = new POVButton(driver, 180),
-        driver_DPAD_LEFT = new POVButton(driver, 270);
-    
+    private static final POVButton driver_DPAD_UP = new POVButton(driver, 0),
+            driver_DPAD_RIGHT = new POVButton(driver, 90), driver_DPAD_DOWN = new POVButton(driver, 180),
+            driver_DPAD_LEFT = new POVButton(driver, 270);
+
     private static RobotContainer instance;
-    public static RobotContainer getInstance(){
-        if (instance == null) instance = new RobotContainer();
+
+    public static RobotContainer getInstance() {
+        if (instance == null)
+            instance = new RobotContainer();
         return instance;
     }
-    
-    private RobotContainer(){
+
+    private RobotContainer() {
         navX = new AHRS(Port.kMXP);
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
-        
+
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
-        
+
         intake = Intake.getInstance();
-    
+
         conveyor = Conveyor.getInstance();
-        conveyor.setDefaultCommand(new ConveyorQueue(ConveyorQueue.State.OneSensor));
-    
+        conveyor.setDefaultCommand(new ConveyorQueue(ConveyorQueue.State.None));
+
         shooter = Shooter.getInstance();
-    
+
         falconDashboard = Dashboard.getInstance();
-    
+
         bindOI();
     }
 
@@ -96,100 +91,110 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
-       driver_X.whileHeld(() -> intake.rotate(0.5)).whenReleased(()->intake.rotate(0.1));
-       driver_Y.whileHeld(() -> intake.rotate(-0.5)).whenReleased(()->intake.rotate(-0.1));
 
-       driver_RB.whileHeld(() -> intake.intake(0.5)).whenReleased(intake::stop);
+       // Flip down intake arm and spin when RB is held, flip back up and stop spinning when released
+        driver_RB.whileHeld(new RunCommand(()->intake.rotate(-0.4), intake)
+                    .alongWith(new RunCommand( ()->intake.intake(0.5)))
+                    .alongWith(new RunCommand( ()->intake.setConveyor(0.5))))
+                .whenReleased(new RunCommand( ()->intake.rotate(0.35), intake)
+                    .alongWith(new InstantCommand(intake::stopIntake)));
 
-       driver_B.whileHeld(()->shooter.setOpenLoop(0.65), shooter).whenReleased(shooter::stop, shooter);
+        // Spin up shooter when LB is held, stop when released
+        driver_LB.whileHeld(new RunCommand( ()-> shooter.setOpenLoop(0.65), shooter))
+                 .whenReleased(shooter::stop, shooter);
+        
+        // Queue up power cells manually when B is held, stop when released
+        driver_B.whileHeld(new RunCommand( ()->conveyor.setOpenLoop(0.55), conveyor)
+                    .alongWith(new RunCommand( ()->intake.setConveyor(0.5), intake)))
+                .whenReleased(new RunCommand(conveyor::stop, conveyor)
+                    .alongWith(new RunCommand(intake::stopIntake, intake)));
 
-       driver_LB.whileHeld(() -> conveyor.setOpenLoop(0.55), conveyor).whenReleased(conveyor::stop, conveyor);
-       driver_A.whileHeld(() -> conveyor.setOpenLoop(-0.55), conveyor).whenReleased(conveyor::stop, conveyor);
-        //climb with left/right arm
+        // Flip intake down and spin outwards to sweep balls out of the way when A is held, flip up and stop when released
+        driver_A.whileHeld(new RunCommand(()->intake.rotate(-0.4), intake)
+                    .alongWith(new RunCommand( ()->intake.intake(-0.5))))
+                .whenReleased(new RunCommand( ()->intake.rotate(0.35), intake)
+                    .alongWith(new InstantCommand(intake::stopIntake)));   
 
-       driver_VIEW.whileHeld( new RunCommand(() -> Climber.climbLeft(0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
-       driver_DPAD_LEFT.whileHeld( new RunCommand(() -> Climber.climbLeft(-0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
-       driver_MENU.whileHeld( new RunCommand(() -> Climber.climbRight(0.5))).whenReleased(new RunCommand(() -> Climber.stopRightMotor()));
-       driver_DPAD_RIGHT.whileHeld( new RunCommand(() -> Climber.climbLeft(-0.5))).whenReleased(new RunCommand(() -> Climber.stopLeftMotor()));
+        // Run both climbers when DPAD up is held
+        driver_DPAD_UP.whileHeld(new RunCommand(() -> climber.climbUnity(0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
 
-        //climb both arms
-       driver_DPAD_UP.whileHeld( new RunCommand(() -> Climber.climbUnity(0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors())); 
-       driver_DPAD_DOWN.whileHeld( new RunCommand(() -> Climber.climbUnity(-0.5))).whenReleased(new RunCommand(() -> Climber.stopMotors()));   
-           /*
-       driver_RB.whenPressed(new InstantCommand(()->intake.setGoal(State.DOWN), intake))
+        // Right the right and left climbers when view and menu are held, respectively
+        driver_VIEW.whileHeld(new RunCommand(() -> climber.climbLeft(0.5), climber)).whenReleased(new RunCommand(climber::stopLeftMotor, climber));
+        driver_MENU.whileHeld( new RunCommand(() -> climber.climbRight(0.5), climber)).whenReleased(new RunCommand(climber::stopRightMotor, climber));
+
+        /*
+        driver_RB.whenPressed(new InstantCommand(()->intake.setGoal(State.DOWN), intake))
                 .whileHeld(() -> intake.intake(0.5), intake)
                 .whenReleased(new InstantCommand(()->intake.setGoal(State.UP), intake)
                     .andThen(new InstantCommand(()->intake.intake(0), intake)));
         */
     }
-    
+
     /**
      * Constructs and returns the Command to run during the autonomous period
      * 
      * @return the Command to run during autonomous
      */
     public Command getAutonomousCommand() {
-        // TODO: Replace this code with the selector logic to select the proper autonomousit  sequence (aka, decide how we want to select auto)
+        // TODO: Replace this code with the selector logic to select the proper
+        // autonomousit sequence (aka, decide how we want to select auto)
         Trajectory initialTrajectory;
         try {
-            initialTrajectory = TrajectoryUtil.fromPathweaverJson(Paths.get("/home/lvuser/deploy/paths/InitiationToTarget.json"));
-        } catch(IOException e) {
+            initialTrajectory = TrajectoryUtil
+                    .fromPathweaverJson(Paths.get("/home/lvuser/deploy/paths/InitiationToTarget.json"));
+        } catch (IOException e) {
             initialTrajectory = TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 5, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(
-                new Translation2d(1, 5.5),
-                new Translation2d(2, 4.5)
-            ),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 5, new Rotation2d(0)),
-            // Pass config
-            new TrajectoryConfig(2, 4)
-                .setKinematics(Drivetrain.KINEMATICS)
-                .addConstraint(new DifferentialDriveVoltageConstraint(Drivetrain.FEEDFORWARD, Drivetrain.KINEMATICS, 10))
-            );
+                    // Start at the origin facing the +X direction
+                    new Pose2d(0, 5, new Rotation2d(0)),
+                    // Pass through these two interior waypoints, making an 's' curve path
+                    List.of(new Translation2d(1, 5.5), new Translation2d(2, 4.5)),
+                    // End 3 meters straight ahead of where we started, facing forward
+                    new Pose2d(3, 5, new Rotation2d(0)),
+                    // Pass config
+                    new TrajectoryConfig(2, 4).setKinematics(Drivetrain.KINEMATICS).addConstraint(
+                            new DifferentialDriveVoltageConstraint(Drivetrain.FEEDFORWARD, Drivetrain.KINEMATICS, 10)));
         }
 
-        // Workaround for try-catch block "initialTrajectory may have already been assigned"
+        // Workaround for try-catch block "initialTrajectory may have already been
+        // assigned"
         final Trajectory initialAutonomousTrajectory = initialTrajectory;
 
         /* Commands common to all autonomous sequences */
-        SequentialCommandGroup initializeAutonomous = new SequentialCommandGroup(
-            new InstantCommand(navX::reset),
-            new InstantCommand(() -> Drivetrain.ODOMETRY.resetPosition(initialAutonomousTrajectory.sample(0).poseMeters, 
-                                     Rotation2d.fromDegrees(navX.getAngle()))),
-            new InstantCommand(drivetrain::resetEncoders)
-        );
+        SequentialCommandGroup initializeAutonomous = new SequentialCommandGroup(new InstantCommand(navX::reset),
+                new InstantCommand(() -> Drivetrain.ODOMETRY.resetPosition(
+                        initialAutonomousTrajectory.sample(0).poseMeters, Rotation2d.fromDegrees(navX.getAngle()))),
+                new InstantCommand(drivetrain::resetEncoders));
 
         /* Adding all the autonomous commands into a single sequence */
         return new SequentialCommandGroup(initializeAutonomous, new TrajectoryTracker(initialTrajectory));
     }
-    
+
     /**
      * Returns the deadbanded throttle input from the main driver controller
      * 
      * @return the deadbanded throttle input from the main driver controller
      */
     public static double getThrottleValue() {
-        // Controllers y-axes are natively up-negative, down-positive. This method corrects that by returning the opposite of the y-value
+        // Controllers y-axes are natively up-negative, down-positive. This method
+        // corrects that by returning the opposite of the y-value
         return -deadbandX(driver.getY(GenericHID.Hand.kLeft), DriverConstants.kJoystickDeadband);
     }
-    
+
     /**
      * Returns the deadbanded turn input from the main driver controller
      * 
-     * @return the deadbanded turn input from the main driver controller 
+     * @return the deadbanded turn input from the main driver controller
      */
     public static double getTurnValue() {
         return deadbandX(driver.getX(GenericHID.Hand.kRight), DriverConstants.kJoystickDeadband);
     }
-    
+
     /**
-     * Deadbands an input to [-1, -deadband], [deadband, 1], rescaling inputs to be linear from (deadband, 0) to (1,1)
+     * Deadbands an input to [-1, -deadband], [deadband, 1], rescaling inputs to be
+     * linear from (deadband, 0) to (1,1)
      * 
-     * @param input The input value to rescale
-     * @param deadband The deadband 
+     * @param input    The input value to rescale
+     * @param deadband The deadband
      * @return the input rescaled and to fit [-1, -deadband], [deadband, 1]
      */
     public static double deadbandX(double input, double deadband) {
@@ -267,8 +272,8 @@ public class RobotContainer {
         SIDE_BY_SIDE(0), PIP_MAIN(1), PIP_SECONDARY(2);
 
         public int val;
-        
-        StreamMode(int val){
+
+        StreamMode(int val) {
             this.val = val;
         }
     }
@@ -281,7 +286,7 @@ public class RobotContainer {
 
         public int val;
 
-        VisionPipeline(int val){
+        VisionPipeline(int val) {
             this.val = val;
         }
     }

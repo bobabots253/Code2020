@@ -15,7 +15,7 @@ public class ConveyorQueue implements Command {
     private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
     public enum State {
-        OneSensor, TwoSensors
+        OneSensor, TwoSensors, None
     }
 
     private State state;
@@ -57,6 +57,9 @@ public class ConveyorQueue implements Command {
                 } else {
                     Conveyor.getInstance().stop();
                 }
+                break;
+
+            case None:
                 break;
             default:
                 break;

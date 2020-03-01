@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -12,8 +13,11 @@ import frc.robot.Util;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter implements Subsystem {
-    private static final CANSparkMax master = Util.createSparkMAX(ShooterConstants.master, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax slave = Util.createSparkMAX(ShooterConstants.slave, CANSparkMaxLowLevel.MotorType.kBrushless);
+    /*private static final CANSparkMax master = Util.createSparkMAX(ShooterConstants.master, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax slave = Util.createSparkMAX(ShooterConstants.slave, CANSparkMaxLowLevel.MotorType.kBrushless);*/
+
+    private static final CANSparkMax master = new CANSparkMax(ShooterConstants.master, MotorType.kBrushless);
+    private static final CANSparkMax slave = new CANSparkMax(ShooterConstants.slave, MotorType.kBrushless);
 
     private static CANPIDController pidController;
 
@@ -26,6 +30,12 @@ public class Shooter implements Subsystem {
     }
     
     private Shooter(){
+
+        master.restoreFactoryDefaults();
+        slave.restoreFactoryDefaults();
+
+        master.enableVoltageCompensation(12);
+        slave.enableVoltageCompensation(12);
 
         master.setIdleMode(IdleMode.kCoast);
         slave.setIdleMode(IdleMode.kCoast);

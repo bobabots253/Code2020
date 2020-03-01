@@ -38,7 +38,7 @@ public class Intake extends ProfiledPIDSubsystem {
      * Enum class representing the two possible positions of the intake arm, UP and DOWN
      */
     public enum State {
-        UP(0), DOWN(0);
+        UP(4.22), DOWN(2.68);
 
         public double position;
 
@@ -56,11 +56,15 @@ public class Intake extends ProfiledPIDSubsystem {
 
         armEncoder.setDistancePerRotation(2*Math.PI);
 
-        conveyorMotor.setInverted(true);
+        conveyorMotor.setInverted(false);
         conveyorMotor.burnFlash();
 
+        armMotor.configContinuousCurrentLimit(1);
+        armMotor.configPeakCurrentLimit(0);
+        armMotor.enableCurrentLimit(true);
+
         setGoal(0);
-        enable();
+        disable();
         register();
     }
 
@@ -124,7 +128,7 @@ public class Intake extends ProfiledPIDSubsystem {
      */
     public void setGoal(State state) {
         setGoal(state.position - IntakeConstants.kInitialPosition);
-        enable();
+        
     }
 
     /**
@@ -144,5 +148,8 @@ public class Intake extends ProfiledPIDSubsystem {
         double feedforward = FEEDFORWARD.calculate(setpoint.position, setpoint.velocity);
         // Set motor, converting voltage to percent voltage
         armMotor.set(ControlMode.PercentOutput, (output + feedforward)/12.0);
+        SmartDashboard.putNumber("pos", setpoint.position);
+        SmartDashboard.putNumber("output", output/12);
+        SmartDashboard.putNumber("feedforward + output", (output+feedforward)/12);
     }
 }

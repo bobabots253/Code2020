@@ -88,18 +88,6 @@ public final class Units {
 
     }
 
-    public static class IntakeUnits {
-        /**
-         * Converts encoder ticks position in radians (Intake)
-         *
-         * @param value absolute encoder value
-         * @return intake position in radians
-         */
-        public static double TicksToRadians(double value) {
-            return value * Constants.IntakeConstants.kRadPerTick;
-        }
-    }
-
     /**
      * Converts given meters to feet.
      *
