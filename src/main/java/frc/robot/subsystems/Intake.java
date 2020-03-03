@@ -78,7 +78,7 @@ public class Intake extends ProfiledPIDSubsystem {
 
     /**
      * Sets the conveyor to spin at a percent of max speed
-     * @param speed Percent speed
+     * @param value Percent speed
      */
     public void setConveyor(double value) {
         conveyorMotor.set(value);
