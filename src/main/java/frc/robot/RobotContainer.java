@@ -26,18 +26,14 @@ import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
 import frc.robot.commands.ConveyorQueue;
 import frc.robot.commands.Drive;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Intake.State;
+import frc.robot.subsystems.*;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class RobotContainer {
+    public static Arm arm;
     public static Drivetrain drivetrain;
     public static Intake intake;
     public static Conveyor conveyor;
@@ -72,6 +68,8 @@ public class RobotContainer {
         navX = new AHRS(Port.kMXP);
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
+        arm = Arm.getInstance();
+        
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
 
@@ -93,10 +91,10 @@ public class RobotContainer {
     private void bindOI() {
 
        // Flip down intake arm and spin when RB is held, flip back up and stop spinning when released
-        driver_RB.whileHeld(new RunCommand(()->intake.rotate(-0.4), intake)
+        driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
                     .alongWith(new RunCommand( ()->intake.intake(0.5)))
                     .alongWith(new RunCommand( ()->intake.setConveyor(0.5))))
-                .whenReleased(new RunCommand( ()->intake.rotate(0.35), intake)
+                .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
 
         // Spin up shooter when LB is held, stop when released
@@ -110,9 +108,9 @@ public class RobotContainer {
                     .alongWith(new RunCommand(intake::stopIntake, intake)));
 
         // Flip intake down and spin outwards to sweep balls out of the way when A is held, flip up and stop when released
-        driver_A.whileHeld(new RunCommand(()->intake.rotate(-0.4), intake)
+        driver_A.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
                     .alongWith(new RunCommand( ()->intake.intake(-0.5))))
-                .whenReleased(new RunCommand( ()->intake.rotate(0.35), intake)
+                .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));   
 
         // Run both climbers when DPAD up is held
