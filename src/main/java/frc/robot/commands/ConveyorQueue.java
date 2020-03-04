@@ -43,6 +43,7 @@ public class ConveyorQueue implements Command {
                         Conveyor.getInstance().stop();
                     }
                 } else {
+                    System.out.println("here????");
                     Conveyor.getInstance().setOpenLoop(-ConveyorConstants.kQueueSpeed);
                 }
 

@@ -59,6 +59,11 @@ public class Shooter implements Subsystem {
      */
     public void setOpenLoop(double value){
         master.set(value);
+
+    if(value != 0){
+        //goShooter = true;
+
+    }
        
     }
     

@@ -55,9 +55,15 @@ public class Conveyor implements Subsystem {
      * Sets the conveyor in percent of max speed
      * @param value Percent speed
      */
+    public void setOpenLoop(double fastValue, double slowValue) {
+        master.set(fastValue);
+        System.out.println("set: " + fastValue);
+    }
     public void setOpenLoop(double value) {
         master.set(value);
+        System.out.println("set: " + value);
     }
+    
 
     public void stop(){
         setOpenLoop(0);
