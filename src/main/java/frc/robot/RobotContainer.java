@@ -50,12 +50,18 @@ public class RobotContainer {
 
     private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
 
+    private static final XboxController driver2 = new XboxController(1);
+
     private static final JoystickButton driver_A = new JoystickButton(driver, 1),
             driver_B = new JoystickButton(driver, 2), driver_X = new JoystickButton(driver, 3),
             driver_Y = new JoystickButton(driver, 4), driver_LB = new JoystickButton(driver, 5),
             driver_RB = new JoystickButton(driver, 6), driver_VIEW = new JoystickButton(driver, 7),
             driver_MENU = new JoystickButton(driver, 8);
-
+            private static final JoystickButton driver_A2 = new JoystickButton(driver2, 1),
+            driver_B2 = new JoystickButton(driver2, 2), driver_X2 = new JoystickButton(driver2, 3),
+            driver_Y2 = new JoystickButton(driver2, 4), driver_LB2 = new JoystickButton(driver2, 5),
+            driver_RB2 = new JoystickButton(driver2, 6), driver_VIEW2 = new JoystickButton(driver2, 7),
+            driver_MENU2 = new JoystickButton(driver2, 8);
     private static final POVButton driver_DPAD_UP = new POVButton(driver, 0),
             driver_DPAD_RIGHT = new POVButton(driver, 90), driver_DPAD_DOWN = new POVButton(driver, 180),
             driver_DPAD_LEFT = new POVButton(driver, 270);
@@ -126,6 +132,17 @@ public class RobotContainer {
         driver_VIEW.whileHeld(new RunCommand(() -> climber.climbLeft(0.5), climber)).whenReleased(new RunCommand(climber::stopLeftMotor, climber));
         driver_MENU.whileHeld( new RunCommand(() -> climber.climbRight(0.5), climber)).whenReleased(new RunCommand(climber::stopRightMotor, climber));
 
+        driver_LB2.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(0.55, 0.15), conveyor))
+        .whenReleased(new RunCommand(conveyor::stop, conveyor));
+        
+        driver_VIEW.whileHeld(new RunCommand(()-> intake.setConveyor(0.5), intake))
+        .whenReleased(new RunCommand(intake::stopIntake, intake));
+
+        driver_RB2.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(-0.55, -0.15), conveyor)) 
+        .whenReleased(new RunCommand(conveyor::stop, conveyor));
+
+        driver_MENU2.whileHeld(new RunCommand(()-> intake.setConveyor(-0.5), intake))
+        .whenReleased(new RunCommand(intake::stopIntake, intake));
         /*
         driver_RB.whenPressed(new InstantCommand(()->intake.setGoal(State.DOWN), intake))
                 .whileHeld(() -> intake.intake(0.5), intake)

@@ -60,8 +60,8 @@ public class Conveyor implements Subsystem {
         System.out.println("set: " + fastValue);
     }
     public void setOpenLoop(double value) {
-        master.set(value);
-        System.out.println("set: " + value);
+        master.set(-value);
+        System.out.println("set: " + -1 * value);
     }
     
 
