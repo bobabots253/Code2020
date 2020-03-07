@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
@@ -161,37 +162,19 @@ public class RobotContainer {
      * @return the Command to run during autonomous
      */
     public Command getAutonomousCommand() {
-        // TODO: Replace this code with the selector logic to select the proper
-        // autonomousit sequence (aka, decide how we want to select auto)
-        Trajectory initialTrajectory;
-        try {
-            initialTrajectory = TrajectoryUtil
-                    .fromPathweaverJson(Paths.get("/home/lvuser/deploy/paths/InitiationToTarget.json"));
-        } catch (IOException e) {
-            initialTrajectory = TrajectoryGenerator.generateTrajectory(
-                    // Start at the origin facing the +X direction
-                    new Pose2d(0, 5, new Rotation2d(0)),
-                    // Pass through these two interior waypoints, making an 's' curve path
-                    List.of(new Translation2d(1, 5.5), new Translation2d(2, 4.5)),
-                    // End 3 meters straight ahead of where we started, facing forward
-                    new Pose2d(3, 5, new Rotation2d(0)),
-                    // Pass config
-                    new TrajectoryConfig(2, 4).setKinematics(Drivetrain.KINEMATICS).addConstraint(
-                            new DifferentialDriveVoltageConstraint(Drivetrain.FEEDFORWARD, Drivetrain.KINEMATICS, 10)));
-        }
+        return new SequentialCommandGroup(
+            new StartEndCommand(
+                ()-> Drivetrain.setOpenLoop(0.2,0.2),
+                Drivetrain::stop,
+                drivetrain
+            ).withTimeout(4), 
+            new StartEndCommand(
+                ()->shooter.setOpenLoop(0.3), 
+                shooter::stop,
+                shooter
+            ).withTimeout(3));
 
-        // Workaround for try-catch block "initialTrajectory may have already been
-        // assigned"
-        final Trajectory initialAutonomousTrajectory = initialTrajectory;
 
-        /* Commands common to all autonomous sequences */
-        SequentialCommandGroup initializeAutonomous = new SequentialCommandGroup(new InstantCommand(navX::reset),
-                new InstantCommand(() -> Drivetrain.ODOMETRY.resetPosition(
-                        initialAutonomousTrajectory.sample(0).poseMeters, Rotation2d.fromDegrees(navX.getAngle()))),
-                new InstantCommand(drivetrain::resetEncoders));
-
-        /* Adding all the autonomous commands into a single sequence */
-        return new SequentialCommandGroup(initializeAutonomous, new TrajectoryTracker(initialTrajectory));
     }
 
     /**
