@@ -11,7 +11,7 @@ import frc.robot.Util;
 import frc.robot.Constants.ConveyorConstants;
 
 public class Conveyor implements Subsystem {
-    private static final CANSparkMax master = Util.createSparkMAX(ConveyorConstants.motor, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static CANSparkMax master;
     private static final DigitalInput photoelectric = new DigitalInput(0);
 
     private static Conveyor instance;
@@ -21,10 +21,11 @@ public class Conveyor implements Subsystem {
     }
     
     private Conveyor() {
-
+        master = Util.createSparkMAX(ConveyorConstants.motor, CANSparkMaxLowLevel.MotorType.kBrushless);
         master.setInverted(true);
         master.burnFlash();
 
+        
         register();
     }
 
