@@ -49,4 +49,8 @@ public class Intake implements Subsystem {
         spinMotor.set(ControlMode.PercentOutput, 0);
         conveyorMotor.set(0);
     }
+
+    public void stopConveyor(){
+        conveyorMotor.set(0);
+    }
 }

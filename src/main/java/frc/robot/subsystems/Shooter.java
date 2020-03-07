@@ -67,6 +67,10 @@ public class Shooter implements Subsystem {
         master.set(value);
        
     }
+
+    public double getShooterVelocity(){
+        return encoder.getVelocity();
+    }
     
     /**
      * Stops the motor
@@ -76,6 +80,7 @@ public class Shooter implements Subsystem {
         
     }
     
+   
     /**
      * Set the setpoint of the flywheel based on an RPM target
      * @param RPM the RPM for the flywheel to spin at

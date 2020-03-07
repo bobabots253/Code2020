@@ -26,6 +26,7 @@ import frc.robot.Constants.DriverConstants;
 import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
 import frc.robot.commands.ConveyorQueue;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
@@ -114,8 +115,9 @@ public class RobotContainer {
     
         // Spin up shooter when LB is held, stop when released
         // Changed shooter from .65 to .60
-        driver_LB.whileHeld(new RunCommand( ()-> shooter.setOpenLoop(0.65), shooter))
-                 .whenReleased(shooter::stop, shooter);
+       /* driver_LB.whileHeld(new RunCommand( ()-> shooter.setOpenLoop(0.65), shooter))
+                 .whenReleased(shooter::stop, shooter);*/
+        driver_LB.whileHeld(new Shoot());
       
         // Queue up power cells manually when B is held, stop when released
         //Orginally we set converyor to 0.55 but that was changed because practice field
