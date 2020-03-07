@@ -2,20 +2,15 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Util;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter implements Subsystem {
-    /*private static final CANSparkMax master = Util.createSparkMAX(ShooterConstants.master, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANSparkMax slave = Util.createSparkMAX(ShooterConstants.slave, CANSparkMaxLowLevel.MotorType.kBrushless);*/
-
     private static final CANSparkMax master = new CANSparkMax(ShooterConstants.master, MotorType.kBrushless);
     private static final CANSparkMax slave = new CANSparkMax(ShooterConstants.slave, MotorType.kBrushless);
 
@@ -59,11 +54,6 @@ public class Shooter implements Subsystem {
      */
     public void setOpenLoop(double value){
         master.set(value);
-
-    if(value != 0){
-        //goShooter = true;
-
-    }
        
     }
     

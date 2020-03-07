@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
     robot = RobotContainer.getInstance();
     RobotContainer.drivetrain.resetEncoders();
     RobotContainer.navX.reset();
-    RobotContainer.intake.resetEncoders();
+    RobotContainer.arm.resetEncoders();
 
   }
   
