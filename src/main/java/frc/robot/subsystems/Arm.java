@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,7 +16,7 @@ public class Arm extends ProfiledPIDSubsystem {
     
     private static final TalonSRX motor = Util.createTalonSRX(IntakeConstants.armMotor, false);
     
-    private static final DutyCycleEncoder armEncoder = new DutyCycleEncoder(1);
+    private static final Encoder armEncoder = new Encoder(4,3);
     
     private static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(IntakeConstants.kS, IntakeConstants.kCos, IntakeConstants.kV, IntakeConstants.kA);
     
@@ -29,7 +30,7 @@ public class Arm extends ProfiledPIDSubsystem {
      * Enum class representing the two possible positions of the intake arm, UP and DOWN
      */
     public enum State {
-        UP(4.22), DOWN(2.68);
+        UP(IntakeConstants.kArmOffset), DOWN(-0.132);
         
         public double position;
         
@@ -43,17 +44,23 @@ public class Arm extends ProfiledPIDSubsystem {
     
     private Arm() {
         super(new ProfiledPIDController(IntakeConstants.kP , IntakeConstants.kI, IntakeConstants.kD,
-                new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration)), 0);
+                new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration), 0));
+
+        armEncoder.setDistancePerPulse((2*Math.PI/2048));
+        armEncoder.setReverseDirection(true);
         
-        armEncoder.setDistancePerRotation(2 * Math.PI);
-    
         motor.configContinuousCurrentLimit(1);
         motor.configPeakCurrentLimit(0);
-        motor.enableCurrentLimit(true);
+        motor.enableCurrentLimit(false);
         
-        setGoal(0);
+        setGoal(IntakeConstants.kArmOffset);
+
         disable();
         register();
+    }
+
+    public void setGoal(State goal) {
+        setGoal(goal.position);
     }
     
     /**
@@ -79,7 +86,8 @@ public class Arm extends ProfiledPIDSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-        SmartDashboard.putNumber("encoder value", armEncoder.getDistance());
+
+        SmartDashboard.putNumber("encoder value", armEncoder.get());
         SmartDashboard.putNumber("measurement", getMeasurement());
     }
     
@@ -88,7 +96,7 @@ public class Arm extends ProfiledPIDSubsystem {
      */
     @Override
     public double getMeasurement() {
-        return armEncoder.getDistance() - IntakeConstants.kInitialPosition;
+       return armEncoder.getDistance() + IntakeConstants.kArmOffset;
     }
     
     /**
@@ -100,8 +108,10 @@ public class Arm extends ProfiledPIDSubsystem {
         double feedforward = FEEDFORWARD.calculate(setpoint.position, setpoint.velocity);
         // Set motor, converting voltage to percent voltage
         motor.set(ControlMode.PercentOutput, (output + feedforward)/12.0);
+
         SmartDashboard.putNumber("pos", setpoint.position);
         SmartDashboard.putNumber("output", output/12);
         SmartDashboard.putNumber("feedforward + output", (output+feedforward)/12);
+
     }
 }

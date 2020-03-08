@@ -12,8 +12,9 @@ import frc.robot.Constants.ConveyorConstants;
 
 public class Conveyor implements Subsystem {
     private static CANSparkMax master;
-    private static final DigitalInput photoelectric = new DigitalInput(0);
-
+    //private static final DigitalInput photoelectric = new DigitalInput(0);
+    private static final DigitalInput horizontalPhotoelectric = new DigitalInput(1);
+    private static final DigitalInput verticalPhotoelectric = new DigitalInput(0);
     private static Conveyor instance;
     public static Conveyor getInstance() {
         if (instance == null) instance = new Conveyor();
@@ -31,16 +32,22 @@ public class Conveyor implements Subsystem {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Queue Sensor", getQueueSensor());
+        SmartDashboard.putBoolean("Horizontal Conveyor Sensor", getHorizontalSensor());
+        SmartDashboard.putBoolean("Vertical Conveyor Sensor", getVerticalSensor());
     }
     /**
      * Determine whether a power cell is seen by the queuing sensor at the beginning of the conveyor
      * 
      * @return true if the sensor sees a ball, else: false
      */
-    public boolean getQueueSensor() {
-        return (photoelectric.get());
-    }   
+
+    public boolean getHorizontalSensor(){
+        return (!horizontalPhotoelectric.get());
+    }
+
+    public boolean getVerticalSensor() {
+        return (!verticalPhotoelectric.get());
+    }
 
     /**
      * Determine whether a power cell is seen by the shooter sensor at the end of the conveyor

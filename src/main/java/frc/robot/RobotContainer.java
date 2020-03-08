@@ -103,7 +103,7 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
-
+        /*
        // Flip down intake arm and spin when RB is held, flip back up and stop spinning when released
         driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
                     .alongWith(new RunCommand( ()->intake.intake(0.5)))
@@ -115,7 +115,8 @@ public class RobotContainer {
         // Changed shooter from .65 to .60
         driver_LB.whileHeld(new RunCommand( ()-> shooter.setOpenLoop(0.65), shooter))
                  .whenReleased(shooter::stop, shooter);
-      
+      */
+
         // Queue up power cells manually when B is held, stop when released
         //Orginally we set converyor to 0.55 but that was changed because practice field
         driver_B.whileHeld(new RunCommand( ()->conveyor.setOpenLoop(0.55), conveyor)
@@ -135,24 +136,17 @@ public class RobotContainer {
         // Right the right and left climbers when view and menu are held, respectively
         driver_VIEW.whileHeld(new RunCommand(() -> climber.climbLeft(0.5), climber)).whenReleased(new RunCommand(climber::stopLeftMotor, climber));
         driver_MENU.whileHeld( new RunCommand(() -> climber.climbRight(0.5), climber)).whenReleased(new RunCommand(climber::stopRightMotor, climber));
-
+        //2nd Controller vertical conveyor up and down respectively
         operator_LB.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(0.55), conveyor))
-        .whenReleased(new RunCommand(conveyor::stop, conveyor));
-        
-        operator_VIEW.whileHeld(new RunCommand(()-> intake.setConveyor(0.5), intake))
-        .whenReleased(new RunCommand(intake::stopIntake, intake));
-
+                   .whenReleased(new RunCommand(conveyor::stop, conveyor));
         operator_RB.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(-0.55), conveyor)) 
-        .whenReleased(new RunCommand(conveyor::stop, conveyor));
-
+                   .whenReleased(new RunCommand(conveyor::stop, conveyor));
+        //2nd controller horizontal conveyor in and out respectively
+        operator_VIEW.whileHeld(new RunCommand(()-> intake.setConveyor(0.5), intake))
+                     .whenReleased(new RunCommand(intake::stopIntake, intake));
         operator_MENU.whileHeld(new RunCommand(()-> intake.setConveyor(-0.5), intake))
         .whenReleased(new RunCommand(intake::stopIntake, intake));
-        /*
-        driver_RB.whenPressed(new InstantCommand(()->intake.setGoal(State.DOWN), intake))
-                .whileHeld(() -> intake.intake(0.5), intake)
-                .whenReleased(new InstantCommand(()->intake.setGoal(State.UP), intake)
-                    .andThen(new InstantCommand(()->intake.intake(0), intake)));
-        */
+        
     }
 
     /**

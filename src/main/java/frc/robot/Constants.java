@@ -81,9 +81,9 @@ public class Constants {
         public static double kA = 0.00717;
 
         /* Intake constants */
-        public static double kMaxVelocity = 0.25; // Maximum velocity to turn arm at, radians per second
-        public static double kMaxAcceleration = 2; // Maximum acceleration to turn arm at, radians per second per second
-        public static double kInitialPosition = 4.22; // Initial position of the intakr arm
+        public static double kMaxVelocity = 2; // Maximum velocity to turn arm at, radians per second
+        public static double kMaxAcceleration = 10; // Maximum acceleration to turn arm at, radians per second per second
+        public static double kArmOffset = 1.344; // Initial position of the intakr arm
     }
     // TODO: Tune
     public static class ConveyorConstants {
