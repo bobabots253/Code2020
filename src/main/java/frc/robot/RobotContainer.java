@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
@@ -123,24 +124,24 @@ public class RobotContainer {
                     .alongWith(new InstantCommand(intake::stopIntake)));   
 
         // Run both climbers when DPAD up is held
-        driver_DPAD_UP.whileHeld(new RunCommand(() -> climber.climbUnity(0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
-        driver_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climbUnity(-0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
+        operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climbUnity(0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
+        //operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climbUnity(-0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
 
         // Run the right and left climbers when view and menu are held, respectively
-        driver_VIEW.whileHeld(new RunCommand(() -> climber.climbLeft(0.5), climber)).whenReleased(new RunCommand(climber::stopLeftMotor, climber));
-        driver_MENU.whileHeld( new RunCommand(() -> climber.climbRight(0.5), climber)).whenReleased(new RunCommand(climber::stopRightMotor, climber));
+        operator_VIEW.whileHeld(new RunCommand(() -> climber.climbLeft(0.5), climber)).whenReleased(new RunCommand(climber::stopLeftMotor, climber));
+        operator_MENU.whileHeld( new RunCommand(() -> climber.climbRight(0.5), climber)).whenReleased(new RunCommand(climber::stopRightMotor, climber));
 
-        //2nd Controller vertical conveyor up and down respectively
-        operator_LB.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(0.55), conveyor))
-                   .whenReleased(new RunCommand(conveyor::stop, conveyor));
-        operator_RB.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(-0.55), conveyor)) 
-                   .whenReleased(new RunCommand(conveyor::stop, conveyor));
+        // 2nd Controller vertical conveyor up and down respectively
+        operator_Y.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(0.55), conveyor))
+                   .whenReleased(new InstantCommand(conveyor::stop, conveyor));
+        operator_A.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(-0.55), conveyor)) 
+                   .whenReleased(new InstantCommand(conveyor::stop, conveyor));
 
-        //2nd controller horizontal conveyor in and out respectively
-        operator_VIEW.whileHeld(new RunCommand(()-> intake.setConveyor(0.5), intake))
-                     .whenReleased(new RunCommand(intake::stopIntake, intake));
-        operator_MENU.whileHeld(new RunCommand(()-> intake.setConveyor(-0.5), intake))
-        .whenReleased(new RunCommand(intake::stopIntake, intake));
+        // 2nd controller horizontal conveyor in and out respectively
+        operator_X.whileHeld(new RunCommand(()-> intake.setConveyor(0.5), intake))
+                     .whenReleased(new InstantCommand(intake::stopIntake, intake));
+        operator_B.whileHeld(new RunCommand(()-> intake.setConveyor(-0.5), intake))
+        .whenReleased(new InstantCommand(intake::stopIntake, intake));
         
     }
 
@@ -155,12 +156,9 @@ public class RobotContainer {
                 ()-> Drivetrain.setOpenLoop(0.2,0.2),
                 Drivetrain::stop,
                 drivetrain
-            ).withTimeout(4), 
-            new StartEndCommand(
-                ()->shooter.setOpenLoop(0.3), 
-                shooter::stop,
-                shooter
-            ).withTimeout(3));
+            ).withTimeout(3), 
+            new WaitCommand(1),
+            new Shoot().withTimeout(3));
 
 
     }
