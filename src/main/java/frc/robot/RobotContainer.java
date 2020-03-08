@@ -105,7 +105,7 @@ public class RobotContainer {
      * Binds operator input to Commands 
      */
     private void bindOI() {
-        /*
+        
        // Flip down intake arm and spin when RB is held, flip back up and stop spinning when released
         driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
                     .alongWith(new RunCommand( ()->intake.intake(0.5)))
@@ -114,17 +114,7 @@ public class RobotContainer {
                     .alongWith(new InstantCommand(intake::stopIntake)));
     
         // Spin up shooter when LB is held, stop when released
-        // Changed shooter from .65 to .60
-       /* driver_LB.whileHeld(new RunCommand( ()-> shooter.setOpenLoop(0.65), shooter))
-                 .whenReleased(shooter::stop, shooter);*/
         driver_LB.whileHeld(new Shoot());
-      
-        // Queue up power cells manually when B is held, stop when released
-        //Orginally we set converyor to 0.55 but that was changed because practice field
-        driver_B.whileHeld(new RunCommand( ()->conveyor.setOpenLoop(0.55), conveyor)
-                    .alongWith(new RunCommand( ()->intake.setConveyor(0.5), intake)))
-                .whenReleased(new RunCommand(conveyor::stop, conveyor)
-                    .alongWith(new RunCommand(intake::stopIntake, intake)));
 
         // Flip intake down and spin outwards to sweep balls out of the way when A is held, flip up and stop when released
         driver_A.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
@@ -135,14 +125,17 @@ public class RobotContainer {
         // Run both climbers when DPAD up is held
         driver_DPAD_UP.whileHeld(new RunCommand(() -> climber.climbUnity(0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
         driver_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climbUnity(-0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
-        // Right the right and left climbers when view and menu are held, respectively
+
+        // Run the right and left climbers when view and menu are held, respectively
         driver_VIEW.whileHeld(new RunCommand(() -> climber.climbLeft(0.5), climber)).whenReleased(new RunCommand(climber::stopLeftMotor, climber));
         driver_MENU.whileHeld( new RunCommand(() -> climber.climbRight(0.5), climber)).whenReleased(new RunCommand(climber::stopRightMotor, climber));
+
         //2nd Controller vertical conveyor up and down respectively
         operator_LB.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(0.55), conveyor))
                    .whenReleased(new RunCommand(conveyor::stop, conveyor));
         operator_RB.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(-0.55), conveyor)) 
                    .whenReleased(new RunCommand(conveyor::stop, conveyor));
+
         //2nd controller horizontal conveyor in and out respectively
         operator_VIEW.whileHeld(new RunCommand(()-> intake.setConveyor(0.5), intake))
                      .whenReleased(new RunCommand(intake::stopIntake, intake));

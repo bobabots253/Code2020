@@ -48,7 +48,7 @@ public class Arm extends ProfiledPIDSubsystem {
         
         motor.configContinuousCurrentLimit(1);
         motor.configPeakCurrentLimit(0);
-        motor.enableCurrentLimit(false);
+        motor.enableCurrentLimit(true);
         
         setGoal(ArmConstants.kArmOffset);
 
