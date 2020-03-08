@@ -130,4 +130,13 @@ public class Constants {
         public static final int leftMotorID = 14;
         public static final int rightMotorID = 15;
     }
+
+    public static class LEDConstants{
+        public static enum State {
+            CLIMBING,
+            //someone who knows more about the robot states should fill this part in
+
+        }
+
+    }
 }

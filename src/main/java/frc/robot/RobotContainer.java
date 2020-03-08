@@ -31,7 +31,9 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Shooter;
+
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -44,6 +46,7 @@ public class RobotContainer {
     public static Shooter shooter;
     public static Climber climber;
     public static Arm arm;
+    public static LED led;
     public boolean goShooter = false;
     public static Dashboard falconDashboard;
     private static NetworkTable limelight;
@@ -94,6 +97,8 @@ public class RobotContainer {
 
         shooter = Shooter.getInstance();
 
+        led = LED.getInstance();
+
         falconDashboard = Dashboard.getInstance();
 
         bindOI();
@@ -114,7 +119,8 @@ public class RobotContainer {
         // Spin up shooter when LB is held, stop when released
         // Changed shooter from .65 to .60
         driver_LB.whileHeld(new RunCommand( ()-> shooter.setOpenLoop(0.65), shooter))
-                 .whenReleased(shooter::stop, shooter);
+                 .whenReleased(shooter::stop, shooter)
+                ;
       
         // Queue up power cells manually when B is held, stop when released
         //Orginally we set converyor to 0.55 but that was changed because practice field
