@@ -7,7 +7,8 @@ public class Constants {
 
     /* Controllers Input */
     public static class InputPorts {
-        public static final int xboxController = 0;
+        public static final int driver_Controller = 0;
+        public static final int operator_Controller = 1;
     }
 
     /* Differential Drive Settings */

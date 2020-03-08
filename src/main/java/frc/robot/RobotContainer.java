@@ -51,9 +51,9 @@ public class RobotContainer {
     private static NetworkTable limelight;
     public static AHRS navX;
 
-    private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
+    private static final XboxController driver = new XboxController(Constants.InputPorts.driver_Controller);
 
-    private static final XboxController operator = new XboxController(1);
+    private static final XboxController operator = new XboxController(Constants.InputPorts.operator_Controller);
 
     private static final JoystickButton driver_A = new JoystickButton(driver, 1),
             driver_B = new JoystickButton(driver, 2), driver_X = new JoystickButton(driver, 3),
@@ -69,6 +69,10 @@ public class RobotContainer {
     private static final POVButton driver_DPAD_UP = new POVButton(driver, 0),
             driver_DPAD_RIGHT = new POVButton(driver, 90), driver_DPAD_DOWN = new POVButton(driver, 180),
             driver_DPAD_LEFT = new POVButton(driver, 270);
+
+    private static final POVButton operator_DPAD_UP = new POVButton(operator, 0),
+            operator_DPAD_RIGHT = new POVButton(driver, 90), operator_DPAD_DOWN = new POVButton(driver, 180),
+            operator_DPAD_LEFT = new POVButton(driver, 270);
 
     private static RobotContainer instance;
 
