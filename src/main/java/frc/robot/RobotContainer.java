@@ -35,10 +35,6 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.List;
-
 public class RobotContainer {
     public static Drivetrain drivetrain;
     public static Intake intake;

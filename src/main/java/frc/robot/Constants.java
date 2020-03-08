@@ -63,12 +63,17 @@ public class Constants {
         public static final double kSupplyTriggerThreshold = 70;
         public static final double kSupplyTriggerDuration = 0.7;
     }
-    // TODO: Tune
+
     public static class IntakeConstants {
         /* Motors */
-        public static final int armMotor = 5;
         public static final int spinMotor = 6;
         public static final int conveyorMotor = 11;
+
+    }
+
+    //TODO: Tune
+    public static class ArmConstants {
+        public static final int armMotor = 5;
 
         /* PID Constants */
         public static double kP = 2.9;
@@ -85,7 +90,9 @@ public class Constants {
         public static double kMaxVelocity = 0.25; // Maximum velocity to turn arm at, radians per second
         public static double kMaxAcceleration = 2; // Maximum acceleration to turn arm at, radians per second per second
         public static double kInitialPosition = 4.22; // Initial position of the intakr arm
+
     }
+
     // TODO: Tune
     public static class ConveyorConstants {
         public static final int motor = 10;

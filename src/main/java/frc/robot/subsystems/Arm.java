@@ -8,16 +8,16 @@ import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Util;
 
 public class Arm extends ProfiledPIDSubsystem {
     
-    private static final TalonSRX motor = Util.createTalonSRX(IntakeConstants.armMotor, false);
+    private static final TalonSRX motor = Util.createTalonSRX(ArmConstants.armMotor, false);
     
     private static final DutyCycleEncoder armEncoder = new DutyCycleEncoder(1);
     
-    private static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(IntakeConstants.kS, IntakeConstants.kCos, IntakeConstants.kV, IntakeConstants.kA);
+    private static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(ArmConstants.kS, ArmConstants.kCos, ArmConstants.kV, ArmConstants.kA);
     
     private static Arm instance;
     public static Arm getInstance() {
@@ -42,8 +42,8 @@ public class Arm extends ProfiledPIDSubsystem {
     }
     
     private Arm() {
-        super(new ProfiledPIDController(IntakeConstants.kP , IntakeConstants.kI, IntakeConstants.kD,
-                new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration)), 0);
+        super(new ProfiledPIDController(ArmConstants.kP , ArmConstants.kI, ArmConstants.kD,
+                new TrapezoidProfile.Constraints(ArmConstants.kMaxVelocity, ArmConstants.kMaxAcceleration)), 0);
         
         armEncoder.setDistancePerRotation(2 * Math.PI);
     
@@ -88,7 +88,7 @@ public class Arm extends ProfiledPIDSubsystem {
      */
     @Override
     public double getMeasurement() {
-        return armEncoder.getDistance() - IntakeConstants.kInitialPosition;
+        return armEncoder.getDistance() - ArmConstants.kInitialPosition;
     }
     
     /**
