@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
@@ -7,6 +8,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.ShooterConstants;
 
@@ -15,6 +17,7 @@ public class Shooter implements Subsystem {
     private static final CANSparkMax slave = new CANSparkMax(ShooterConstants.slave, MotorType.kBrushless);
 
     private static CANPIDController pidController;
+    private static CANEncoder encoder = master.getEncoder();
 
     private static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
     
@@ -46,15 +49,26 @@ public class Shooter implements Subsystem {
 
         master.burnFlash();
         slave.burnFlash();
+
+        register();
+    }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("Shooter Velocity", encoder.getVelocity());
     }
 
     /**
      * Sets the speed of the shooter in percent of max voltage (overriding the closed loop velocity control)
      * @param value percent of voltage [-1, 1]
      */
-    public void setOpenLoop(double value){
+    public void setOpenLoop(final double value){
         master.set(value);
        
+    }
+
+    public double getShooterVelocity(){
+        return encoder.getVelocity();
     }
     
     /**
@@ -65,11 +79,12 @@ public class Shooter implements Subsystem {
         
     }
     
+   
     /**
      * Set the setpoint of the flywheel based on an RPM target
      * @param RPM the RPM for the flywheel to spin at
      */
-    public void setGoal(double RPM){
+    public void setGoal(final double RPM){
         pidController.setReference(RPM, ControlType.kVelocity, ShooterConstants.kSlotID, FEEDFORWARD.calculate(RPM), CANPIDController.ArbFFUnits.kVoltage);
     }
 }

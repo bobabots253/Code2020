@@ -19,12 +19,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
 import frc.robot.commands.ConveyorQueue;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
@@ -32,10 +34,6 @@ import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.List;
 
 public class RobotContainer {
     public static Drivetrain drivetrain;
@@ -49,9 +47,9 @@ public class RobotContainer {
     private static NetworkTable limelight;
     public static AHRS navX;
 
-    private static final XboxController driver = new XboxController(Constants.InputPorts.xboxController);
+    private static final XboxController driver = new XboxController(Constants.InputPorts.driver_Controller);
 
-    private static final XboxController operator = new XboxController(1);
+    private static final XboxController operator = new XboxController(Constants.InputPorts.operator_Controller);
 
     private static final JoystickButton driver_A = new JoystickButton(driver, 1),
             driver_B = new JoystickButton(driver, 2), driver_X = new JoystickButton(driver, 3),
@@ -67,6 +65,10 @@ public class RobotContainer {
     private static final POVButton driver_DPAD_UP = new POVButton(driver, 0),
             driver_DPAD_RIGHT = new POVButton(driver, 90), driver_DPAD_DOWN = new POVButton(driver, 180),
             driver_DPAD_LEFT = new POVButton(driver, 270);
+
+    private static final POVButton operator_DPAD_UP = new POVButton(operator, 0),
+            operator_DPAD_RIGHT = new POVButton(driver, 90), operator_DPAD_DOWN = new POVButton(driver, 180),
+            operator_DPAD_LEFT = new POVButton(driver, 270);
 
     private static RobotContainer instance;
 
@@ -113,10 +115,10 @@ public class RobotContainer {
     
         // Spin up shooter when LB is held, stop when released
         // Changed shooter from .65 to .60
-        driver_LB.whileHeld(new RunCommand( ()-> shooter.setOpenLoop(0.65), shooter))
-                 .whenReleased(shooter::stop, shooter);
-      */
-
+       /* driver_LB.whileHeld(new RunCommand( ()-> shooter.setOpenLoop(0.65), shooter))
+                 .whenReleased(shooter::stop, shooter);*/
+        driver_LB.whileHeld(new Shoot());
+      
         // Queue up power cells manually when B is held, stop when released
         //Orginally we set converyor to 0.55 but that was changed because practice field
         driver_B.whileHeld(new RunCommand( ()->conveyor.setOpenLoop(0.55), conveyor)
@@ -155,37 +157,19 @@ public class RobotContainer {
      * @return the Command to run during autonomous
      */
     public Command getAutonomousCommand() {
-        // TODO: Replace this code with the selector logic to select the proper
-        // autonomousit sequence (aka, decide how we want to select auto)
-        Trajectory initialTrajectory;
-        try {
-            initialTrajectory = TrajectoryUtil
-                    .fromPathweaverJson(Paths.get("/home/lvuser/deploy/paths/InitiationToTarget.json"));
-        } catch (IOException e) {
-            initialTrajectory = TrajectoryGenerator.generateTrajectory(
-                    // Start at the origin facing the +X direction
-                    new Pose2d(0, 5, new Rotation2d(0)),
-                    // Pass through these two interior waypoints, making an 's' curve path
-                    List.of(new Translation2d(1, 5.5), new Translation2d(2, 4.5)),
-                    // End 3 meters straight ahead of where we started, facing forward
-                    new Pose2d(3, 5, new Rotation2d(0)),
-                    // Pass config
-                    new TrajectoryConfig(2, 4).setKinematics(Drivetrain.KINEMATICS).addConstraint(
-                            new DifferentialDriveVoltageConstraint(Drivetrain.FEEDFORWARD, Drivetrain.KINEMATICS, 10)));
-        }
+        return new SequentialCommandGroup(
+            new StartEndCommand(
+                ()-> Drivetrain.setOpenLoop(0.2,0.2),
+                Drivetrain::stop,
+                drivetrain
+            ).withTimeout(4), 
+            new StartEndCommand(
+                ()->shooter.setOpenLoop(0.3), 
+                shooter::stop,
+                shooter
+            ).withTimeout(3));
 
-        // Workaround for try-catch block "initialTrajectory may have already been
-        // assigned"
-        final Trajectory initialAutonomousTrajectory = initialTrajectory;
 
-        /* Commands common to all autonomous sequences */
-        SequentialCommandGroup initializeAutonomous = new SequentialCommandGroup(new InstantCommand(navX::reset),
-                new InstantCommand(() -> Drivetrain.ODOMETRY.resetPosition(
-                        initialAutonomousTrajectory.sample(0).poseMeters, Rotation2d.fromDegrees(navX.getAngle()))),
-                new InstantCommand(drivetrain::resetEncoders));
-
-        /* Adding all the autonomous commands into a single sequence */
-        return new SequentialCommandGroup(initializeAutonomous, new TrajectoryTracker(initialTrajectory));
     }
 
     /**

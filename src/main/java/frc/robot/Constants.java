@@ -7,7 +7,8 @@ public class Constants {
 
     /* Controllers Input */
     public static class InputPorts {
-        public static final int xboxController = 0;
+        public static final int driver_Controller = 0;
+        public static final int operator_Controller = 1;
     }
 
     /* Differential Drive Settings */
@@ -62,12 +63,17 @@ public class Constants {
         public static final double kSupplyTriggerThreshold = 70;
         public static final double kSupplyTriggerDuration = 0.7;
     }
-    // TODO: Tune
+
     public static class IntakeConstants {
         /* Motors */
-        public static final int armMotor = 5;
         public static final int spinMotor = 6;
         public static final int conveyorMotor = 11;
+
+    }
+
+    //TODO: Tune
+    public static class ArmConstants {
+        public static final int armMotor = 5;
 
         /* PID Constants */
         public static double kP = 2.9;
@@ -81,10 +87,12 @@ public class Constants {
         public static double kA = 0.00717;
 
         /* Intake constants */
-        public static double kMaxVelocity = 2; // Maximum velocity to turn arm at, radians per second
-        public static double kMaxAcceleration = 10; // Maximum acceleration to turn arm at, radians per second per second
-        public static double kArmOffset = 1.344; // Initial position of the intakr arm
+        public static double kMaxVelocity = 0.25; // Maximum velocity to turn arm at, radians per second
+        public static double kMaxAcceleration = 2; // Maximum acceleration to turn arm at, radians per second per second
+        public static double kArmOffset = 4.22; // Initial position of the intake arm
+
     }
+
     // TODO: Tune
     public static class ConveyorConstants {
         public static final int motor = 10;

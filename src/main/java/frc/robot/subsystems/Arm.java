@@ -9,16 +9,16 @@ import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Util;
 
 public class Arm extends ProfiledPIDSubsystem {
     
-    private static final TalonSRX motor = Util.createTalonSRX(IntakeConstants.armMotor, false);
+    private static final TalonSRX motor = Util.createTalonSRX(ArmConstants.armMotor, false);
     
     private static final Encoder armEncoder = new Encoder(4,3);
     
-    private static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(IntakeConstants.kS, IntakeConstants.kCos, IntakeConstants.kV, IntakeConstants.kA);
+    private static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(ArmConstants.kS, ArmConstants.kCos, ArmConstants.kV, ArmConstants.kA);
     
     private static Arm instance;
     public static Arm getInstance() {
@@ -30,7 +30,7 @@ public class Arm extends ProfiledPIDSubsystem {
      * Enum class representing the two possible positions of the intake arm, UP and DOWN
      */
     public enum State {
-        UP(IntakeConstants.kArmOffset), DOWN(-0.132);
+        UP(ArmConstants.kArmOffset), DOWN(-0.132);
         
         public double position;
         
@@ -43,17 +43,14 @@ public class Arm extends ProfiledPIDSubsystem {
     }
     
     private Arm() {
-        super(new ProfiledPIDController(IntakeConstants.kP , IntakeConstants.kI, IntakeConstants.kD,
-                new TrapezoidProfile.Constraints(IntakeConstants.kMaxVelocity, IntakeConstants.kMaxAcceleration), 0));
-
-        armEncoder.setDistancePerPulse((2*Math.PI/2048));
-        armEncoder.setReverseDirection(true);
+        super(new ProfiledPIDController(ArmConstants.kP , ArmConstants.kI, ArmConstants.kD,
+                new TrapezoidProfile.Constraints(ArmConstants.kMaxVelocity, ArmConstants.kMaxAcceleration)), 0);
         
         motor.configContinuousCurrentLimit(1);
         motor.configPeakCurrentLimit(0);
         motor.enableCurrentLimit(false);
         
-        setGoal(IntakeConstants.kArmOffset);
+        setGoal(ArmConstants.kArmOffset);
 
         disable();
         register();
@@ -96,7 +93,7 @@ public class Arm extends ProfiledPIDSubsystem {
      */
     @Override
     public double getMeasurement() {
-       return armEncoder.getDistance() + IntakeConstants.kArmOffset;
+        return armEncoder.getDistance() - ArmConstants.kArmOffset;
     }
     
     /**
