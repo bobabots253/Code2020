@@ -132,11 +132,16 @@ public class Constants {
     }
 
     public static class LEDConstants{
-        public static enum State {
-            CLIMBING,
+        public enum State {
+            SHOOTING,
+            INTAKE,
+            ENABLED,
+            DISABLED,
+            ERROR,
+            NULL
             //someone who knows more about the robot states should fill this part in
-
         }
+
 
     }
 }
