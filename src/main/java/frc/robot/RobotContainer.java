@@ -124,7 +124,7 @@ public class RobotContainer {
         driver_LB.whileHeld(new RunCommand( ()-> shooter.setOpenLoop(0.65), shooter)
                     .alongWith(new RunCommand(()->led.setState(LEDConstants.State.SHOOTING))))
                  .whenReleased(shooter::stop, shooter);
-      
+        driver_LB.whenReleased(new RunCommand(()->led.setState(LEDConstants.State.NULL)));
         // Queue up power cells manually when B is held, stop when released
         //Orginally we set converyor to 0.55 but that was changed because practice field
         driver_B.whileHeld(new RunCommand( ()->conveyor.setOpenLoop(0.55), conveyor)

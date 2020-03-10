@@ -10,7 +10,7 @@ import frc.robot.Constants.LEDConstants;
  
 public class LED implements Subsystem{
     
-    CANifier canifier = new CANifier(15);
+    CANifier canifier = new CANifier(LEDConstants.canifierID);
     private static LED instance;
     public static LEDConstants.State state = LEDConstants.State.NULL;
     public static Color color;
@@ -27,7 +27,7 @@ public class LED implements Subsystem{
             case ENABLED: { setColor(Color.kDarkTurquoise, 0.0); break; } 
             case DISABLED: { setColor(Color.kGreen, 0.0); break; }
             case ERROR: { setColor(Color.kRed, 0.0); break; }
-            case NULL: { setRGB(0,0,0,0.0);}
+            case NULL: { setRGB(0,0,0,0.0); startTime = 0.0; break;}
         }
     }
 

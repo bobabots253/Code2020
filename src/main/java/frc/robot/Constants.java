@@ -132,6 +132,8 @@ public class Constants {
     }
 
     public static class LEDConstants{
+        public static final int canifierID = 15;
+        public static final double blinkTime = 0.1;
         public enum State {
             SHOOTING,
             INTAKE,
