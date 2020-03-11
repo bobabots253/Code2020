@@ -29,6 +29,7 @@ public class LED implements Subsystem{
             case DISABLED: { setColor(Color.kGreen, 0.0); break; }
             case ERROR: { setColor(Color.kRed, 0.0); break; }
             case NULL: { setRGB(0,0,0,0.0); startONTime = 0; break;}
+            default: { setColor(Color.kBlue, 0.0); break; } //just set color to blue if we cant figure out y the wrong colors are being displayed
         }
     }
 
@@ -38,15 +39,15 @@ public class LED implements Subsystem{
     }
     public void setRGB(double red, double green, double blue, double blinkTiming){
         if(blinkTiming == 0.0){
-            canifier.setLEDOutput(red, LEDChannel.LEDChannelA);
-            canifier.setLEDOutput(green, LEDChannel.LEDChannelB);
+            canifier.setLEDOutput(green, LEDChannel.LEDChannelA);
+            canifier.setLEDOutput(red, LEDChannel.LEDChannelB);
             canifier.setLEDOutput(blue, LEDChannel.LEDChannelC);
         }
         else{
         if(startONTime == 0.0)   {startONTime = Timer.getFPGATimestamp();}
         if((Timer.getFPGATimestamp() - startONTime ) < blinkTiming){
-            canifier.setLEDOutput(red, LEDChannel.LEDChannelA);
-            canifier.setLEDOutput(green, LEDChannel.LEDChannelB);
+            canifier.setLEDOutput(green, LEDChannel.LEDChannelA);
+            canifier.setLEDOutput(red, LEDChannel.LEDChannelB);
             canifier.setLEDOutput(blue, LEDChannel.LEDChannelC);
         }
         else {
