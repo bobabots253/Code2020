@@ -14,7 +14,8 @@ public class LED implements Subsystem{
     private static LED instance;
     public static LEDConstants.State state = LEDConstants.State.NULL;
     public static Color color;
-    public static double startTime = 0.0;
+    public static double startONTime = 0.0;
+    public static double startOFFTime = 0.0;
     private LED(){
         register();
     }  
@@ -27,7 +28,7 @@ public class LED implements Subsystem{
             case ENABLED: { setColor(Color.kDarkTurquoise, 0.0); break; } 
             case DISABLED: { setColor(Color.kGreen, 0.0); break; }
             case ERROR: { setColor(Color.kRed, 0.0); break; }
-            case NULL: { setRGB(0,0,0,0.0); startTime = 0.0; break;}
+            case NULL: { setRGB(0,0,0,0.0); startONTime = 0; break;}
         }
     }
 
@@ -42,17 +43,22 @@ public class LED implements Subsystem{
             canifier.setLEDOutput(blue, LEDChannel.LEDChannelC);
         }
         else{
-        if(startTime == 0.0)   {startTime = Timer.getFPGATimestamp();}
-        if((Timer.getFPGATimestamp() - startTime ) < blinkTiming){
+        if(startONTime == 0.0)   {startONTime = Timer.getFPGATimestamp();}
+        if((Timer.getFPGATimestamp() - startONTime ) < blinkTiming){
             canifier.setLEDOutput(red, LEDChannel.LEDChannelA);
             canifier.setLEDOutput(green, LEDChannel.LEDChannelB);
             canifier.setLEDOutput(blue, LEDChannel.LEDChannelC);
         }
         else {
+            if(startOFFTime == 0.0) 
+                startOFFTime = Timer.getFPGATimestamp();
+            if((Timer.getFPGATimestamp() - startOFFTime) >= LEDConstants.blinkTime){ //resets to light
+                startONTime = Timer.getFPGATimestamp();
+                startOFFTime = 0.0;
+            }
             canifier.setLEDOutput(0.0, LEDChannel.LEDChannelA);
             canifier.setLEDOutput(0.0, LEDChannel.LEDChannelB);
             canifier.setLEDOutput(0.0, LEDChannel.LEDChannelC);
-            startTime = Timer.getFPGATimestamp();
         }
     }
     }
