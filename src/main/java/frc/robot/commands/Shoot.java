@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -12,7 +11,7 @@ import java.util.Set;
 
 public class Shoot implements Command {
     
-    private Subsystem[] requirements = {RobotContainer.shooter, RobotContainer.conveyor, RobotContainer.intake};
+    private static final Set<Subsystem> requirements = Set.of(Intake.getInstance(), Conveyor.getInstance(), Shooter.getInstance());
     
     Timer encoderFallback;
 
@@ -57,6 +56,6 @@ public class Shoot implements Command {
     
     @Override
     public Set<Subsystem> getRequirements() {
-        return Set.of(requirements);
+        return requirements;
     }
 }

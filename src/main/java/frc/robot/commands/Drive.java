@@ -19,7 +19,7 @@ public class Drive implements Command {
     }
     
     private State state;
-    Subsystem[] requirements = { RobotContainer.drivetrain };
+    private static final Set<Subsystem> requirements = Set.of(Drivetrain.getInstance());
     
     public Drive(State state){
         this.state = state;
@@ -130,6 +130,6 @@ public class Drive implements Command {
     
     @Override
     public Set<Subsystem> getRequirements() {
-        return Set.of(requirements);
+        return requirements;
     }
 }

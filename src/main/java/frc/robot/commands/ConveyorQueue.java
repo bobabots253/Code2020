@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class ConveyorQueue implements Command {
 
-    private Subsystem[] requirements = {Conveyor.getInstance()};
+    private static final Set<Subsystem> requirements = Set.of(Conveyor.getInstance());
 
     public ConveyorQueue() {
     }
@@ -32,6 +32,6 @@ public class ConveyorQueue implements Command {
 
     @Override
     public Set<Subsystem> getRequirements() {
-        return Set.of(requirements);
+        return requirements;
     }    
 }

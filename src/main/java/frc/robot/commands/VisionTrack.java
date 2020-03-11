@@ -23,7 +23,7 @@ public class VisionTrack implements Command {
     private static final PIDController DIST_PID_CONTROLLER = new PIDController(VisionConstants.kPDist,
             VisionConstants.kIDist, VisionConstants.kDDist);
 
-    private Subsystem[] requirements = { RobotContainer.drivetrain };
+    private static final Set<Subsystem> requirements = Set.of(Drivetrain.getInstance());
 
     public VisionTrack() {
 
@@ -81,6 +81,6 @@ public class VisionTrack implements Command {
 
     @Override
     public Set<Subsystem> getRequirements() {
-        return Set.of(requirements);
+        return requirements;
     }
 }
