@@ -71,7 +71,7 @@ public class RobotContainer {
         intake = Intake.getInstance();
 
         conveyor = Conveyor.getInstance();
-        conveyor.setDefaultCommand(new ConveyorQueue(ConveyorQueue.State.None));
+        conveyor.setDefaultCommand(new ConveyorQueue());
 
         climber = Climber.getInstance();
 

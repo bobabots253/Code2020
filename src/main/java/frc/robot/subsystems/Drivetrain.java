@@ -176,14 +176,4 @@ public class Drivetrain implements Subsystem {
     public static double getRightEncVelocityMeters() {
         return Units.DrivetrainUnits.TicksPerDecisecondToMPS(getRightEncVelocity());
     }
-    
-    /* Static class to contain the speeds of each side of the drivetrain */
-    public static class WheelState {
-        public double left, right;
-        
-        public WheelState(double left, double right) {
-            this.left = left;
-            this.right = right;
-        }
-    }
 }
