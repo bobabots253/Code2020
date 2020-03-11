@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    autonomous = RobotContainer.getInstance().getAutonomousCommand();
+    autonomous = RobotContainer.getInstance().getAutonomousCommand(Constants.AutonConstants.driveDelaySecs, Constants.AutonConstants.shootDelaySecs);
     if (autonomous != null) autonomous.schedule();
   }
 

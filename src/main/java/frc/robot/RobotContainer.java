@@ -123,7 +123,7 @@ public class RobotContainer {
                 .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));   
 
-        // Run both climbers when DPAD up is held
+        // Run both climbers when DPAD up is heldgit 
         operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climbUnity(0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
         //operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climbUnity(-0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
 
@@ -159,9 +159,51 @@ public class RobotContainer {
             ).withTimeout(3), 
             new WaitCommand(1),
             new Shoot().withTimeout(3));
-
-
     }
+
+    public Command getAutonomousCommand(int driveDelay, int shootDelay) {
+        return new SequentialCommandGroup(
+            new WaitCommand(driveDelay),
+            new StartEndCommand(
+                ()-> Drivetrain.setOpenLoop(0.2,0.2),
+                Drivetrain::stop,
+                drivetrain
+            ).withTimeout(3), 
+            new WaitCommand(shootDelay),
+            new Shoot().withTimeout(3));
+    }
+
+    public Command getTrenchAutonomousCommand(int driveDelay, int shootDelay) {
+        return new SequentialCommandGroup(
+            new WaitCommand(driveDelay),
+            new StartEndCommand(
+                ()-> Drivetrain.setOpenLoop(0.2,0.2),
+                Drivetrain::stop,
+                drivetrain
+            ).withTimeout(3), 
+            new WaitCommand(shootDelay),
+            new RunCommand(()->arm.rotate(-0.4), arm)
+            .alongWith(new RunCommand( ()->intake.intake(0.5)))
+            .alongWith(new RunCommand( ()->intake.setConveyor(0.5))),
+            new StartEndCommand(
+                ()-> Drivetrain.setOpenLoop(0.2,0.2),
+                Drivetrain::stop,
+                drivetrain
+            ).withTimeout(3), 
+            new StartEndCommand(
+                ()-> Drivetrain.setOpenLoop(-0.2,0.2),
+                Drivetrain::stop,
+                drivetrain
+            ).withTimeout(3),
+            new StartEndCommand(
+                ()-> Drivetrain.setOpenLoop(0.2,0.2),
+                Drivetrain::stop,
+                drivetrain
+            ).withTimeout(3), 
+            new Shoot().withTimeout(3));
+    }
+
+
 
     /**
      * Returns the deadbanded throttle input from the main driver controller

@@ -5,6 +5,12 @@ public class Constants {
     public static final double dt = 0.02;
     public static final double kMaxVoltage = 12.0;
 
+    /* Auton Constants */
+    public static class AutonConstants {
+        public static final int driveDelaySecs = 0;
+        public static final int shootDelaySecs = 1;
+    }
+
     /* Controllers Input */
     public static class InputPorts {
         public static final int driver_Controller = 0;
