@@ -36,7 +36,7 @@ public class Arm extends ProfiledPIDSubsystem {
         /**
          * @param position the value of the arm position in radians
          */
-        private State(double position) {
+        State(double position) {
             this.position = position;
         }
     }
