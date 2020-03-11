@@ -25,7 +25,6 @@ public class RobotContainer {
     public static Shooter shooter;
     public static Climber climber;
     public static Arm arm;
-    public boolean goShooter = false;
     public static Dashboard falconDashboard;
     private static NetworkTable limelight;
     public static AHRS navX;
@@ -34,18 +33,27 @@ public class RobotContainer {
 
     private static final XboxController operator = new XboxController(Constants.InputPorts.operator_Controller);
 
-    private static final JoystickButton driver_A = new JoystickButton(driver, 1),
-            driver_B = new JoystickButton(driver, 2), driver_X = new JoystickButton(driver, 3),
-            driver_Y = new JoystickButton(driver, 4), driver_LB = new JoystickButton(driver, 5),
-            driver_RB = new JoystickButton(driver, 6), driver_VIEW = new JoystickButton(driver, 7),
+    private static final JoystickButton
+            driver_A = new JoystickButton(driver, 1),
+            driver_B = new JoystickButton(driver, 2),
+            driver_X = new JoystickButton(driver, 3),
+            driver_Y = new JoystickButton(driver, 4),
+            driver_LB = new JoystickButton(driver, 5),
+            driver_RB = new JoystickButton(driver, 6),
+            driver_VIEW = new JoystickButton(driver, 7),
             driver_MENU = new JoystickButton(driver, 8);
-    private static final JoystickButton operator_A = new JoystickButton(operator, 1),
-            operator_B = new JoystickButton(operator, 2), operator_X = new JoystickButton(operator, 3),
-            operator_Y = new JoystickButton(operator, 4), operator_LB = new JoystickButton(operator, 5),
-            operator_RB = new JoystickButton(operator, 6), operator_VIEW = new JoystickButton(operator, 7),
+    private static final JoystickButton
+            operator_A = new JoystickButton(operator, 1),
+            operator_B = new JoystickButton(operator, 2),
+            operator_X = new JoystickButton(operator, 3),
+            operator_Y = new JoystickButton(operator, 4),
+            operator_LB = new JoystickButton(operator, 5),
+            operator_RB = new JoystickButton(operator, 6),
+            operator_VIEW = new JoystickButton(operator, 7),
             operator_MENU = new JoystickButton(operator, 8);
         
-    private static final POVButton driver_DPAD_UP = new POVButton(driver, 0),
+    private static final POVButton
+            driver_DPAD_UP = new POVButton(driver, 0),
             driver_DPAD_RIGHT = new POVButton(driver, 90), driver_DPAD_DOWN = new POVButton(driver, 180),
             driver_DPAD_LEFT = new POVButton(driver, 270);
 
@@ -90,19 +98,19 @@ public class RobotContainer {
     private void bindOI() {
         
        // Flip down intake arm and spin when RB is held, flip back up and stop spinning when released
-        driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
-                    .alongWith(new RunCommand( ()->intake.intake(0.5)))
-                    .alongWith(new RunCommand( ()->intake.setConveyor(0.5))))
-                .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
+        driver_RB.whileHeld(new RunCommand(() -> arm.rotate(-0.4), arm)
+                    .alongWith(new RunCommand(() -> intake.intake(0.5)))
+                    .alongWith(new RunCommand(() -> intake.setConveyor(0.5))))
+                .whenReleased(new RunCommand(() -> arm.rotate(0.35), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
     
         // Spin up shooter when LB is held, stop when released
         driver_LB.whileHeld(new Shoot());
 
         // Flip intake down and spin outwards to sweep balls out of the way when A is held, flip up and stop when released
-        driver_A.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
-                    .alongWith(new RunCommand( ()->intake.intake(-0.5))))
-                .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
+        driver_A.whileHeld(new RunCommand(() -> arm.rotate(-0.4), arm)
+                    .alongWith(new RunCommand(() -> intake.intake(-0.5))))
+                .whenReleased(new RunCommand(() -> arm.rotate(0.35), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));   
 
         // Run both climbers when DPAD up is held
@@ -114,16 +122,16 @@ public class RobotContainer {
         operator_MENU.whileHeld(new Climb(Climb.Side.RIGHT, 0.5));
 
         // 2nd Controller vertical conveyor up and down respectively
-        operator_Y.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(0.55), conveyor))
-                   .whenReleased(new InstantCommand(conveyor::stop, conveyor));
-        operator_A.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(-0.55), conveyor)) 
-                   .whenReleased(new InstantCommand(conveyor::stop, conveyor));
+        operator_Y.whileHeld(new RunCommand(() -> conveyor.setOpenLoop(0.55), conveyor))
+                  .whenReleased(new InstantCommand(conveyor::stop, conveyor));
+        operator_A.whileHeld(new RunCommand(() -> conveyor.setOpenLoop(-0.55), conveyor))
+                  .whenReleased(new InstantCommand(conveyor::stop, conveyor));
 
         // 2nd controller horizontal conveyor in and out respectively
-        operator_X.whileHeld(new RunCommand(()-> intake.setConveyor(0.5), intake))
-                     .whenReleased(new InstantCommand(intake::stopIntake, intake));
-        operator_B.whileHeld(new RunCommand(()-> intake.setConveyor(-0.5), intake))
-        .whenReleased(new InstantCommand(intake::stopIntake, intake));
+        operator_X.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake))
+                  .whenReleased(new InstantCommand(intake::stopIntake, intake));
+        operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(-0.5), intake))
+                  .whenReleased(new InstantCommand(intake::stopIntake, intake));
         
     }
 
@@ -135,7 +143,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return new SequentialCommandGroup(
             new StartEndCommand(
-                ()-> Drivetrain.setOpenLoop(0.2,0.2),
+                () -> Drivetrain.setOpenLoop(0.2,0.2),
                 Drivetrain::stop,
                 drivetrain
             ).withTimeout(3), 
