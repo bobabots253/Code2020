@@ -68,7 +68,7 @@ public class RobotContainer {
             driver_DPAD_LEFT = new POVButton(driver, 270);
 
     private static final POVButton operator_DPAD_UP = new POVButton(operator, 0),
-            operator_DPAD_RIGHT = new POVButton(driver, 90), operator_DPAD_DOWN = new POVButton(driver, 180),
+            operator_DPAD_RIGHT = new POVButton(driver, 90), operator_DPAD_DOWN = new POVButton(operator, 180),
             operator_DPAD_LEFT = new POVButton(driver, 270);
 
     private static RobotContainer instance;
@@ -89,7 +89,7 @@ public class RobotContainer {
         intake = Intake.getInstance();
 
         conveyor = Conveyor.getInstance();
-        conveyor.setDefaultCommand(new ConveyorQueue(ConveyorQueue.State.None));
+        //conveyor.setDefaultCommand(new ConveyorQueue(ConveyorQueue.State.None));
 
         climber = Climber.getInstance();
 
@@ -125,7 +125,7 @@ public class RobotContainer {
 
         // Run both climbers when DPAD up is held
         operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climbUnity(0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
-        //operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climbUnity(-0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
+        operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climbUnity(-0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
 
         // Run the right and left climbers when view and menu are held, respectively
         operator_VIEW.whileHeld(new RunCommand(() -> climber.climbLeft(0.5), climber)).whenReleased(new RunCommand(climber::stopLeftMotor, climber));
