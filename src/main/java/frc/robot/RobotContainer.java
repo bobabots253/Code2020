@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
+import frc.robot.commands.Climb;
 import frc.robot.commands.ConveyorQueue;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.Drive;
@@ -124,12 +125,12 @@ public class RobotContainer {
                     .alongWith(new InstantCommand(intake::stopIntake)));   
 
         // Run both climbers when DPAD up is held
-        operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climbUnity(0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
-        operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climbUnity(-0.5), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber)); 
+        operator_DPAD_UP.whileHeld(new Climb(Climb.Side.BOTH, 0.5));
+        operator_DPAD_DOWN.whileHeld(new Climb(Climb.Side.BOTH, -0.5));
 
         // Run the right and left climbers when view and menu are held, respectively
-        operator_VIEW.whileHeld(new RunCommand(() -> climber.climbLeft(0.5), climber)).whenReleased(new RunCommand(climber::stopLeftMotor, climber));
-        operator_MENU.whileHeld( new RunCommand(() -> climber.climbRight(0.5), climber)).whenReleased(new RunCommand(climber::stopRightMotor, climber));
+        operator_VIEW.whileHeld(new Climb(Climb.Side.LEFT, 0.5));
+        operator_MENU.whileHeld(new Climb(Climb.Side.RIGHT, 0.5));
 
         // 2nd Controller vertical conveyor up and down respectively
         operator_Y.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(0.55), conveyor))

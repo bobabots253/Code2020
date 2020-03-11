@@ -2,11 +2,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Util;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Util;
 
 public class Climber implements Subsystem {
     Servo leftServo, rightServo;
@@ -21,11 +20,6 @@ public class Climber implements Subsystem {
         rightMotor.setInverted(true);
         leftServo = new Servo(ClimberConstants.leftServoID);
         rightServo = new Servo(ClimberConstants.rightServoID);
-    }
-
-    public void climbUnity(double speed){
-        climbLeft(speed);
-        climbRight(speed);
     }
 
     public void leftServoUp() {
@@ -45,12 +39,10 @@ public class Climber implements Subsystem {
     }
     
     public void climbRight(double rightSpeed){
-        rightServoDown();
         rightMotor.set(ControlMode.PercentOutput, rightSpeed);
     }
 
     public void climbLeft(double leftSpeed){
-        leftServoDown();
         leftMotor.set(ControlMode.PercentOutput, leftSpeed);
     }
 
@@ -58,17 +50,14 @@ public class Climber implements Subsystem {
         if(instance == null) {instance = new Climber();}
         return instance;
     }
-    public void stopMotors(){
-        stopLeftMotor();
-        stopRightMotor();
-    }
+    
     public void stopLeftMotor(){
         leftServoUp();
         leftMotor.set(ControlMode.PercentOutput, 0.0);
     }
+    
     public void stopRightMotor(){
         rightServoUp();
         rightMotor.set(ControlMode.PercentOutput, 0.0);
     }
-    
 }
