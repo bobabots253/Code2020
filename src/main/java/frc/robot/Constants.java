@@ -140,4 +140,20 @@ public class Constants {
         public static final int leftServoID = 8;
         public static final int rightServoID = 9;
     }
+
+    public static class LEDConstants{
+        public static final int canifierID = 15;
+        public static final double blinkTime = 0.1;
+        public enum State {
+            SHOOTING,
+            INTAKE,
+            ENABLED,
+            DISABLED,
+            ERROR,
+            NULL
+            //someone who knows more about the robot states should fill this part in
+        }
+
+
+    }
 }

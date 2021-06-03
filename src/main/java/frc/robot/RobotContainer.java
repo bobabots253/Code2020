@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.Constants.LEDConstants;
 import frc.robot.autonomous.Dashboard;
 import frc.robot.autonomous.TrajectoryTracker;
 import frc.robot.commands.Climb;
@@ -35,7 +36,13 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Shooter;
+
+
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class RobotContainer {
     public static Drivetrain drivetrain;
@@ -44,6 +51,7 @@ public class RobotContainer {
     public static Shooter shooter;
     public static Climber climber;
     public static Arm arm;
+    public static LED led;
     public boolean goShooter = false;
     public static Dashboard falconDashboard;
     private static NetworkTable limelight;
@@ -98,6 +106,8 @@ public class RobotContainer {
 
         shooter = Shooter.getInstance();
 
+        led = LED.getInstance();
+
         falconDashboard = Dashboard.getInstance();
 
         bindOI();
@@ -110,9 +120,11 @@ public class RobotContainer {
         
        // Flip down intake arm and spin when RB is held, flip back up and stop spinning when released
         driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
+                    .alongWith(new RunCommand(()->led.setState(LEDConstants.State.INTAKE)))
                     .alongWith(new RunCommand( ()->intake.intake(0.5)))
                     .alongWith(new RunCommand( ()->intake.setConveyor(0.5))))
                 .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
+                    .alongWith(new RunCommand(()->led.setState(LEDConstants.State.NULL)))
                     .alongWith(new InstantCommand(intake::stopIntake)));
     
         // Spin up shooter when LB is held, stop when released
@@ -120,8 +132,10 @@ public class RobotContainer {
 
         // Flip intake down and spin outwards to sweep balls out of the way when A is held, flip up and stop when released
         driver_A.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
+                    .alongWith(new RunCommand(()->led.setState(LEDConstants.State.INTAKE)))
                     .alongWith(new RunCommand( ()->intake.intake(-0.5))))
                 .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
+                    .alongWith(new RunCommand(()->led.setState(LEDConstants.State.NULL)))
                     .alongWith(new InstantCommand(intake::stopIntake)));   
 
         // Run both climbers when DPAD up is held
