@@ -7,18 +7,18 @@ public class Constants {
 
     /* Controllers Input */
     public static class InputPorts {
-        public static final int driver_Controller = 0;
-        public static final int operator_Controller = 1;
+        public static final int driver_Controller = 1;
+        public static final int operator_Controller = 0;  // no driving - drift on the blue controller
     }
 
     /* Differential Drive Settings */
     public static class DriverConstants {
         /* Common drive mode settings */
         public static final double kJoystickDeadband = 0.07; // How much of joystick is "dead" zone [0,1]
-        public static final double kDriveSens = 1.0; // Overall speed setting (turn down for demos) [0,1]
-        public static final double kTurnInPlaceSens = 0.5; // Maximum turn-in-place rate (in percent of max) to allow
+        public static final double kDriveSens = 0.2; // Overall speed setting (turn down for demos) [0,1]
+        public static final double kTurnInPlaceSens = 0.2; // Maximum turn-in-place rate (in percent of max) to allow
                                                             // robot to turn to [0,1]
-        public static final double kTurnSens = 1; // Maximum normal turning rate (in percent of max) to allow robot to
+        public static final double kTurnSens = 0.75; // Maximum normal turning rate (in percent of max) to allow robot to
                                                   // turn to [0,1]
 
     }
@@ -152,6 +152,7 @@ public class Constants {
             ERROR,
             NULL
             //someone who knows more about the robot states should fill this part in
+, LEFT_CLIMB, RIGHT_CLIMB, CLIMB_UNITY
         }
 
 

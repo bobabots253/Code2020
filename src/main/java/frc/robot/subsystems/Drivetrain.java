@@ -44,7 +44,10 @@ public class Drivetrain implements Subsystem {
 
         leftSlave.follow(leftMaster);
         rightSlave.follow(rightMaster);
-        
+        leftMaster.clearStickyFaults();
+        rightMaster.clearStickyFaults();
+        leftSlave.clearStickyFaults();
+        rightSlave.clearStickyFaults();
         // Inverting opposite sides of the drivetrain
         List.of(leftMaster, leftSlave).forEach(motor -> motor.setInverted(false));
         List.of(rightMaster, rightSlave).forEach(motor -> motor.setInverted(true));

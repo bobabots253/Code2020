@@ -16,41 +16,59 @@ public class Climber implements Subsystem {
          rightMotor = Util.createTalonSRX(ClimberConstants.rightMotorID, true); 
 
     private Climber(){
-        leftMotor.setInverted(true);
-        rightMotor.setInverted(true);
+        leftMotor.setInverted(false);
+        rightMotor.setInverted(false);
         leftServo = new Servo(ClimberConstants.leftServoID);
         rightServo = new Servo(ClimberConstants.rightServoID);
+        leftMotor.clearStickyFaults();
+        rightMotor.clearStickyFaults();
     }
-
     public void leftServoUp() {
-        leftServo.set(0.025);
+        leftServo.set(0.25);
     }
 
     public void rightServoUp() {
-        rightServo.set(0.975);
+        rightServo.set(0.66);
     }
 
     public void leftServoDown() {
-        leftServo.set(0);
+        leftServo.set(0.75);
     }
 
     public void rightServoDown() {
-        rightServo.set(1);
+        rightServo.set(0.17);
+    }
+
+    public void servosDown() {
+        leftServoDown();
+        rightServoDown();
     }
     
-    public void climbRight(double rightSpeed){
+    public void servosUp() {
+        leftServoUp();
+        rightServoUp();
+    }
+    public void climbRight(double rightSpeed) {
         rightMotor.set(ControlMode.PercentOutput, rightSpeed);
     }
 
-    public void climbLeft(double leftSpeed){
-        leftMotor.set(ControlMode.PercentOutput, leftSpeed);
+    public void climbLeft(double leftSpeed) {
+        leftMotor.set(ControlMode.PercentOutput, -leftSpeed);
     }
-
+    public void climbUnity(double speed) {
+        climbLeft(speed);
+        climbRight(speed);
+    }
     public static Climber getInstance(){
         if(instance == null) {instance = new Climber();}
         return instance;
     }
     
+    public void stopMotors(){
+        stopLeftMotor();
+        stopRightMotor();
+    }
+
     public void stopLeftMotor(){
         leftServoUp();
         leftMotor.set(ControlMode.PercentOutput, 0.0);

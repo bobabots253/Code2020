@@ -20,6 +20,7 @@ public class Intake implements Subsystem {
     }
 
     private Intake(){
+        spinMotor.clearStickyFaults();
         conveyorMotor.setInverted(false);
         conveyorMotor.burnFlash();
         

@@ -2,19 +2,12 @@
 package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -26,11 +19,10 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.LEDConstants;
 import frc.robot.autonomous.Dashboard;
-import frc.robot.autonomous.TrajectoryTracker;
 import frc.robot.commands.Climb;
 import frc.robot.commands.ConveyorQueue;
-import frc.robot.commands.Shoot;
 import frc.robot.commands.Drive;
+import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Conveyor;
@@ -38,11 +30,6 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Shooter;
-
-
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.List;
 
 public class RobotContainer {
     public static Drivetrain drivetrain;
@@ -52,7 +39,6 @@ public class RobotContainer {
     public static Climber climber;
     public static Arm arm;
     public static LED led;
-    public boolean goShooter = false;
     public static Dashboard falconDashboard;
     private static NetworkTable limelight;
     public static AHRS navX;
@@ -118,38 +104,51 @@ public class RobotContainer {
      */
     private void bindOI() {
         
-       // Flip down intake arm and spin when RB is held, flip back up and stop spinning when released
-        driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
+  //     Flip down intake arm and spin when RB is held, flip back up and stop spinning when released
+        driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.35), arm)
                     .alongWith(new RunCommand(()->led.setState(LEDConstants.State.INTAKE)))
-                    .alongWith(new RunCommand( ()->intake.intake(0.5)))
+                    .alongWith(new RunCommand( ()->intake.intake(0.65)))
                     .alongWith(new RunCommand( ()->intake.setConveyor(0.5))))
                 .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
                     .alongWith(new RunCommand(()->led.setState(LEDConstants.State.NULL)))
                     .alongWith(new InstantCommand(intake::stopIntake)));
     
         // Spin up shooter when LB is held, stop when released
-        driver_LB.whileHeld(new Shoot());
-
-        // Flip intake down and spin outwards to sweep balls out of the way when A is held, flip up and stop when released
-        driver_A.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
-                    .alongWith(new RunCommand(()->led.setState(LEDConstants.State.INTAKE)))
-                    .alongWith(new RunCommand( ()->intake.intake(-0.5))))
-                .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
-                    .alongWith(new RunCommand(()->led.setState(LEDConstants.State.NULL)))
-                    .alongWith(new InstantCommand(intake::stopIntake)));   
-
+        driver_LB.whileHeld(new Shoot().alongWith((new RunCommand(()->led.setState(LEDConstants.State.SHOOTING)))));
+        driver_VIEW.whileHeld(new Shoot().alongWith((new RunCommand(()->led.setState(LEDConstants.State.SHOOTING)))));
+        
         // Run both climbers when DPAD up is held
-        operator_DPAD_UP.whileHeld(new Climb(Climb.Side.BOTH, 0.5));
-        operator_DPAD_DOWN.whileHeld(new Climb(Climb.Side.BOTH, -0.5));
+        operator_DPAD_UP.whileHeld(new Climb(Climb.Side.BOTH, 0.5)
+            .alongWith(new RunCommand(()->led.setState(LEDConstants.State.CLIMB_UNITY))))
+        .whenReleased(new InstantCommand(climber::stopMotors, climber)
+            .alongWith(new RunCommand(()->led.setState(LEDConstants.State.NULL))));
+         
+        //^ made in hopes of trying to run climb down (to reset climb) but doesn't work because servos need to run
+
+        //operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climbUnity(-0.2), climber)).whenReleased(new InstantCommand(climber::stopMotors, climber));
+
+        // operator_DPAD_DOWN.whileHeld(new Climb(Climb.Side.DOWN, -0.35))
+        // .whenReleased(new InstantCommand(climber::stopMotors, climber));
+
+        // operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.leftServoDown(), climber))
+        // .whenReleased(new InstantCommand(climber::leftServoUp, climber));
 
         // Run the right and left climbers when view and menu are held, respectively
-        operator_VIEW.whileHeld(new Climb(Climb.Side.LEFT, 0.5));
-        operator_MENU.whileHeld(new Climb(Climb.Side.RIGHT, 0.5));
+        
+        operator_VIEW.whileHeld(new Climb(Climb.Side.LEFT, 0.5)
+            .alongWith(new RunCommand(()->led.setState(LEDConstants.State.LEFT_CLIMB))))
+        .whenReleased(new RunCommand(climber::stopLeftMotor, climber)
+            .alongWith(new RunCommand(()->led.setState(LEDConstants.State.NULL))));
+
+        operator_MENU.whileHeld(new Climb(Climb.Side.RIGHT, 0.5)
+            .alongWith(new RunCommand(()->led.setState(LEDConstants.State.RIGHT_CLIMB))))
+        .whenReleased(new RunCommand(climber::stopRightMotor, climber)
+            .alongWith(new RunCommand(()->led.setState(LEDConstants.State.NULL))));
 
         // 2nd Controller vertical conveyor up and down respectively
-        operator_Y.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(0.55), conveyor))
+        driver_Y.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(0.55), conveyor))
                    .whenReleased(new InstantCommand(conveyor::stop, conveyor));
-        operator_A.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(-0.55), conveyor)) 
+        driver_A.whileHeld(new RunCommand(()-> conveyor.setOpenLoop(-0.55), conveyor)) 
                    .whenReleased(new InstantCommand(conveyor::stop, conveyor));
 
         // 2nd controller horizontal conveyor in and out respectively
@@ -186,6 +185,8 @@ public class RobotContainer {
     public static double getThrottleValue() {
         // Controllers y-axes are natively up-negative, down-positive. This method
         // corrects that by returning the opposite of the y-value
+        if(-deadbandX(driver.getY(GenericHID.Hand.kLeft), DriverConstants.kJoystickDeadband) > 0)
+            led.setState(LEDConstants.State.RIGHT_CLIMB);
         return -deadbandX(driver.getY(GenericHID.Hand.kLeft), DriverConstants.kJoystickDeadband);
     }
 
@@ -221,6 +222,7 @@ public class RobotContainer {
      * 
      * @param ledMode The mode to set the Limelight LEDs to
      */
+    
     public void setLEDMode(LEDMode ledMode) {
         limelight.getEntry("ledMode").setNumber(ledMode.val);
     }

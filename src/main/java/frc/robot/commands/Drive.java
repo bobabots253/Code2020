@@ -116,6 +116,7 @@ public class Drive implements Command {
             default:
                 left = 0;
                 right = 0;
+                System.out.println("no drive state provided");
                 break;
         }
 

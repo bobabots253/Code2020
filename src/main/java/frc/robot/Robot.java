@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.Climb;
 import frc.robot.subsystems.Drivetrain;
 
 public class Robot extends TimedRobot {
@@ -21,6 +22,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robot = RobotContainer.getInstance();
+    RobotContainer.led.rainbow();
     RobotContainer.drivetrain.resetEncoders();
     RobotContainer.navX.reset();
     RobotContainer.arm.resetEncoders();
@@ -29,7 +31,9 @@ public class Robot extends TimedRobot {
   
   @Override
   public void disabledInit(){
-  
+    Climb.timer.reset();
+    Climb.timer.stop();
+    Climb.startTime = 0;
   }
 
   @Override

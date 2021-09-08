@@ -22,6 +22,7 @@ public class Arm extends ProfiledPIDSubsystem {
     
     private static Arm instance;
     public static Arm getInstance() {
+        motor.clearStickyFaults();
         if (instance == null) instance = new Arm();
         return instance;
     }
